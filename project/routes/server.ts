@@ -1,6 +1,6 @@
 ///<reference path='../types/DefinitelyTyped/node/node.d.ts'/>
 ///<reference path='../types/DefinitelyTyped/express/express.d.ts'/> 
-export class Server {
+class Server {
 
     constructor(){}
 
@@ -9,7 +9,7 @@ export class Server {
 
     	function onRequest(request, response) {
     		response.writeHead(200, {"Content-Type": "text/plain"});
-    		response.write("Hello World");
+    		response.write("Test!!!");
     		response.end();
     	}
 
@@ -18,3 +18,5 @@ export class Server {
     }    
 }
 
+var server = new Server()
+export = server

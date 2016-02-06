@@ -7,11 +7,12 @@ var Server = (function () {
         var http = require("http");
         function onRequest(request, response) {
             response.writeHead(200, { "Content-Type": "text/plain" });
-            response.write("Hello World");
+            response.write("Test!!!");
             response.end();
         }
         http.createServer(onRequest).listen(8888);
     };
     return Server;
 })();
-exports.Server = Server;
+var server = new Server();
+module.exports = server;

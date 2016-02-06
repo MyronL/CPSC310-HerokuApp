@@ -1,7 +1,8 @@
 ///<reference path='../types/DefinitelyTyped/node/node.d.ts'/>
 ///<reference path='../types/DefinitelyTyped/express/express.d.ts'/> 
 
-import s = require('./server')
+import server = require('./server')
+import requestHandler = require('./requestHandler')
 
 class Router {
 	
@@ -11,7 +12,7 @@ class Router {
 
 		var express = require('express');
 		var router = express.Router();
-		var server = new s.Server();
+
 
         server.start();
 
