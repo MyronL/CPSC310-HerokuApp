@@ -1,6 +1,6 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
-append styles
-    link(href='../public/stylesheets/style.css', rel='stylesheet')
+//append styles
+//    link(href='../public/stylesheets/style.css', rel='stylesheet')
 block body
   h1= "Comic Editor"
   page
@@ -15,11 +15,43 @@ block body
       button#buttonSave(type="submit") Save Field
       br
       br
-      form#formUploadImage(name="uploadImage", method="post", action="/uploadImage")
       button#buttonUpload(type="submit", style="width:100px;height:100px;font-size:18px;background-color:orange;font-weight:bold") Upload Image
+      form#formUploadImage(name="uploadImage", method="post", action="/uploadImage")
+        |Select a file:
+        input#imgLoader(type="file", name="image")
+      
+      canvas#c(width ="300", height="300")
+
     #maincontent
       canvas#panel1(name="panel1", width="500",height="500",style="border: 1px solid black;")
       canvas#panel2(name="panel2", width="500",height="500",style="border: 1px solid black;")
       canvas#panel3(name="panel3", width="500",height="500",style="border: 1px solid black;")
       canvas#panel4(name="panel4", width="500",height="500",style="border: 1px solid black;")        
     #clearingdiv
+
+block scripts
+  script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
+  
+  // reference:http://jsfiddle.net/jaibuu/Vp6wa/
+  script(type="text/javascript").
+    canvas = new fabric.Canvas('c');
+    document.getElementById('imgLoader').onchange = function showImage(e) {
+      var reader = new FileReader();
+      reader.onload = function(event) { console.log('loadimage');
+        var imgObj = new Image();
+        imgObj.src = event.target.result;
+        imgObj.onload = function() {
+          //start fabricJS stuff
+          var image = new fabric.Image(imgObj);
+          image.set({
+            left: 0,
+            top: 0,
+            angle: 0,
+            padding: 0,
+          });
+          canvas.add(image);
+          //end fabricJS stuff
+        }
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
