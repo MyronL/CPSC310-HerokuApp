@@ -23,19 +23,19 @@ export class Editor{
       return this;
   }
   
-  selectPanel = function(){
+  selectPanel(): void{
       
   }
   
-  uploadImage = function(){
+  uploadImage(): void{
       
   } 
   
-  saveProject = function(){
+  saveProject(): void{
       
   }
   
-  publishComic =  function(){
+  publishComic():void{
       
   }
 }

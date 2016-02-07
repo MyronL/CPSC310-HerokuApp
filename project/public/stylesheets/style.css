@@ -7,19 +7,8 @@ a {
   color: #00B7FF;
 }
 
-#page {
-    width: 100%
-}
-#maincontent {
-    float: left;
-    width: 75%;
-    background-color: #F0F0F0;
-}
-#menuleftcontent{
-    float: left;
-    width: 25%;
-    background-color: #CCCCCC;
-}
-#clearingdiv {
-    clear: both;
+@media (min-width: 1200px) {
+  .container {
+    width: 2500px;
+  }
 }
