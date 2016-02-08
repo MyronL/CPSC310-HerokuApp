@@ -1,6 +1,6 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 append styles
-    link(href='stylesheets/style.css', rel='stylesheet')
+    link(rel='stylesheet',href='/stylesheets/style.css')
 block body
   h1  Comic Editor
   body
@@ -10,13 +10,17 @@ block body
                     .panel.panel-success
                         .panel-heading Comic Fields
                         .panel-body
-                            form#formUpdateComicField(name="formUpdateComicField", method="post", action="/updateField")
-                            textarea#inputTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
-                            br
-                            textarea#inputDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
-                            br
-                            textarea#inputTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
-                            br
+                            form#formSaveProject(name="formSaveProject", method="post", action="/saveProject")
+                                textarea#inputTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
+                                br
+                                textarea#inputDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
+                                br
+                                textarea#inputTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
+                                br
+                                input(type="hidden",name="sPanel1")
+                                input(type="hidden",name="sPanel2")
+                                input(type="hidden",name="sPanel3")
+                                input(type="hidden",name="sPanel4")
                     .panel.panel-success
                         .panel-heading Upload Image
                         .panel-body                        
@@ -35,11 +39,6 @@ block body
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
-                            form(name="formSavePanels", method="post",action="/savePanels")
-                                input(type="hidden",name="sPanel1")
-                                input(type="hidden",name="sPanel2")
-                                input(type="hidden",name="sPanel3")
-                                input(type="hidden",name="sPanel4")
                             button(onClick="saveProject()") Save Comic                    
             .col-sm-10
                 h2 Comic Panels
@@ -58,7 +57,7 @@ block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js") 
    // reference:http://jsfiddle.net/jaibuu/Vp6wa/
-  script(type="text/javascript", src="modules/Editor.js")
+  script(type="text/javascript", src="/modules/Editor.js")
   script(type="text/javascript").
 
     // speech bubble implementation here:
@@ -67,13 +66,36 @@ block scripts
     canvas2 = new fabric.Canvas('panel2');
     canvas3 = new fabric.Canvas('panel3');
     canvas4 = new fabric.Canvas('panel4');
+    // Correctly loading
+    // TODO: need to make sure saveProject save to the same mongoID
+    // TODO: need to make sure the upload img will work
+    // TODO: need to populate the title/description... when loaded
+    window.onload = function(){
+        var loadProject =!{JSON.stringify(loadProject)};
+        console.log("Hi Loading");
+        if (loadProject == null){
+            console.log("nothing");
+        } else {
+            var title = loadProject[0].title;
+            var description = loadProject[0].description;
+            var tags = loadProject[0].tags;
+            var author = loadProject[0].author;
+            var JsonPanel1 = loadProject[0].panel1;
+            var JsonPanel2 = loadProject[0].panel2;
+            var JsonPanel3 = loadProject[0].panel3;
+            var JsonPanel4 = loadProject[0].panel4;
+            console.log(title);
+            console.log(loadProject[0])
+            canvas1.loadFromJSON(JsonPanel1, canvas1.renderAll.bind(canvas1));
+        }
+    };  
     function saveProject(){
-        document.formUpdateComicField.submit();
-        document.formSavePanels.sPanel1.value = JSON.stringify(canvas1);
-        document.formSavePanels.sPanel1.value = JSON.stringify(canvas2);
-        document.formSavePanels.sPanel1.value = JSON.stringify(canvas3);
-        document.formSavePanels.sPanel1.value = JSON.stringify(canvas4);
-        document.formSavePanels.submit();
+        document.formSaveProject.sPanel1.value = JSON.stringify(canvas1);
+        console.log(JSON.stringify(canvas1));
+        document.formSaveProject.sPanel2.value = JSON.stringify(canvas2);
+        document.formSaveProject.sPanel3.value = JSON.stringify(canvas3);
+        document.formSaveProject.sPanel4.value = JSON.stringify(canvas4);
+        document.formSaveProject.submit();
     }
     // remove selected
     // TODO: this is supposed to remove speech bubbles too but it doesn't
@@ -167,9 +189,7 @@ block scripts
       helperBubble(speech);
     }
     
-    function loadCanvas(){
-        canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
-    }
+
     
 
 
