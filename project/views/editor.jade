@@ -28,6 +28,12 @@ block body
                             button(onClick="loadCanvas()") Load
             .col-sm-10
                 h2 Comic Panels
+                    // speech bubble buttons
+                    h3 Temp Toolbar
+                    .panel-body
+                        button(onClick="bubbleButton()") Speech Bubble
+                        button(onClick="squareButton()") Square Bubble
+                        button(onClick="thoughtButton()") Thought Bubble
                         .container
                             style
                             .row
@@ -42,9 +48,115 @@ block body
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js") 
-  // reference:http://jsfiddle.net/jaibuu/Vp6wa/
+   // reference:http://jsfiddle.net/jaibuu/Vp6wa/
   script(type="text/javascript", src="modules/Editor.js")
   script(type="text/javascript").
+
+    // speech bubble implementation here:
+    // the 4 panels have been instantiated as canvases here
+    canvas1 = new fabric.Canvas('panel1');
+    canvas2 = new fabric.Canvas('panel2');
+    canvas3 = new fabric.Canvas('panel3');
+    canvas4 = new fabric.Canvas('panel4');
+
+    // default text to be instantiated into bubble
+    var defaultText = new fabric.Text('hello', {
+      fontFamily: 'Comic Sans' // will look into other fonts later
+    });
+
+    // imported images from placeholder imgur URL
+    // TODO: need to have images on server and load from there
+    // button switches for speech bubble
+    var bubble = 'http://i.imgur.com/qtDmgzK.png';
+    var square = 'http://i.imgur.com/Co7HFts.png';
+    var thought = 'http://i.imgur.com/EZruJfs.png';
+    var bubbleSelect = false;
+    var squareSelect = false;
+    var thoughtSelect = false;
+    var speech;
+
+    function bubbleButton() {
+      bubbleSelect = true;
+      squareSelect = false;
+      thoughtSelect = false;
+
+      if (bubbleSelect) {
+        speech = bubble;
+      } else {
+        speech = null;
+      }
+
+      fabric.Image.fromURL(speech, function(b) {
+        // on mouse click
+        canvas1.on('mouse:up', function(b1){
+          canvas1.add(b);
+        });
+        canvas2.on('mouse:up', function(b2){
+          canvas2.add(b);
+        });
+        canvas3.on('mouse:up', function(b3){
+          canvas3.add(b);
+        });
+        canvas4.on('mouse:up', function(b4){
+          canvas4.add(b);
+        });
+      });
+    }
+
+    function squareButton() {
+      bubbleSelect = false;
+      squareSelect = true;
+      thoughtSelect = false;
+
+      if (squareSelect) {
+        speech = square;
+      } else {
+        speech = null;
+      }
+
+      fabric.Image.fromURL(speech, function(s) {
+        // on mouse click
+        canvas1.on('mouse:up', function(s1){
+          canvas1.add(s);
+        });
+        canvas2.on('mouse:up', function(s2){
+          canvas2.add(s);
+        });
+        canvas3.on('mouse:up', function(s3){
+          canvas3.add(s);
+        });
+        canvas4.on('mouse:up', function(s4){
+          canvas4.add(s);
+        });
+      });
+    }
+    
+    function thoughtButton() {
+      bubbleSelect = false;
+      squareSelect = false;
+      thoughtSelect= true;
+
+      if (thoughtSelect) {
+        speech = thought;
+      } else {
+        speech = null;
+      }
+      fabric.Image.fromURL(speech, function(t) {
+        // on mouse click
+        canvas1.on('mouse:up', function(t1){
+          canvas1.add(t);
+        });
+        canvas2.on('mouse:up', function(t2){
+          canvas2.add(t);
+        });
+        canvas3.on('mouse:up', function(t3){
+          canvas3.add(t);
+        });
+        canvas4.on('mouse:up', function(t4){
+          canvas4.add(t);
+        });
+      });
+    }
 
     var json;
      function saveCanvasinJson(){
