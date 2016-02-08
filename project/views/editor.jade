@@ -1,35 +1,68 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
-append styles
-    link(href='stylesheets/style.css', rel='stylesheet')
-block body
-  h1= "Comic Editor"
-  page
-    #menuleftcontent
-      form#formUpdateComicField(name="updateField", method="post", action="/updateField")
-      textarea#inputTitle(type="text", placeholder="Title",name="comicTitle", style="width:200px;resize:none;height:1%")
-      br
-      textarea#inputDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:200px;")
-      br
-      textarea#inputTags(type="text", placeholder="Tags",name="comicTags",style="width:200px;resize:none;height:1%")
-      br
-      button#buttonSave(type="submit") Save Field
-      br
-      br
-      //form#formUploadImage(name="uploadImage", method="post", action="/uploadImage")
-      button#buttonUpload(type="submit", style="width:100px;height:100px;font-size:18px;background-color:orange;font-weight:bold") Upload Image
-      
-      input#imgLoader(type="file" accept="image/*")  
-      
-      
-    #maincontent
-      canvas#panel1(name="panel1", width="500",height="500",style="border: 1px solid black;")
-      canvas#panel2(name="panel2", width="500",height="500",style="border: 1px solid black;")
-      canvas#panel3(name="panel3", width="500",height="500",style="border: 1px solid black;")
-      canvas#panel4(name="panel4", width="500",height="500",style="border: 1px solid black;")        
-    #clearingdiv
 
+//link(rel="stylesheet", href="stylesheets/style.css")
+block body
+  h1  Comic Editor
+  body
+    .container-fluid 
+        .row
+            .col-sm-2
+                    .panel.panel-success
+                        .panel-heading Comic Fields
+                        .panel-body
+                            form#formUpdateComicField(name="updateField", method="post", action="/updateField")
+                            textarea#inputTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
+                            br
+                            textarea#inputDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
+                            br
+                            textarea#inputTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
+                            br
+                            button#buttonSave(type="submit") Save Field
+                            br
+                            br
+                    .panel.panel-success
+                        .panel-heading Upload Image
+                        .panel-body                        
+                            input#imgLoader(type="file")
+                            button(onClick="saveCanvasinJson()") Save
+                            button(onClick="loadCanvas()") Load
+            .col-sm-10
+                .panel.panel-info
+                    .panel-heading Comic Panels
+                    .panel-body
+                        .container-fluid
+                            style
+                            .row
+                                .col-lg-3
+                                    canvas#panel1(name="panel1", width="400",height="400",style="border: 1px solid black;")
+                                .col-lg-3
+                                    canvas#panel2(name="panel2", width="400",height="400",style="border: 1px solid black;")
+                                .col-lg-3
+                                    canvas#panel3(name="panel3", width="400",height="400",style="border: 1px solid black;")
+                                .col-lg-3
+                                    canvas#panel4(name="panel4", width="400",height="400",style="border: 1px solid black;")
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js") 
+  // reference:http://jsfiddle.net/jaibuu/Vp6wa/
   script(type="text/javascript", src="modules/Editor.js")
-  
-  
+  script(type="text/javascript").
+    // try to make the canvas clickable, not working
+    //var panel1 = document.getElementById('panel1');
+    //var selectedPanel;
+     //$("#panel1").click(function(){
+        //selectedPanel = "panel1";
+        //document.getElementById('panel1').style.border = "thick solid red";
+    //});
+    var json;
+     function saveCanvasinJson(){
+        json = JSON.stringify(canvas);
+        canvas.clear();
+    }
+    
+    function loadCanvas(){
+        canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
+    }
+    
+
+
