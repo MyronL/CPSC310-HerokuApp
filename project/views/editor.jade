@@ -34,8 +34,10 @@ block body
                         button(onClick="bubbleButton()") Speech Bubble
                         button(onClick="squareButton()") Square Bubble
                         button(onClick="thoughtButton()") Thought Bubble
-                        textarea#dialogue(name="dialogue", placeholder="dialogue")
+                        textarea#dialogue(placeholder="dialogue")
                         button(onClick="addText()") Add Text
+                        textarea#colour(placeholder="type in colour and select text", style="resize:none")
+                        button(onClick="setColour()") Set Text Colour
                         button(onClick="removeSelected()") Remove Text
                         .container
                             style
@@ -75,6 +77,13 @@ block scripts
         fontFamily: 'Comic Sans'
       });
       canvas1.add(textToAdd);
+    }
+
+    function setColour(colour) {
+      colour = document.getElementById("colour").value;
+      var selected = canvas1.getActiveObject();
+      selected.setColor(colour);
+      canvas1.renderAll();
     }
 
     // imported images from placeholder imgur URL
