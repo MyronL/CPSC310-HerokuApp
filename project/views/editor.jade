@@ -92,22 +92,12 @@ block scripts
     var bubble = 'http://i.imgur.com/qtDmgzK.png';
     var square = 'http://i.imgur.com/Co7HFts.png';
     var thought = 'http://i.imgur.com/EZruJfs.png';
-    var bubbleSelect = false;
-    var squareSelect = false;
-    var thoughtSelect = false;
+    //- var bubbleSelect = false;
+    //- var squareSelect = false;
+    //- var thoughtSelect = false;
     var speech;
 
-    function bubbleButton() {
-      bubbleSelect = true;
-      squareSelect = false;
-      thoughtSelect = false;
-
-      if (bubbleSelect) {
-        speech = bubble;
-      } else {
-        speech = null;
-      }
-
+    function helperBubble(speech) {
       fabric.Image.fromURL(speech, function(b) {
         canvas1.on('mouse:down', function(b1){
           canvas1.add(b);
@@ -124,57 +114,46 @@ block scripts
       });
     }
 
+    function bubbleButton() {
+      //- bubbleSelect = true;
+      //- squareSelect = false;
+      //- thoughtSelect = false;
+
+      //- if (bubbleSelect) {
+      //-   speech = bubble;
+      //- } else {
+      //-   speech = null;
+      //- }
+      speech = bubble;
+      helperBubble(speech);
+    }
+
     function squareButton() {
-      bubbleSelect = false;
-      squareSelect = true;
-      thoughtSelect = false;
+      //- bubbleSelect = false;
+      //- squareSelect = true;
+      //- thoughtSelect = false;
 
-      if (squareSelect) {
-        speech = square;
-      } else {
-        speech = null;
-      }
-
-      fabric.Image.fromURL(speech, function(s) {
-        canvas1.on('mouse:down', function(s1){
-          canvas1.add(s);
-        });
-        canvas2.on('mouse:down', function(s2){
-          canvas2.add(s);
-        });
-        canvas3.on('mouse:down', function(s3){
-          canvas3.add(s);
-        });
-        canvas4.on('mouse:down', function(s4){
-          canvas4.add(s);
-        });
-      });
+      //- if (squareSelect) {
+      //-   speech = square;
+      //- } else {
+      //-   speech = null;
+      //- }
+      speech = square;
+      helperBubble(speech);
     }
     
     function thoughtButton() {
-      bubbleSelect = false;
-      squareSelect = false;
-      thoughtSelect= true;
+      //- bubbleSelect = false;
+      //- squareSelect = false;
+      //- thoughtSelect= true;
 
-      if (thoughtSelect) {
-        speech = thought;
-      } else {
-        speech = null;
-      }
-      fabric.Image.fromURL(speech, function(t) {
-        canvas1.on('mouse:down', function(t1){
-          canvas1.add(t);
-        });
-        canvas2.on('mouse:down', function(t2){
-          canvas2.add(t);
-        });
-        canvas3.on('mouse:down', function(t3){
-          canvas3.add(t);
-        });
-        canvas4.on('mouse:down', function(t4){
-          canvas4.add(t);
-        });
-      });
+      //- if (thoughtSelect) {
+      //-   speech = thought;
+      //- } else {
+      //-   speech = null;
+      //- }
+      speech = thought;
+      helperBubble(speech);
     }
 
     var json;
