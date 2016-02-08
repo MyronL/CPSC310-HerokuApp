@@ -34,6 +34,8 @@ block body
                         button(onClick="bubbleButton()") Speech Bubble
                         button(onClick="squareButton()") Square Bubble
                         button(onClick="thoughtButton()") Thought Bubble
+                        textarea#dialogue(name="dialogue", placeholder="dialogue")
+                        button(onClick="addText()") Add Text
                         .container
                             style
                             .row
@@ -58,11 +60,14 @@ block scripts
     canvas2 = new fabric.Canvas('panel2');
     canvas3 = new fabric.Canvas('panel3');
     canvas4 = new fabric.Canvas('panel4');
-
-    // default text to be instantiated into bubble
-    var defaultText = new fabric.Text('hello', {
-      fontFamily: 'Comic Sans' // will look into other fonts later
-    });
+    // add text
+    function addText() {
+      var textArea = document.getElementById("dialogue").value;
+      var textToAdd = new fabric.Text(textArea, {
+        fontFamily: 'Comic Sans'
+      });
+      canvas1.add(textToAdd);
+    }
 
     // imported images from placeholder imgur URL
     // TODO: need to have images on server and load from there
@@ -87,7 +92,6 @@ block scripts
       }
 
       fabric.Image.fromURL(speech, function(b) {
-        // on mouse click
         canvas1.on('mouse:up', function(b1){
           canvas1.add(b);
         });
@@ -115,7 +119,6 @@ block scripts
       }
 
       fabric.Image.fromURL(speech, function(s) {
-        // on mouse click
         canvas1.on('mouse:up', function(s1){
           canvas1.add(s);
         });
@@ -142,7 +145,6 @@ block scripts
         speech = null;
       }
       fabric.Image.fromURL(speech, function(t) {
-        // on mouse click
         canvas1.on('mouse:up', function(t1){
           canvas1.add(t);
         });
