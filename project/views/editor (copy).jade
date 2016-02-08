@@ -25,13 +25,13 @@ block body
                         .panel-heading Speech Bubble
                         .panel-body                        
                             button#bubbleButton Normal Bubble
-                            button#squareButton Square Bubble
-                            button#thoughtButton Thought Bubble
+                            button(onClick="squareButton()") Square Bubble
+                            button(onClick="thoughtButton()") Thought Bubble
                             textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
-                            button#textButton Add Text
+                            button(onClick="addText()") Add Text
                             textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
-                            button#colourButton Set Text Colour
-                            button#rmTextButton Remove Text                           
+                            button(onClick="setColour()") Set Text Colour
+                            button(onClick="removeSelected()") Remove Text                           
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
@@ -60,7 +60,13 @@ block scripts
    // reference:http://jsfiddle.net/jaibuu/Vp6wa/
   script(type="text/javascript", src="modules/Editor.js")
   script(type="text/javascript").
-   
+    /*
+    // speech bubble implementation here:
+    // the 4 panels have been instantiated as canvases here
+    canvas1 = new fabric.Canvas('panel1');
+    canvas2 = new fabric.Canvas('panel2');
+    canvas3 = new fabric.Canvas('panel3');
+    canvas4 = new fabric.Canvas('panel4');
     function saveProject(){
         document.formUpdateComicField.submit();
         document.formSavePanels.sPanel1.value = JSON.stringify(canvas1);
@@ -166,4 +172,4 @@ block scripts
     }
     
 
-    
+    */
