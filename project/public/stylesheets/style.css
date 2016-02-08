@@ -9,6 +9,8 @@ a {
 
 @media (min-width: 1200px) {
   .container {
-    width: 2500px;
+    width: 1600px;
+    padding-left: 1px;
+    padding-right:1px;
   }
 }
