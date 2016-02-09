@@ -17,7 +17,7 @@ class Application {
     var logger = require('morgan');
     var mongo = require('mongodb');
     var monk = require('monk');
-    var db = monk('localhost:27018/data');
+    var db = monk('localhost:27017/comicdata');
     var cookieParser = require('cookie-parser');
     var bodyParser = require('body-parser');
 

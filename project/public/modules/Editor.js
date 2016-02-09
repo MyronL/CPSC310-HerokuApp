@@ -11,7 +11,7 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm) {
         var _this = this;
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
         this.square = 'http://i.imgur.com/Co7HFts.png';
@@ -26,6 +26,8 @@ var Editor = (function () {
         this.colourText = colourText;
         this.colourButton = colourButton;
         this.rmTextButton = rmTextButton;
+        this.saveButton = saveButton;
+        this.saveProjectForm = saveProjectForm;
         this.canvases = [];
         for (var i = 0; i < 4; i++) {
             this.canvases.push(new fabric.Canvas(this.panels[i]));
@@ -37,6 +39,7 @@ var Editor = (function () {
         textButton.onclick = function () { return _this.addText(); };
         colourButton.onclick = function () { return _this.setColour(); };
         rmTextButton.onclick = function () { return _this.removeSelected(); };
+        saveButton.onclick = function () { return _this.saveProject(); };
         //this.tools = null;
         //this.editingComic = null;
         //this.selectedPanel = null;
@@ -64,32 +67,9 @@ var Editor = (function () {
     Editor.prototype.helperBubble = function () {
         console.log("helperBubble " + this.speech);
         var canvas1 = this.canvases[0];
-        var canvas2 = this.canvases[1];
-        var canvas3 = this.canvases[2];
-        var canvas4 = this.canvases[3];
         fabric.Image.fromURL(this.speech, function (obj) {
-            canvas1.on('mouse:down', function (b1) {
-                canvas1.add(obj);
-            });
+            canvas1.add(obj);
             canvas1.setActiveObject(obj);
-        });
-        fabric.Image.fromURL(this.speech, function (obj2) {
-            canvas2.on('mouse:down', function (b2) {
-                canvas2.add(obj2);
-            });
-            canvas2.setActiveObject(obj2);
-        });
-        fabric.Image.fromURL(this.speech, function (obj3) {
-            canvas3.on('mouse:down', function (b3) {
-                canvas3.add(obj3);
-            });
-            canvas3.setActiveObject(obj3);
-        });
-        fabric.Image.fromURL(this.speech, function (obj4) {
-            canvas4.on('mouse:down', function (b4) {
-                canvas4.add(obj4);
-            });
-            canvas4.setActiveObject(obj4);
         });
     };
     Editor.prototype.clickBubbleButton = function () {
@@ -123,10 +103,29 @@ var Editor = (function () {
     };
     Editor.prototype.removeSelected = function () {
         var removeThis = this.canvases[0].getActiveObject();
-        if (removeThis instanceof fabric.Text) {
-            this.canvases[0].remove(removeThis);
-            this.canvases[0].renderAll();
-        }
+        this.canvases[0].remove(removeThis);
+        this.canvases[0].renderAll();
+    };
+    Editor.prototype.saveProject = function () {
+        this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+        console.log(JSON.stringify(this.canvases[0]));
+        this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+        this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+        this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+        this.saveProjectForm.submit();
+    };
+    Editor.prototype.loadProject = function (loadProject) {
+        var title = loadProject[0].title;
+        var description = loadProject[0].description;
+        var tags = loadProject[0].tags;
+        var author = loadProject[0].author;
+        var JsonPanel1 = loadProject[0].panel1;
+        var JsonPanel2 = loadProject[0].panel2;
+        var JsonPanel3 = loadProject[0].panel3;
+        var JsonPanel4 = loadProject[0].panel4;
+        console.log(title);
+        console.log(loadProject[0]);
+        this.canvases[0].loadFromJSON(JsonPanel1, this.canvases[0].renderAll.bind(this.canvases[0]));
     };
     return Editor;
 })();
@@ -145,5 +144,13 @@ window.onload = function () {
     var colourText = document.getElementById("colour");
     var colourButton = document.getElementById("colourButton");
     var rmTextButton = document.getElementById("rmTextButton");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton);
+    var saveButton = document.getElementById("saveButton");
+    var saveProjectForm = document.getElementById("formSaveProject");
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm);
+    if (loadProject == null) {
+        console.log("nothing");
+    }
+    else {
+        editor.loadProject(loadProject);
+    }
 };
