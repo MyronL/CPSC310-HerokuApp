@@ -11,7 +11,7 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm, publishButton) {
         var _this = this;
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
         this.square = 'http://i.imgur.com/Co7HFts.png';
@@ -27,6 +27,7 @@ var Editor = (function () {
         this.colourButton = colourButton;
         this.rmTextButton = rmTextButton;
         this.saveButton = saveButton;
+        this.publishButton = publishButton;
         this.saveProjectForm = saveProjectForm;
         this.canvases = [];
         for (var i = 0; i < 4; i++) {
@@ -40,6 +41,7 @@ var Editor = (function () {
         colourButton.onclick = function () { return _this.setColour(); };
         rmTextButton.onclick = function () { return _this.removeSelected(); };
         saveButton.onclick = function () { return _this.saveProject(); };
+        publishButton.onclick = function () { return _this.publishProject(); };
         //this.tools = null;
         //this.editingComic = null;
         //this.selectedPanel = null;
@@ -57,7 +59,7 @@ var Editor = (function () {
             imgObj.src = reader.result;
             imgObj.onload = function () {
                 var image = new fabric.Image(imgObj, { left: 0, top: 0, angle: 0, padding: 0 });
-                image.scaleToWidth(400);
+                image.scaleToWidth(300);
                 canvas.add(image);
                 canvas.setActiveObject(image);
             };
@@ -106,9 +108,24 @@ var Editor = (function () {
         this.canvases[0].remove(removeThis);
         this.canvases[0].renderAll();
     };
-    Editor.prototype.saveProject = function () {
+    Editor.prototype.publishProject = function () {
+        this.saveProjectForm.elements['published'].value = true;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
-        console.log(JSON.stringify(this.canvases[0]));
+        //   console.log(JSON.stringify(this.canvases[0]));
+        this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+        this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+        this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+        this.saveProjectForm.submit();
+    };
+    Editor.prototype.saveProject = function () {
+        /*    this.canvases[0].forEachObject(function(obj){
+                obj.sourcePath = '/uploadIMG/FILE.svg';
+                console.log(obj.sourcePath);
+            });
+            */
+        this.saveProjectForm.elements['published'].value = false;
+        this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+        //   console.log(JSON.stringify(this.canvases[0]));
         this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
         this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
         this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
@@ -124,6 +141,9 @@ var Editor = (function () {
         var JsonPanel3 = loadProject[0].panel3;
         var JsonPanel4 = loadProject[0].panel4;
         console.log(title);
+        $('#comicTitle').val(title);
+        $('#comicDescription').val(description);
+        $('#comicTags').val(tags);
         console.log(loadProject[0]);
         this.canvases[0].loadFromJSON(JsonPanel1, this.canvases[0].renderAll.bind(this.canvases[0]));
     };
@@ -145,8 +165,9 @@ window.onload = function () {
     var colourButton = document.getElementById("colourButton");
     var rmTextButton = document.getElementById("rmTextButton");
     var saveButton = document.getElementById("saveButton");
+    var publishButton = document.getElementById("publishButton");
     var saveProjectForm = document.getElementById("formSaveProject");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm);
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm, publishButton);
     if (loadProject == null) {
         console.log("nothing");
     }

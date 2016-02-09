@@ -30,6 +30,7 @@ class Editor{
   private colourButton: HTMLButtonElement;
   private rmTextButton: HTMLButtonElement;
   private saveButton: HTMLButtonElement;
+  private publishButton: HTMLButtonElement;
   private saveProjectForm: HTMLFormElement;
 
   private canvases: fabric.ICanvas[];
@@ -44,7 +45,7 @@ class Editor{
     bubbleButton: HTMLButtonElement, squareButton: HTMLButtonElement, thoughtButton: HTMLButtonElement,
     dialogue: HTMLTextAreaElement, textButton: HTMLButtonElement,
     colourText: HTMLTextAreaElement, colourButton: HTMLButtonElement, rmTextButton: HTMLButtonElement,
-    saveButton: HTMLButtonElement, saveProjectForm: HTMLFormElement){
+    saveButton: HTMLButtonElement, saveProjectForm: HTMLFormElement, publishButton: HTMLButtonElement){
       this.panels = panels;
       this.imgLoader = imgLoader;
       this.bubbleButton = bubbleButton;
@@ -56,6 +57,7 @@ class Editor{
       this.colourButton = colourButton;
       this.rmTextButton = rmTextButton;
       this.saveButton = saveButton;
+      this.publishButton = publishButton;
       this.saveProjectForm = saveProjectForm;
 
 
@@ -73,6 +75,7 @@ class Editor{
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
       saveButton.onclick = () => this.saveProject();
+      publishButton.onclick = () => this.publishProject();
       //this.tools = null;
       //this.editingComic = null;
       //this.selectedPanel = null;
@@ -93,7 +96,7 @@ class Editor{
       imgObj.src = reader.result;
       imgObj.onload = function() {
           var image = new fabric.Image(imgObj, {left: 0, top: 0, angle: 0, padding: 0});
-          image.scaleToWidth(400);
+          image.scaleToWidth(300);
           canvas.add(image);
           canvas.setActiveObject(image);
         }
@@ -152,10 +155,24 @@ class Editor{
       this.canvases[0].remove(removeThis);
       this.canvases[0].renderAll();  
    }
-
-  saveProject(){
+  publishProject(){
+    this.saveProjectForm.elements['published'].value = true;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
-    console.log(JSON.stringify(this.canvases[0]));
+ //   console.log(JSON.stringify(this.canvases[0]));
+    this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+    this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+    this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+    this.saveProjectForm.submit(); 
+  }
+  saveProject(){
+/*    this.canvases[0].forEachObject(function(obj){
+        obj.sourcePath = '/uploadIMG/FILE.svg';
+        console.log(obj.sourcePath);
+    });
+    */
+    this.saveProjectForm.elements['published'].value = false;
+    this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+ //   console.log(JSON.stringify(this.canvases[0]));
     this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
     this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
     this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
@@ -172,6 +189,9 @@ class Editor{
       var JsonPanel3 = loadProject[0].panel3;
       var JsonPanel4 = loadProject[0].panel4;
       console.log(title);
+      $('#comicTitle').val(title);
+      $('#comicDescription').val(description);
+      $('#comicTags').val(tags);      
       console.log(loadProject[0])
       this.canvases[0].loadFromJSON(JsonPanel1, this.canvases[0].renderAll.bind(this.canvases[0]));
 
@@ -196,13 +216,14 @@ window.onload = function() {
   var colourButton = <HTMLButtonElement> document.getElementById("colourButton");
   var rmTextButton = <HTMLButtonElement> document.getElementById("rmTextButton");
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
+  var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
   var editor = new Editor(panels, imgLoader, 
     bubbleButton, squareButton, thoughtButton, 
     dialogue, textButton,
     colourText, colourButton, rmTextButton,
-    saveButton, saveProjectForm);
+    saveButton, saveProjectForm, publishButton);
 
   if (loadProject == null){
             console.log("nothing");

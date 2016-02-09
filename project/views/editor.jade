@@ -17,6 +17,7 @@ block body
                                 br
                                 textarea#comicTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
                                 br
+                                input(type="hidden",name="published")
                                 input(type="hidden",name="sPanel1")
                                 input(type="hidden",name="sPanel2")
                                 input(type="hidden",name="sPanel3")
@@ -40,7 +41,8 @@ block body
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
-                            button#saveButton Save Comic                    
+                            button#saveButton Save Comic   
+                            button#publishButton Publish Comic                 
             .col-sm-10
                 h2 Comic Panels
                         .container

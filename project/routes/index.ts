@@ -55,6 +55,7 @@ class Router {
             var panel2_JSON = req.body.sPanel2;
             var panel3_JSON = req.body.sPanel3;
             var panel4_JSON = req.body.sPanel4;
+            var published = req.body.published;
             var db = req.db;
             var comicCollection = db.get('EditingComic');
             var author = "test"
@@ -62,22 +63,67 @@ class Router {
             console.log("updateField");
             console.log(editor_title);
             comicCollection.insert({
-                "title": editor_title,
-                "author": "test",
-                "description": editor_des,
-                "published": false,
-                "tags": editor_tags,
-                "panel1": panel1_JSON,
-                "panel2": panel2_JSON,
-                "panel3": panel3_JSON,
-                "panel4": panel4_JSON
-            }, function(err,doc){
-                if (err) {res.send("There was a problem adding the information to DB");}
-                else {
-                    console.log("success");
-                    res.redirect('/testProjectList');
-                }
-            });
+                            "title": editor_title,
+                            "author": "test",
+                            "description": editor_des,
+                            "published": published,
+                            "tags": editor_tags,
+                            "panel1": panel1_JSON,
+                            "panel2": panel2_JSON,
+                            "panel3": panel3_JSON,
+                            "panel4": panel4_JSON
+                        }, function(err,doc){
+                            if (err) {res.send("There was a problem adding the information to DB");}
+                            else {
+                                if (published == "true"){
+                                    console.log("success publish");
+                                    res.redirect('/');  
+                                } else {
+                                    console.log("success save");
+                                    res.redirect('/testProjectList');                                      
+                                }
+                                                  
+                            }
+                        });
+            /*
+            if (published == "true") {
+                        comicCollection.insert({
+                            "title": editor_title,
+                            "author": "test",
+                            "description": editor_des,
+                            "published": published,
+                            "tags": editor_tags,
+                            "panel1": panel1_JSON,
+                            "panel2": panel2_JSON,
+                            "panel3": panel3_JSON,
+                            "panel4": panel4_JSON
+                        }, function(err,doc){
+                            if (err) {res.send("There was a problem adding the information to DB");}
+                            else {
+                                console.log("publish");
+                                res.redirect('/');                    
+                            }
+                        });
+                    } else {
+                        comicCollection.insert({
+                            "title": editor_title,
+                            "author": "test",
+                            "description": editor_des,
+                            "published": published,
+                            "tags": editor_tags,
+                            "panel1": panel1_JSON,
+                            "panel2": panel2_JSON,
+                            "panel3": panel3_JSON,
+                            "panel4": panel4_JSON
+                        }, function(err,doc){
+                            if (err) {res.send("There was a problem adding the information to DB");}
+                            else {
+                                console.log("success");
+                                res.redirect('/testProjectList');                    
+                            }
+                        });
+                    }      
+                    */    
         });
 		module.exports = router;
 	}
