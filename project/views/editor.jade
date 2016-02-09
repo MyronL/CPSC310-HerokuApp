@@ -11,11 +11,11 @@ block body
                         .panel-heading Comic Fields
                         .panel-body
                             form#formSaveProject(name="formSaveProject", method="post", action="/saveProject")
-                                textarea#inputTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
+                                textarea#comicTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
                                 br
-                                textarea#inputDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
+                                textarea#comicDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
                                 br
-                                textarea#inputTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
+                                textarea#comicTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
                                 br
                                 input(type="hidden",name="sPanel1")
                                 input(type="hidden",name="sPanel2")
@@ -85,6 +85,9 @@ block scripts
             var JsonPanel3 = loadProject[0].panel3;
             var JsonPanel4 = loadProject[0].panel4;
             console.log(title);
+            $('#comicTitle').val(title);
+            $('#comicDescription').val(description);
+            $('#comicTags').val(tags);
             console.log(loadProject[0])
             canvas1.loadFromJSON(JsonPanel1, canvas1.renderAll.bind(canvas1));
         }
