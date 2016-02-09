@@ -11,12 +11,13 @@ block body
                         .panel-heading Comic Fields
                         .panel-body
                             form#formSaveProject(name="formSaveProject", method="post", action="/saveProject")
-                                textarea#inputTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
+                                textarea#comicTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
                                 br
-                                textarea#inputDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
+                                textarea#comicDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
                                 br
-                                textarea#inputTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
+                                textarea#comicTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
                                 br
+                                input(type="hidden",name="published")
                                 input(type="hidden",name="sPanel1")
                                 input(type="hidden",name="sPanel2")
                                 input(type="hidden",name="sPanel3")
@@ -28,18 +29,20 @@ block body
                     .panel.panel-success
                         .panel-heading Speech Bubble
                         .panel-body                        
-                            button(onClick="bubbleButton()") Normal Bubble
-                            button(onClick="squareButton()") Square Bubble
-                            button(onClick="thoughtButton()") Thought Bubble
+                            button#bubbleButton Normal Bubble
+                            button#squareButton Square Bubble
+                            button#thoughtButton Thought Bubble
                             textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
-                            button(onClick="addText()") Add Text
+                            button#textButton Add Text
                             textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
-                            button(onClick="setColour()") Set Text Colour
-                            button(onClick="removeSelected()") Remove Text                           
+                            button#colourButton Set Text Colour
+                            button#rmTextButton Remove                            
+                            button#forwardButton Bring Forward
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
-                            button(onClick="saveProject()") Save Comic                    
+                            button#saveButton Save Comic   
+                            button#publishButton Publish Comic                 
             .col-sm-10
                 h2 Comic Panels
                         .container
@@ -57,19 +60,22 @@ block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js") 
    // reference:http://jsfiddle.net/jaibuu/Vp6wa/
+  script.
+    var loadProject =!{JSON.stringify(loadProject)};
   script(type="text/javascript", src="/modules/Editor.js")
   script(type="text/javascript").
 
     // speech bubble implementation here:
     // the 4 panels have been instantiated as canvases here
-    canvas1 = new fabric.Canvas('panel1');
-    canvas2 = new fabric.Canvas('panel2');
-    canvas3 = new fabric.Canvas('panel3');
-    canvas4 = new fabric.Canvas('panel4');
+    //canvas1 = new fabric.Canvas('panel1');
+    //canvas2 = new fabric.Canvas('panel2');
+    //canvas3 = new fabric.Canvas('panel3');
+    //canvas4 = new fabric.Canvas('panel4');
     // Correctly loading
     // TODO: need to make sure saveProject save to the same mongoID
     // TODO: need to make sure the upload img will work
     // TODO: need to populate the title/description... when loaded
+    /*
     window.onload = function(){
         var loadProject =!{JSON.stringify(loadProject)};
         console.log("Hi Loading");
@@ -85,10 +91,14 @@ block scripts
             var JsonPanel3 = loadProject[0].panel3;
             var JsonPanel4 = loadProject[0].panel4;
             console.log(title);
+            $('#comicTitle').val(title);
+            $('#comicDescription').val(description);
+            $('#comicTags').val(tags);
             console.log(loadProject[0])
             canvas1.loadFromJSON(JsonPanel1, canvas1.renderAll.bind(canvas1));
         }
     };  
+    */
     function saveProject(){
         document.formSaveProject.sPanel1.value = JSON.stringify(canvas1);
         console.log(JSON.stringify(canvas1));
@@ -97,99 +107,7 @@ block scripts
         document.formSaveProject.sPanel4.value = JSON.stringify(canvas4);
         document.formSaveProject.submit();
     }
-    // remove selected
-    // TODO: this is supposed to remove speech bubbles too but it doesn't
-    function removeSelected(){
-      var removeThis = canvas1.getActiveObject();
-      canvas1.remove(removeThis);  
-    }
-    // add text
-    function addText() {
-      var textArea = document.getElementById("dialogue").value;
-      var textToAdd = new fabric.Text(textArea, {
-        fontFamily: 'Comic Sans'
-      });
-      canvas1.add(textToAdd);
-    }
-
-    function setColour(colour) {
-      colour = document.getElementById("colour").value;
-      var selected = canvas1.getActiveObject();
-      selected.setColor(colour);
-      canvas1.renderAll();
-    }
-
-    // imported images from placeholder imgur URL
-    // TODO: need to have images on server and load from there
-    // button switches for speech bubble
-    var bubble = 'http://i.imgur.com/qtDmgzK.png';
-    var square = 'http://i.imgur.com/Co7HFts.png';
-    var thought = 'http://i.imgur.com/EZruJfs.png';
-    //- var bubbleSelect = false;
-    //- var squareSelect = false;
-    //- var thoughtSelect = false;
-    var speech;
-
-    function helperBubble(speech) {
-      fabric.Image.fromURL(speech, function(b) {
-        canvas1.on('mouse:down', function(b1){
-          canvas1.add(b);
-        });
-        canvas2.on('mouse:down', function(b2){
-          canvas2.add(b);
-        });
-        canvas3.on('mouse:down', function(b3){
-          canvas3.add(b);
-        });
-        canvas4.on('mouse:down', function(b4){
-          canvas4.add(b);
-        });
-      });
-    }
-
-    function bubbleButton() {
-      //- bubbleSelect = true;
-      //- squareSelect = false;
-      //- thoughtSelect = false;
-
-      //- if (bubbleSelect) {
-      //-   speech = bubble;
-      //- } else {
-      //-   speech = null;
-      //- }
-      speech = bubble;
-      helperBubble(speech);
-    }
-
-    function squareButton() {
-      //- bubbleSelect = false;
-      //- squareSelect = true;
-      //- thoughtSelect = false;
-
-      //- if (squareSelect) {
-      //-   speech = square;
-      //- } else {
-      //-   speech = null;
-      //- }
-      speech = square;
-      helperBubble(speech);
-    }
-    
-    function thoughtButton() {
-      //- bubbleSelect = false;
-      //- squareSelect = false;
-      //- thoughtSelect= true;
-
-      //- if (thoughtSelect) {
-      //-   speech = thought;
-      //- } else {
-      //-   speech = null;
-      //- }
-      speech = thought;
-      helperBubble(speech);
-    }
     
 
     
-
 

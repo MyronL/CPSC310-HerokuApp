@@ -1,0 +1,47 @@
+doctype html.no-js(lang='en')
+head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Foundation | Welcome
+    link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
+    link(href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css', rel='stylesheet', type='text/css')
+    .top-bar
+      .top-bar-left
+        ul.menu
+          li
+            input(type='search', placeholder='Search')
+          li
+            button.button(type='button') Search
+      .top-bar-right
+        ul.menu
+          li
+            a(href='/') Sign In
+          li
+            a(href='/signup') Sign Up
+    .row
+      .medium-4.columns
+        img(src='https://www.berksfoods.com/wp-content/uploads/2014/02/ph_home_1.png')
+      .medium-8.columns
+        img(src='http://images.cooltext.com/4586341.png')
+    br
+    .title-bar(data-responsive-toggle='main-menu', data-hide-for='medium')
+      button.menu-icon(type='button', data-toggle='')
+      .title-bar-title Menu
+    #main-menu.top-bar
+      ul.menu.vertical.medium-horizontal.expanded.medium-text-center(data-responsive-menu='drilldown medium-dropdown')
+        li.has-submenu
+          a(href='../editor') Make Comic
+        li.has-submenu
+          a(href='#') Favourites
+        li.has-submenu
+          a(href='#') Top Comics
+        li.has-submenu
+          a(href='#') My Comics
+    br
+    .row
+        include PublishedProject     
+    footer
+      .medium-6.columns
+        ul.menu.align-right
+          li.menu-text Copyright &copy; OverPricedHotdogs
+
