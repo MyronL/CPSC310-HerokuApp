@@ -29,6 +29,7 @@ class Editor{
   private colourText: HTMLTextAreaElement;
   private colourButton: HTMLButtonElement;
   private rmTextButton: HTMLButtonElement;
+  private forwardButton: HTMLButtonElement;
   private saveButton: HTMLButtonElement;
   private publishButton: HTMLButtonElement;
   private saveProjectForm: HTMLFormElement;
@@ -41,11 +42,21 @@ class Editor{
   private speech: string;
 
   
-  constructor(panels: HTMLCanvasElement[], imgLoader: HTMLInputElement, 
-    bubbleButton: HTMLButtonElement, squareButton: HTMLButtonElement, thoughtButton: HTMLButtonElement,
-    dialogue: HTMLTextAreaElement, textButton: HTMLButtonElement,
-    colourText: HTMLTextAreaElement, colourButton: HTMLButtonElement, rmTextButton: HTMLButtonElement,
-    saveButton: HTMLButtonElement, saveProjectForm: HTMLFormElement, publishButton: HTMLButtonElement){
+  constructor(panels: HTMLCanvasElement[], 
+    imgLoader: HTMLInputElement, 
+    bubbleButton: HTMLButtonElement, 
+    squareButton: HTMLButtonElement, 
+    thoughtButton: HTMLButtonElement,
+    dialogue: HTMLTextAreaElement, 
+    textButton: HTMLButtonElement,
+    colourText: HTMLTextAreaElement, 
+    colourButton: HTMLButtonElement, 
+    rmTextButton: HTMLButtonElement, 
+    forwardButton: HTMLButtonElement,
+    saveButton: HTMLButtonElement, 
+    saveProjectForm: HTMLFormElement, 
+    publishButton: HTMLButtonElement) {
+
       this.panels = panels;
       this.imgLoader = imgLoader;
       this.bubbleButton = bubbleButton;
@@ -59,7 +70,7 @@ class Editor{
       this.saveButton = saveButton;
       this.publishButton = publishButton;
       this.saveProjectForm = saveProjectForm;
-
+      this.forwardButton = forwardButton;
 
 
       this.canvases = [];
@@ -74,6 +85,7 @@ class Editor{
       textButton.onclick = () => this.addText();
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
+      forwardButton.onclick = () => this.forwards();
       saveButton.onclick = () => this.saveProject();
       publishButton.onclick = () => this.publishProject();
       //this.tools = null;
@@ -155,6 +167,7 @@ class Editor{
       this.canvases[0].remove(removeThis);
       this.canvases[0].renderAll();  
    }
+
   publishProject(){
     this.saveProjectForm.elements['published'].value = true;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
@@ -177,8 +190,14 @@ class Editor{
     this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
     this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
     this.saveProjectForm.submit();
-
    }
+   
+   forwards() {
+     var forward = this.canvases[0].getActiveObject();
+     this.canvases[0].bringForward(forward);
+     this.canvases[0].bringForward(forward);
+     this.canvases[0].renderAll(); 
+  }
    loadProject(loadProject) {
       var title = loadProject[0].title;
       var description = loadProject[0].description;
@@ -215,15 +234,28 @@ window.onload = function() {
   var colourText = <HTMLTextAreaElement> document.getElementById("colour");
   var colourButton = <HTMLButtonElement> document.getElementById("colourButton");
   var rmTextButton = <HTMLButtonElement> document.getElementById("rmTextButton");
+  var forwardButton = <HTMLButtonElement>document.getElementById("forwardButton");
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
   var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
-  var editor = new Editor(panels, imgLoader, 
-    bubbleButton, squareButton, thoughtButton, 
-    dialogue, textButton,
-    colourText, colourButton, rmTextButton,
-    saveButton, saveProjectForm, publishButton);
+
+  var editor = new Editor(
+    panels, 
+    imgLoader, 
+    bubbleButton, 
+    squareButton, 
+    thoughtButton, 
+    dialogue, 
+    textButton,
+    colourText, 
+    colourButton, 
+    rmTextButton, 
+    forwardButton, 
+    saveButton, 
+    saveProjectForm, 
+    publishButton
+    );
 
   if (loadProject == null){
             console.log("nothing");

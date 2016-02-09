@@ -11,7 +11,7 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm, publishButton) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
         var _this = this;
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
         this.square = 'http://i.imgur.com/Co7HFts.png';
@@ -29,6 +29,7 @@ var Editor = (function () {
         this.saveButton = saveButton;
         this.publishButton = publishButton;
         this.saveProjectForm = saveProjectForm;
+        this.forwardButton = forwardButton;
         this.canvases = [];
         for (var i = 0; i < 4; i++) {
             this.canvases.push(new fabric.Canvas(this.panels[i]));
@@ -40,6 +41,7 @@ var Editor = (function () {
         textButton.onclick = function () { return _this.addText(); };
         colourButton.onclick = function () { return _this.setColour(); };
         rmTextButton.onclick = function () { return _this.removeSelected(); };
+        forwardButton.onclick = function () { return _this.forwards(); };
         saveButton.onclick = function () { return _this.saveProject(); };
         publishButton.onclick = function () { return _this.publishProject(); };
         //this.tools = null;
@@ -131,6 +133,12 @@ var Editor = (function () {
         this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
         this.saveProjectForm.submit();
     };
+    Editor.prototype.forwards = function () {
+        var forward = this.canvases[0].getActiveObject();
+        this.canvases[0].bringForward(forward);
+        this.canvases[0].bringForward(forward);
+        this.canvases[0].renderAll();
+    };
     Editor.prototype.loadProject = function (loadProject) {
         var title = loadProject[0].title;
         var description = loadProject[0].description;
@@ -164,10 +172,11 @@ window.onload = function () {
     var colourText = document.getElementById("colour");
     var colourButton = document.getElementById("colourButton");
     var rmTextButton = document.getElementById("rmTextButton");
+    var forwardButton = document.getElementById("forwardButton");
     var saveButton = document.getElementById("saveButton");
     var publishButton = document.getElementById("publishButton");
     var saveProjectForm = document.getElementById("formSaveProject");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm, publishButton);
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
     if (loadProject == null) {
         console.log("nothing");
     }
