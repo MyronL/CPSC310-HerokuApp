@@ -194,7 +194,6 @@ var Router = (function () {
                 res.redirect('/print');
             });
         });
-        router.get('*', function (req, res) { res.render('404', { title: 'Page Not Found' }); });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
             res.render('editor', { title: 'Editor', "loadProject": null });
@@ -259,6 +258,7 @@ var Router = (function () {
                 }
             });
         });
+        router.get('*', function (req, res) { res.render('404', { title: 'Page Not Found' }); });
         module.exports = router;
     };
     return Router;
