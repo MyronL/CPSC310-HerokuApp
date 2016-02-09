@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1 Project List
+  u1 
+        each project, i in projectList
+            li
+                a(href="/editor/"+project._id)= project.title

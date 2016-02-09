@@ -8,6 +8,9 @@ var Application = (function () {
         var path = require('path');
         var favicon = require('serve-favicon');
         var logger = require('morgan');
+        var mongo = require('mongodb');
+        var monk = require('monk');
+        var db = monk('localhost:27017/comicdata');
         var cookieParser = require('cookie-parser');
         var bodyParser = require('body-parser');
         var routes = require('./routes/index');
@@ -23,6 +26,11 @@ var Application = (function () {
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public')));
+        // Make our db accessible to our router
+        app.use(function (req, res, next) {
+            req.db = db;
+            next();
+        });
         app.use('/', routes);
         app.use('/users', users);
         // catch 404 and forward to error handler
