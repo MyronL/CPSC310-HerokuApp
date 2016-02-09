@@ -36,6 +36,7 @@ block body
                             textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
                             button(onClick="setColour()") Set Text Colour
                             button(onClick="removeSelected()") Remove Text                           
+                            button(onClick="bringForward()") Bring Forward
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
@@ -103,6 +104,15 @@ block scripts
       var removeThis = canvas1.getActiveObject();
       canvas1.remove(removeThis);  
     }
+
+    function bringForward(){
+      var forward = canvas1.getActiveObject();
+      // calling 2 times because bring forward once only puts it in the
+      // same plane as the other object and is still covered by it
+      canvas1.bringForward(forward);
+      canvas1.bringForward(forward);
+      canvas1.renderAll();
+    }
     // add text
     function addText() {
       var textArea = document.getElementById("dialogue").value;
@@ -132,18 +142,7 @@ block scripts
 
     function helperBubble(speech) {
       fabric.Image.fromURL(speech, function(b) {
-        canvas1.on('mouse:down', function(b1){
-          canvas1.add(b);
-        });
-        canvas2.on('mouse:down', function(b2){
-          canvas2.add(b);
-        });
-        canvas3.on('mouse:down', function(b3){
-          canvas3.add(b);
-        });
-        canvas4.on('mouse:down', function(b4){
-          canvas4.add(b);
-        });
+        canvas1.add(b);
       });
     }
 
