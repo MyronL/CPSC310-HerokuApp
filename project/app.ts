@@ -17,7 +17,7 @@ class Application {
     var logger = require('morgan');
     var mongo = require('mongodb');
     var monk = require('monk');
-    var db = monk('localhost:27017/comicdata');
+    var db = monk('OP123456:BT123456@ds059205.mongolab.com:59205/heroku_t6fhvx60');
     var cookieParser = require('cookie-parser');
     var bodyParser = require('body-parser');
     var session = require('express-session');
@@ -41,7 +41,7 @@ class Application {
 	   proxy: true,
 	   resave: true,
 	   saveUninitialized: true,
-	   store: new MongoStore({ host: 'localhost', port: 27017, db: 'node-login'})
+	   store: new MongoStore({ host: 'OP123456:BT123456@ds059205.mongolab.com', port: 59205, db: 'heroku_t6fhvx60'})
 	   })
     );
     

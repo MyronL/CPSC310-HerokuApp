@@ -7,3 +7,5 @@
 ehthumbs.db
 Thumbs.db
 project/.DS_Store
+/project/node_modules
+/project//myron's stuff

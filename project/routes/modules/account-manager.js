@@ -4,13 +4,14 @@ var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 
-var dbPort 		= 27017;
-var dbHost 		= 'localhost';
-var dbName 		= 'node-login';
+var dbPort 		= 59205;
+var dbHost 		= 'mongodb://OP123456:BT123456@ds059205.mongolab.com';
+var dbName 		= 'heroku_t6fhvx60';
 
 /* establish the database connection */
-
-var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
+var monk = require('monk');
+var db = monk('OP123456:BT123456@ds059205.mongolab.com:59205/heroku_t6fhvx60');
+/*var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
 	db.open(function(e, d){
 	if (e) {
 		console.log(e);
@@ -18,7 +19,8 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 		console.log('connected to database :: ' + dbName);
 	}
 });
-var accounts = db.collection('accounts');
+*/
+var accounts = db.get('accounts');
 
 /* login validation methods */
 
