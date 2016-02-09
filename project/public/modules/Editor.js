@@ -11,7 +11,7 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm) {
         var _this = this;
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
         this.square = 'http://i.imgur.com/Co7HFts.png';
@@ -28,6 +28,7 @@ var Editor = (function () {
         this.rmTextButton = rmTextButton;
         this.saveButton = saveButton;
         this.saveProjectForm = saveProjectForm;
+        this.forwardButton = forwardButton;
         this.canvases = [];
         for (var i = 0; i < 4; i++) {
             this.canvases.push(new fabric.Canvas(this.panels[i]));
@@ -39,6 +40,7 @@ var Editor = (function () {
         textButton.onclick = function () { return _this.addText(); };
         colourButton.onclick = function () { return _this.setColour(); };
         rmTextButton.onclick = function () { return _this.removeSelected(); };
+        forwardButton.onclick = function () { return _this.forwards(); };
         saveButton.onclick = function () { return _this.saveProject(); };
         //this.tools = null;
         //this.editingComic = null;
@@ -106,6 +108,12 @@ var Editor = (function () {
         this.canvases[0].remove(removeThis);
         this.canvases[0].renderAll();
     };
+    Editor.prototype.forwards = function () {
+        var forward = this.canvases[0].getActiveObject();
+        this.canvases[0].bringForward(forward);
+        this.canvases[0].bringForward(forward);
+        this.canvases[0].renderAll();
+    };
     Editor.prototype.saveProject = function () {
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
         console.log(JSON.stringify(this.canvases[0]));
@@ -144,9 +152,10 @@ window.onload = function () {
     var colourText = document.getElementById("colour");
     var colourButton = document.getElementById("colourButton");
     var rmTextButton = document.getElementById("rmTextButton");
+    var forwardButton = document.getElementById("forwardButton");
     var saveButton = document.getElementById("saveButton");
     var saveProjectForm = document.getElementById("formSaveProject");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, saveButton, saveProjectForm);
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm);
     if (loadProject == null) {
         console.log("nothing");
     }

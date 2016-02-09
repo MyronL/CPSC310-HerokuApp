@@ -29,6 +29,7 @@ class Editor{
   private colourText: HTMLTextAreaElement;
   private colourButton: HTMLButtonElement;
   private rmTextButton: HTMLButtonElement;
+  private forwardButton: HTMLButtonElement;
   private saveButton: HTMLButtonElement;
   private saveProjectForm: HTMLFormElement;
 
@@ -40,11 +41,19 @@ class Editor{
   private speech: string;
 
   
-  constructor(panels: HTMLCanvasElement[], imgLoader: HTMLInputElement, 
-    bubbleButton: HTMLButtonElement, squareButton: HTMLButtonElement, thoughtButton: HTMLButtonElement,
-    dialogue: HTMLTextAreaElement, textButton: HTMLButtonElement,
-    colourText: HTMLTextAreaElement, colourButton: HTMLButtonElement, rmTextButton: HTMLButtonElement,
-    saveButton: HTMLButtonElement, saveProjectForm: HTMLFormElement){
+  constructor(panels: HTMLCanvasElement[], 
+    imgLoader: HTMLInputElement, 
+    bubbleButton: HTMLButtonElement, 
+    squareButton: HTMLButtonElement, 
+    thoughtButton: HTMLButtonElement,
+    dialogue: HTMLTextAreaElement, 
+    textButton: HTMLButtonElement,
+    colourText: HTMLTextAreaElement, 
+    colourButton: HTMLButtonElement, 
+    rmTextButton: HTMLButtonElement, 
+    forwardButton: HTMLButtonElement,
+    saveButton: HTMLButtonElement, 
+    saveProjectForm: HTMLFormElement) {
       this.panels = panels;
       this.imgLoader = imgLoader;
       this.bubbleButton = bubbleButton;
@@ -57,7 +66,7 @@ class Editor{
       this.rmTextButton = rmTextButton;
       this.saveButton = saveButton;
       this.saveProjectForm = saveProjectForm;
-
+      this.forwardButton = forwardButton;
 
 
       this.canvases = [];
@@ -72,6 +81,7 @@ class Editor{
       textButton.onclick = () => this.addText();
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
+      forwardButton.onclick = () => this.forwards();
       saveButton.onclick = () => this.saveProject();
       //this.tools = null;
       //this.editingComic = null;
@@ -153,7 +163,14 @@ class Editor{
       this.canvases[0].renderAll();  
    }
 
-  saveProject(){
+   forwards() {
+     var forward = this.canvases[0].getActiveObject();
+     this.canvases[0].bringForward(forward);
+     this.canvases[0].bringForward(forward);
+     this.canvases[0].renderAll(); 
+  }
+
+  saveProject() {
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
     console.log(JSON.stringify(this.canvases[0]));
     this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
@@ -195,14 +212,25 @@ window.onload = function() {
   var colourText = <HTMLTextAreaElement> document.getElementById("colour");
   var colourButton = <HTMLButtonElement> document.getElementById("colourButton");
   var rmTextButton = <HTMLButtonElement> document.getElementById("rmTextButton");
+  var forwardButton = <HTMLButtonElement>document.getElementById("forwardButton");
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
-  var editor = new Editor(panels, imgLoader, 
-    bubbleButton, squareButton, thoughtButton, 
-    dialogue, textButton,
-    colourText, colourButton, rmTextButton,
-    saveButton, saveProjectForm);
+  var editor = new Editor(
+    panels, 
+    imgLoader, 
+    bubbleButton, 
+    squareButton, 
+    thoughtButton, 
+    dialogue, 
+    textButton,
+    colourText, 
+    colourButton, 
+    rmTextButton, 
+    forwardButton, 
+    saveButton, 
+    saveProjectForm
+    );
 
   if (loadProject == null){
             console.log("nothing");

@@ -36,7 +36,7 @@ block body
                             textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
                             button#colourButton Set Text Colour
                             button#rmTextButton Remove                            
-                            button(onClick="bringForward()") Bring Forward
+                            button#forwardButton Bring Forward
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
@@ -101,21 +101,6 @@ block scripts
         document.formSaveProject.sPanel3.value = JSON.stringify(canvas3);
         document.formSaveProject.sPanel4.value = JSON.stringify(canvas4);
         document.formSaveProject.submit();
-    }
-    // remove selected
-    // TODO: this is supposed to remove speech bubbles too but it doesn't
-    function removeSelected(){
-      var removeThis = canvas1.getActiveObject();
-      canvas1.remove(removeThis);  
-    }
-
-    function bringForward(){
-      var forward = canvas1.getActiveObject();
-      // calling 2 times because bring forward once only puts it in the
-      // same plane as the other object and is still covered by it
-      canvas1.bringForward(forward);
-      canvas1.bringForward(forward);
-      canvas1.renderAll();
     }
     
 
