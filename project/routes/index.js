@@ -258,45 +258,6 @@ var Router = (function () {
                     }
                 }
             });
-            /*
-            if (published == "true") {
-                        comicCollection.insert({
-                            "title": editor_title,
-                            "author": "test",
-                            "description": editor_des,
-                            "published": published,
-                            "tags": editor_tags,
-                            "panel1": panel1_JSON,
-                            "panel2": panel2_JSON,
-                            "panel3": panel3_JSON,
-                            "panel4": panel4_JSON
-                        }, function(err,doc){
-                            if (err) {res.send("There was a problem adding the information to DB");}
-                            else {
-                                console.log("publish");
-                                res.redirect('/');
-                            }
-                        });
-                    } else {
-                        comicCollection.insert({
-                            "title": editor_title,
-                            "author": "test",
-                            "description": editor_des,
-                            "published": published,
-                            "tags": editor_tags,
-                            "panel1": panel1_JSON,
-                            "panel2": panel2_JSON,
-                            "panel3": panel3_JSON,
-                            "panel4": panel4_JSON
-                        }, function(err,doc){
-                            if (err) {res.send("There was a problem adding the information to DB");}
-                            else {
-                                console.log("success");
-                                res.redirect('/testProjectList');
-                            }
-                        });
-                    }
-                    */
         });
         module.exports = router;
     };
