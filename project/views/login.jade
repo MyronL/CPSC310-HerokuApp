@@ -2,13 +2,15 @@
 extends loginlayout
 
 block content
-
+	//page at localhost:3000
 	#login-container
 		form( method="post")#login-form.well.span4
+			// .well creates the login box
+			// .span<int> changes the width of the beige loginbox
 			<center>
 			img(src="https://www.berksfoods.com/wp-content/uploads/2014/02/ph_home_1.png" width = "300")
 			h1 Hello!
-			p.subheading Please Sign In
+			p.subheading Please sign in to access comics
 			label Username 
 			input(type="text", name="user", id='user-tf').span4.required
 			label Password

@@ -21,6 +21,10 @@
     "moment" : "~2.10.3",
     "emailjs": "~1.0.0",
     "connect-mongo": "~0.8.2",
-    "errorhandler": "~1.4.2"
+    "errorhandler": "~1.4.2",
+    "jade-bootstrap": "1.0.1"
+  },
+  "engines": {
+	"node": "5.4.0"
   }
 }

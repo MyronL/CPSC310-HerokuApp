@@ -299,7 +299,7 @@ class Router {
                             }
                         });
         });
-        router.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
+    router.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
 		module.exports = router;
 	}
 }

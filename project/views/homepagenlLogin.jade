@@ -1,23 +1,29 @@
 doctype html.no-js(lang='en')
 head
+  // this is me attempting to create a bar on the top of the page for easy navigation everywhere
+  extends loginlayout
+  block content
+    div.navbar.navbar-fixed-top
+      div.navbar-inner
+        div.container-fluid
+          .top-bar-left
+            ul.menu
+              li
+                input(type='search', placeholder='Search')
+              li
+                button.button(type='button') Search
+          .top-bar-right
+            ul.menu
+              li
+                a(href='/signup') Sign Up
+              li
+                a(href='/home') Account Profile
+
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title Foundation | Welcome
+    title Overpriced Hotdogs
     link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
     link(href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css', rel='stylesheet', type='text/css')
-    .top-bar
-      .top-bar-left
-        ul.menu
-          li
-            input(type='search', placeholder='Search')
-          li
-            button.button(type='button') Search
-      .top-bar-right
-        ul.menu
-          li
-            a(href='/') Sign In
-          li
-            a(href='/signup') Sign Up
     .row
       .medium-4.columns
         img(src='https://www.berksfoods.com/wp-content/uploads/2014/02/ph_home_1.png')
