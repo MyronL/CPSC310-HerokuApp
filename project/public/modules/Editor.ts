@@ -2,6 +2,7 @@
 /// <reference path='../../types/DefinitelyTyped/express/express.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/mongodb/mongodb.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/fabricjs/fabricjs.d.ts'/>
+/// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
 
 
 // server
@@ -257,6 +258,7 @@ window.onload = function() {
     publishButton
     );
 
+  // load project is not defined
   if (loadProject == null){
             console.log("nothing");
   } else {
