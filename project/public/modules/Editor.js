@@ -2,6 +2,7 @@
 /// <reference path='../../types/DefinitelyTyped/express/express.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/mongodb/mongodb.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/fabricjs/fabricjs.d.ts'/>
+/// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
 // server
 //import mongodb = require('mongodb');
 // image tools: resize, rotate, etc.
@@ -177,6 +178,7 @@ window.onload = function () {
     var publishButton = document.getElementById("publishButton");
     var saveProjectForm = document.getElementById("formSaveProject");
     var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
+    // load project is not defined
     if (loadProject == null) {
         console.log("nothing");
     }
