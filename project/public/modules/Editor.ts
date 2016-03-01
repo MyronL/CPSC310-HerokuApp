@@ -25,6 +25,7 @@ class Editor{
   private bubbleButton: HTMLButtonElement;
   private squareButton: HTMLButtonElement;
   private thoughtButton: HTMLButtonElement;
+  private boxButton: HTMLButtonElement;
   private dialogue: HTMLTextAreaElement;
   private textButton: HTMLButtonElement;
   private colourText: HTMLTextAreaElement;
@@ -40,6 +41,7 @@ class Editor{
   private bubble = 'http://i.imgur.com/qtDmgzK.png';
   private square = 'http://i.imgur.com/Co7HFts.png';
   private thought = 'http://i.imgur.com/EZruJfs.png';
+  private box = 'http://i.imgur.com/sCXVrzn.png';
   private speech: string;
 
   
@@ -48,6 +50,7 @@ class Editor{
     bubbleButton: HTMLButtonElement, 
     squareButton: HTMLButtonElement, 
     thoughtButton: HTMLButtonElement,
+    boxButton: HTMLButtonElement,
     dialogue: HTMLTextAreaElement, 
     textButton: HTMLButtonElement,
     colourText: HTMLTextAreaElement, 
@@ -63,6 +66,7 @@ class Editor{
       this.bubbleButton = bubbleButton;
       this.squareButton = squareButton;
       this.thoughtButton = thoughtButton;
+      this.boxButton = boxButton;
       this.dialogue = dialogue;
       this.textButton = textButton;
       this.colourText = colourText;
@@ -83,6 +87,7 @@ class Editor{
       bubbleButton.onclick = () => this.clickBubbleButton();
       squareButton.onclick = () => this.clickSquareButton();
       thoughtButton.onclick = () => this.clickThoughtButton();
+      boxButton.onclick = () => this.clickBoxButton();
       textButton.onclick = () => this.addText();
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
@@ -140,6 +145,10 @@ class Editor{
   }
   clickThoughtButton() {
     this.speech = this.thought;
+    this.helperBubble();
+  }
+  clickBoxButton() {
+    this.speech = this.box;
     this.helperBubble();
   }
 
@@ -230,6 +239,7 @@ window.onload = function() {
   var bubbleButton = <HTMLButtonElement> document.getElementById("bubbleButton");
   var squareButton = <HTMLButtonElement> document.getElementById("squareButton");
   var thoughtButton = <HTMLButtonElement> document.getElementById("thoughtButton");
+  var boxButton = <HTMLButtonElement>document.getElementById("boxButton");
   var dialogue = <HTMLTextAreaElement> document.getElementById("dialogue");
   var textButton = <HTMLButtonElement> document.getElementById("textButton");
   var colourText = <HTMLTextAreaElement> document.getElementById("colour");
@@ -246,7 +256,8 @@ window.onload = function() {
     imgLoader, 
     bubbleButton, 
     squareButton, 
-    thoughtButton, 
+    thoughtButton,
+    boxButton, 
     dialogue, 
     textButton,
     colourText, 

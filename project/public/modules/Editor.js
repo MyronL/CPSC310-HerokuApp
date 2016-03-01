@@ -12,16 +12,18 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
         var _this = this;
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
         this.square = 'http://i.imgur.com/Co7HFts.png';
         this.thought = 'http://i.imgur.com/EZruJfs.png';
+        this.box = 'http://i.imgur.com/sCXVrzn.png';
         this.panels = panels;
         this.imgLoader = imgLoader;
         this.bubbleButton = bubbleButton;
         this.squareButton = squareButton;
         this.thoughtButton = thoughtButton;
+        this.boxButton = boxButton;
         this.dialogue = dialogue;
         this.textButton = textButton;
         this.colourText = colourText;
@@ -39,6 +41,7 @@ var Editor = (function () {
         bubbleButton.onclick = function () { return _this.clickBubbleButton(); };
         squareButton.onclick = function () { return _this.clickSquareButton(); };
         thoughtButton.onclick = function () { return _this.clickThoughtButton(); };
+        boxButton.onclick = function () { return _this.clickBoxButton(); };
         textButton.onclick = function () { return _this.addText(); };
         colourButton.onclick = function () { return _this.setColour(); };
         rmTextButton.onclick = function () { return _this.removeSelected(); };
@@ -87,6 +90,10 @@ var Editor = (function () {
     };
     Editor.prototype.clickThoughtButton = function () {
         this.speech = this.thought;
+        this.helperBubble();
+    };
+    Editor.prototype.clickBoxButton = function () {
+        this.speech = this.box;
         this.helperBubble();
     };
     Editor.prototype.addText = function () {
@@ -168,6 +175,7 @@ window.onload = function () {
     var bubbleButton = document.getElementById("bubbleButton");
     var squareButton = document.getElementById("squareButton");
     var thoughtButton = document.getElementById("thoughtButton");
+    var boxButton = document.getElementById("boxButton");
     var dialogue = document.getElementById("dialogue");
     var textButton = document.getElementById("textButton");
     var colourText = document.getElementById("colour");
@@ -177,7 +185,7 @@ window.onload = function () {
     var saveButton = document.getElementById("saveButton");
     var publishButton = document.getElementById("publishButton");
     var saveProjectForm = document.getElementById("formSaveProject");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
     // load project is not defined
     if (loadProject == null) {
         console.log("nothing");
