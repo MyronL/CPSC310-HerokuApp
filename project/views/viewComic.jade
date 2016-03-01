@@ -46,6 +46,12 @@ block body
         .row
             .col-sm-12
                 h2 Comment
+                h4 
+                    form#newComment(name="formNewComment", method="post", action="/newComment")
+                        textarea#comment(type="text",placeholder="New Comment",style="resize:none",name="comment")
+                        input(type="hidden", name="commentUserID")
+                        br
+                        input(type="submit", value="Comment")
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
