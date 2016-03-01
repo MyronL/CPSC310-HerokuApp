@@ -241,6 +241,10 @@ class Router {
 	});
 	
 
+// viewer
+    router.get('/viewer', function(req,res,next){
+        res.render('viewComic', {title: 'Viewer'});
+    });
 
 // editor stuff	
         router.get('/editor', function(req, res, next) {
