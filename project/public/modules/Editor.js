@@ -20,8 +20,7 @@ var Editor = (function () {
         this.thought = 'http://i.imgur.com/EZruJfs.png';
         this.box = 'http://i.imgur.com/sCXVrzn.png';
         // fonts for text in editor
-        this.default = 'defaultfabricfont';
-        this.font = this.default;
+        this.font = 'ComicSans';
         this.panelLine1 = new fabric.Rect({
             left: 400,
             top: -1,
@@ -129,7 +128,7 @@ var Editor = (function () {
     };
     Editor.prototype.addText = function () {
         var text = this.dialogue.value;
-        var textToAdd = new fabric.Text(text, {
+        var textToAdd = new fabric.IText(text, {
             fontFamily: this.font
         });
         this.canvases[0].add(textToAdd);
@@ -138,6 +137,9 @@ var Editor = (function () {
     };
     Editor.prototype.selectFont = function () {
         this.font = document.getElementById("fontSelect").value;
+        // this throws a false error
+        this.canvases[0].getActiveObject().setFontFamily(this.font);
+        this.canvases[0].renderAll();
     };
     Editor.prototype.setColour = function () {
         console.log("setcolor");

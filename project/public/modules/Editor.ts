@@ -47,8 +47,7 @@ class Editor{
   private speech: string;
 
   // fonts for text in editor
-  private default = 'defaultfabricfont';
-  private font = this.default;
+  private font = 'ComicSans';
 
   private panelLine1 = new fabric.Rect({
           left: 400,
@@ -188,7 +187,7 @@ class Editor{
 
   addText() {
     var text = this.dialogue.value;
-    var textToAdd = new fabric.Text(text, {
+    var textToAdd = new fabric.IText(text, {
         fontFamily: this.font
       });
     this.canvases[0].add(textToAdd);
@@ -198,6 +197,9 @@ class Editor{
 
   selectFont() {
     this.font = (<HTMLInputElement>document.getElementById("fontSelect")).value;
+    // this throws a false error
+    this.canvases[0].getActiveObject().setFontFamily(this.font);
+    this.canvases[0].renderAll();
   }
 
   setColour() {

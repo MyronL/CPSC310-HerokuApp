@@ -6,16 +6,16 @@ font-family: WildWordsRoman;
 src: url('WildWordsRoman.TTF');
 }
 @font-face {
-font-family: WildWordsBold;
-src: url('WildWordsbold.TTF');
-}
-@font-face {
 font-family: WildWordsItalic;
 src: url('WildWordsitalic.TTF');
 }
 @font-face {
 font-family: WildWordsBoldItalic;
 src: url('WildWordsbolditalic.TTF');
+}
+@font-face {
+font-family: ComicSans;
+src: url('ComicSans.ttf');
 }
 /*canvas {
 	background-color: White;
