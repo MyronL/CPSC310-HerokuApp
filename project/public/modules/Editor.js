@@ -18,6 +18,30 @@ var Editor = (function () {
         this.square = 'http://i.imgur.com/Co7HFts.png';
         this.thought = 'http://i.imgur.com/EZruJfs.png';
         this.box = 'http://i.imgur.com/sCXVrzn.png';
+        this.panelLine1 = new fabric.Rect({
+            left: 400,
+            top: -1,
+            width: 3,
+            height: 401,
+            fill: "black",
+            selectable: false
+        });
+        this.panelLine2 = new fabric.Rect({
+            left: 810,
+            top: -1,
+            width: 3,
+            height: 401,
+            fill: "black",
+            selectable: false
+        });
+        this.panelLine3 = new fabric.Rect({
+            left: 1220,
+            top: -1,
+            width: 3,
+            height: 401,
+            fill: "black",
+            selectable: false
+        });
         this.panels = panels;
         this.imgLoader = imgLoader;
         this.bubbleButton = bubbleButton;
@@ -122,9 +146,9 @@ var Editor = (function () {
         this.saveProjectForm.elements['published'].value = true;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
         //   console.log(JSON.stringify(this.canvases[0]));
-        this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
-        this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
-        this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+        //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+        //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+        //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
         this.saveProjectForm.submit();
     };
     Editor.prototype.saveProject = function () {
@@ -136,9 +160,9 @@ var Editor = (function () {
         this.saveProjectForm.elements['published'].value = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
         //   console.log(JSON.stringify(this.canvases[0]));
-        this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
-        this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
-        this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+        //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+        //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+        //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
         this.saveProjectForm.submit();
     };
     Editor.prototype.forwards = function () {
@@ -153,9 +177,9 @@ var Editor = (function () {
         var tags = loadProject[0].tags;
         var author = loadProject[0].author;
         var JsonPanel1 = loadProject[0].panel1;
-        var JsonPanel2 = loadProject[0].panel2;
-        var JsonPanel3 = loadProject[0].panel3;
-        var JsonPanel4 = loadProject[0].panel4;
+        //     var JsonPanel2 = loadProject[0].panel2;
+        //     var JsonPanel3 = loadProject[0].panel3;
+        //     var JsonPanel4 = loadProject[0].panel4;
         console.log(title);
         $('#comicTitle').val(title);
         $('#comicDescription').val(description);
@@ -163,14 +187,26 @@ var Editor = (function () {
         console.log(loadProject[0]);
         this.canvases[0].loadFromJSON(JsonPanel1, this.canvases[0].renderAll.bind(this.canvases[0]));
     };
+    //move border to front -> working but not in use
+    Editor.prototype.putBordertoFront = function () {
+        this.canvases[0].bringToFront(this.panelLine1);
+        this.canvases[0].bringToFront(this.panelLine2);
+        this.canvases[0].bringToFront(this.panelLine3);
+    };
+    Editor.prototype.loadEmptyPanels = function () {
+        var canvas = this.canvases[0];
+        canvas.add(this.panelLine1);
+        canvas.add(this.panelLine2);
+        canvas.add(this.panelLine3);
+    };
     return Editor;
 })();
 window.onload = function () {
     var panels = [];
     panels.push(document.getElementById("panel1"));
-    panels.push(document.getElementById("panel2"));
-    panels.push(document.getElementById("panel3"));
-    panels.push(document.getElementById("panel4"));
+    //  panels.push(<HTMLCanvasElement>document.getElementById("panel2"));
+    //  panels.push(<HTMLCanvasElement>document.getElementById("panel3"));
+    //  panels.push(<HTMLCanvasElement>document.getElementById("panel4"));
     var imgLoader = document.getElementById("imgLoader");
     var bubbleButton = document.getElementById("bubbleButton");
     var squareButton = document.getElementById("squareButton");
@@ -188,6 +224,7 @@ window.onload = function () {
     var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
     // load project is not defined
     if (loadProject == null) {
+        editor.loadEmptyPanels();
         console.log("nothing");
     }
     else {

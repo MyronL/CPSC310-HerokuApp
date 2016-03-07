@@ -43,7 +43,30 @@ class Editor{
   private thought = 'http://i.imgur.com/EZruJfs.png';
   private box = 'http://i.imgur.com/sCXVrzn.png';
   private speech: string;
-
+  private panelLine1 = new fabric.Rect({
+          left: 400,
+          top: -1,
+          width: 3,
+          height: 401,
+          fill: "black",
+          selectable: false
+  });
+  private panelLine2 = new fabric.Rect({
+          left: 810,
+          top: -1,
+          width: 3,
+          height: 401,
+          fill: "black",
+          selectable: false
+  });
+  private panelLine3 = new fabric.Rect({
+          left: 1220,
+          top: -1,
+          width: 3,
+          height: 401,
+          fill: "black",
+          selectable: false
+  });
   
   constructor(panels: HTMLCanvasElement[], 
     imgLoader: HTMLInputElement, 
@@ -159,7 +182,6 @@ class Editor{
       });
     this.canvases[0].add(textToAdd);
     this.canvases[0].setActiveObject(textToAdd);
-
   }
 
   setColour() {
@@ -182,9 +204,9 @@ class Editor{
     this.saveProjectForm.elements['published'].value = true;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
  //   console.log(JSON.stringify(this.canvases[0]));
-    this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
-    this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
-    this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+ //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+ //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+ //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
     this.saveProjectForm.submit(); 
   }
   saveProject(){
@@ -196,9 +218,9 @@ class Editor{
     this.saveProjectForm.elements['published'].value = false;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
  //   console.log(JSON.stringify(this.canvases[0]));
-    this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
-    this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
-    this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
+ //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
+ //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
+ //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
     this.saveProjectForm.submit();
    }
    
@@ -214,9 +236,9 @@ class Editor{
       var tags = loadProject[0].tags;
       var author = loadProject[0].author;
       var JsonPanel1 = loadProject[0].panel1;
-      var JsonPanel2 = loadProject[0].panel2;
-      var JsonPanel3 = loadProject[0].panel3;
-      var JsonPanel4 = loadProject[0].panel4;
+ //     var JsonPanel2 = loadProject[0].panel2;
+ //     var JsonPanel3 = loadProject[0].panel3;
+ //     var JsonPanel4 = loadProject[0].panel4;
       console.log(title);
       $('#comicTitle').val(title);
       $('#comicDescription').val(description);
@@ -225,14 +247,29 @@ class Editor{
       this.canvases[0].loadFromJSON(JsonPanel1, this.canvases[0].renderAll.bind(this.canvases[0]));
 
    }
+   
+   //move border to front -> working but not in use
+   putBordertoFront(){
+       this.canvases[0].bringToFront(this.panelLine1);
+       this.canvases[0].bringToFront(this.panelLine2);
+       this.canvases[0].bringToFront(this.panelLine3);
+   }
+   
+   
+   loadEmptyPanels(){
+      var canvas = this.canvases[0];
+      canvas.add(this.panelLine1);
+      canvas.add(this.panelLine2); 
+      canvas.add(this.panelLine3);  
+   }
 }
 
 window.onload = function() {
   var panels: HTMLCanvasElement[] = [];
   panels.push(<HTMLCanvasElement>document.getElementById("panel1"));
-  panels.push(<HTMLCanvasElement>document.getElementById("panel2"));
-  panels.push(<HTMLCanvasElement>document.getElementById("panel3"));
-  panels.push(<HTMLCanvasElement>document.getElementById("panel4"));
+//  panels.push(<HTMLCanvasElement>document.getElementById("panel2"));
+//  panels.push(<HTMLCanvasElement>document.getElementById("panel3"));
+//  panels.push(<HTMLCanvasElement>document.getElementById("panel4"));
   
 
   var imgLoader = <HTMLInputElement> document.getElementById("imgLoader");
@@ -271,7 +308,8 @@ window.onload = function() {
 
   // load project is not defined
   if (loadProject == null){
-            console.log("nothing");
+      editor.loadEmptyPanels();
+      console.log("nothing");
   } else {
       editor.loadProject(loadProject);
   }
