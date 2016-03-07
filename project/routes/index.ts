@@ -45,6 +45,7 @@ class Router {
         var projectlistCollection = db.get('EditingComic');
         projectlistCollection.find({"published":"true"},{},function(e,docs){
             res.render('homepagenlLogin',{
+               udata : req.session.user,
                "projectList": docs 
             });
         });                   
@@ -244,19 +245,30 @@ class Router {
 // viewer
     //testing
     router.get('/viewer', function(req,res,next){
+        if (req.session.user == null){
+	       // if user is not logged-in redirect back to login page //
+			res.redirect('/');
+	    }else{  
         res.render('viewComic', {title: 'Viewer', "loadProject": null});
+        }
     });
 
     router.get('/viewer/:id', function(req,res,next){
         var comicID = req.params.id;
         var db = req.db;
         var projectlistCollection = db.get('EditingComic');
-        projectlistCollection.find({_id: ObjectId(comicID)},{},function(e,docs){
+        if (req.session.user == null){
+	       // if user is not logged-in redirect back to login page //
+			res.redirect('/');
+	    }else{        
+            projectlistCollection.find({_id: ObjectId(comicID)},{},function(e,docs){
               res.render('viewComic',{
                  title: 'viewComic',
-                 "loadProject": docs
+                 "loadProject": docs,
+                 udata : req.session.user
               });
-        });        
+        });
+        }        
     });
 
 
