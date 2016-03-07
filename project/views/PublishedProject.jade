@@ -7,4 +7,4 @@ block content
         each project, i in projectList
             li
                 a(href="/viewer/"+project._id)= project.title
-                    img(src=project.thumbnail)
+                    img(src=project.thumbnail, style = "border: 1px solid black;")
