@@ -28,6 +28,7 @@ class Editor{
   private boxButton: HTMLButtonElement;
   private dialogue: HTMLTextAreaElement;
   private textButton: HTMLButtonElement;
+  private fontSelect: HTMLSelectElement;
   private colourText: HTMLTextAreaElement;
   private colourButton: HTMLButtonElement;
   private rmTextButton: HTMLButtonElement;
@@ -38,11 +39,17 @@ class Editor{
 
   private canvases: fabric.ICanvas[];
 
+  // images for speech bubble hosted on imgur
   private bubble = 'http://i.imgur.com/qtDmgzK.png';
   private square = 'http://i.imgur.com/Co7HFts.png';
   private thought = 'http://i.imgur.com/EZruJfs.png';
   private box = 'http://i.imgur.com/sCXVrzn.png';
   private speech: string;
+
+  // fonts for text in editor
+  private default = 'defaultfabricfont';
+  private font = this.default;
+
   private panelLine1 = new fabric.Rect({
           left: 400,
           top: -1,
@@ -76,6 +83,7 @@ class Editor{
     boxButton: HTMLButtonElement,
     dialogue: HTMLTextAreaElement, 
     textButton: HTMLButtonElement,
+    fontSelect: HTMLSelectElement,
     colourText: HTMLTextAreaElement, 
     colourButton: HTMLButtonElement, 
     rmTextButton: HTMLButtonElement, 
@@ -92,6 +100,7 @@ class Editor{
       this.boxButton = boxButton;
       this.dialogue = dialogue;
       this.textButton = textButton;
+      this.fontSelect = fontSelect;
       this.colourText = colourText;
       this.colourButton = colourButton;
       this.rmTextButton = rmTextButton;
@@ -112,6 +121,7 @@ class Editor{
       thoughtButton.onclick = () => this.clickThoughtButton();
       boxButton.onclick = () => this.clickBoxButton();
       textButton.onclick = () => this.addText();
+      fontSelect.onchange = () => this.selectFont();
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
       forwardButton.onclick = () => this.forwards();
@@ -154,8 +164,9 @@ class Editor{
     fabric.Image.fromURL(this.speech, function(obj) {
         canvas1.add(obj);
         canvas1.setActiveObject(obj);
+        this.canvases[0].renderAll();
     });
-    
+
   }
 
   clickBubbleButton() {
@@ -178,10 +189,15 @@ class Editor{
   addText() {
     var text = this.dialogue.value;
     var textToAdd = new fabric.Text(text, {
-        fontFamily: 'Comic Sans'
+        fontFamily: this.font
       });
     this.canvases[0].add(textToAdd);
+    this.canvases[0].renderAll();
     this.canvases[0].setActiveObject(textToAdd);
+  }
+
+  selectFont() {
+    this.font = (<HTMLInputElement>document.getElementById("fontSelect")).value;
   }
 
   setColour() {
@@ -279,6 +295,7 @@ window.onload = function() {
   var boxButton = <HTMLButtonElement>document.getElementById("boxButton");
   var dialogue = <HTMLTextAreaElement> document.getElementById("dialogue");
   var textButton = <HTMLButtonElement> document.getElementById("textButton");
+  var fontSelect = <HTMLSelectElement> document.getElementById("fontSelect");
   var colourText = <HTMLTextAreaElement> document.getElementById("colour");
   var colourButton = <HTMLButtonElement> document.getElementById("colourButton");
   var rmTextButton = <HTMLButtonElement> document.getElementById("rmTextButton");
@@ -297,6 +314,7 @@ window.onload = function() {
     boxButton, 
     dialogue, 
     textButton,
+    fontSelect,
     colourText, 
     colourButton, 
     rmTextButton, 
