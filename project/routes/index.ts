@@ -248,7 +248,7 @@ class Router {
 
 // editor stuff	
         router.get('/editor', function(req, res, next) {
-            res.render('editor', { title: 'Editor', "loadProject" : null });
+            res.render('editor', { title: 'Editor', "loadProject" : null, "editorID": null});
         });
         
         router.get('/editor/:id', function(req,res,next){
@@ -258,7 +258,7 @@ class Router {
            projectlistCollection.find({_id: ObjectId(editID)},{},function(e,docs){
               res.render('editor',{
                  title: 'Editor',
-                 "loadProject": docs 
+                 "loadProject": docs
               });
            });
         });
@@ -269,26 +269,25 @@ class Router {
             var editor_des = req.body.comicDescription;
             var editor_tags = req.body.comicTags;
             var panel1_JSON = req.body.sPanel1;
-            var panel2_JSON = req.body.sPanel2;
-            var panel3_JSON = req.body.sPanel3;
-            var panel4_JSON = req.body.sPanel4;
             var published = req.body.published;
+            var thumbnail = req.body.thumbnail;
+            var editorID = req.body.editorID;
             var db = req.db;
             var comicCollection = db.get('EditingComic');
             var author = "test"
             
             console.log("updateField");
             console.log(editor_title);
-            comicCollection.insert({
+            console.log("before"+editorID);
+            if (editorID == "0"){
+                comicCollection.insert({
                             "title": editor_title,
-                            "author": "test",
+                            "author": author,
                             "description": editor_des,
                             "published": published,
                             "tags": editor_tags,
                             "panel1": panel1_JSON,
-                            "panel2": panel2_JSON,
-                            "panel3": panel3_JSON,
-                            "panel4": panel4_JSON
+                            "thumbnail": thumbnail
                         }, function(err,doc){
                             if (err) {res.send("There was a problem adding the information to DB");}
                             else {
@@ -302,6 +301,34 @@ class Router {
                                                   
                             }
                         });
+            } else {
+                console.log("in else case"+editorID);
+                comicCollection.findAndModify({
+                    _id: ObjectId(editorID)
+                },{
+                    $set: {
+                     "title": editor_title,
+                     "author": author,
+                     "description": editor_des,
+                     "published": published,
+                     "tags": editor_tags,
+                     "panel1": panel1_JSON,
+                     "thumbnail": thumbnail                        
+                    }
+                },function(err,doc){
+                   if (err) {res.send("There was a problem adding the information to DB");}
+                   else {
+                      if (published == "true"){
+                           console.log("success publish");
+                           res.redirect('/homepage');  
+                      } else {
+                           console.log("success save");
+                           res.redirect('/home');                                      
+                      }
+                                                  
+                   }
+                });
+            };
         });
     router.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
 		module.exports = router;

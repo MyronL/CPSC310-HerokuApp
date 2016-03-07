@@ -24,6 +24,8 @@ block body
                                 br
                                 input(type="hidden",name="published")
                                 input(type="hidden",name="sPanel1")
+                                input(type="hidden", name="thumbnail")
+                                input(type="hidden", name="editorID")
                     .panel.panel-success
                         .panel-heading Upload Image
                         .panel-body                        
@@ -51,7 +53,7 @@ block body
                         .container
                             style
                             .row
-                                .col-lg-3
+                                .col-lg-12
                                     canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
@@ -61,52 +63,7 @@ block scripts
   script.
     var loadProject =!{JSON.stringify(loadProject)};
   script(type="text/javascript", src="/modules/Editor.js")
-  script(type="text/javascript").
-
-    // speech bubble implementation here:
-    // the 4 panels have been instantiated as canvases here
-    //canvas1 = new fabric.Canvas('panel1');
-    //canvas2 = new fabric.Canvas('panel2');
-    //canvas3 = new fabric.Canvas('panel3');
-    //canvas4 = new fabric.Canvas('panel4');
-    // Correctly loading
-    // TODO: need to make sure saveProject save to the same mongoID
-    // TODO: need to make sure the upload img will work
-    // TODO: need to populate the title/description... when loaded
-    /*
-    window.onload = function(){
-        var loadProject =!{JSON.stringify(loadProject)};
-        console.log("Hi Loading");
-        if (loadProject == null){
-            console.log("nothing");
-        } else {
-            var title = loadProject[0].title;
-            var description = loadProject[0].description;
-            var tags = loadProject[0].tags;
-            var author = loadProject[0].author;
-            var JsonPanel1 = loadProject[0].panel1;
-            var JsonPanel2 = loadProject[0].panel2;
-            var JsonPanel3 = loadProject[0].panel3;
-            var JsonPanel4 = loadProject[0].panel4;
-            console.log(title);
-            $('#comicTitle').val(title);
-            $('#comicDescription').val(description);
-            $('#comicTags').val(tags);
-            console.log(loadProject[0])
-            canvas1.loadFromJSON(JsonPanel1, canvas1.renderAll.bind(canvas1));
-        }
-    };  
-    */
-    // do we still need this code down here, even though there's already a copy in Editor.ts?
-    function saveProject(){
-        document.formSaveProject.sPanel1.value = JSON.stringify(canvas1);
-        console.log(JSON.stringify(canvas1));
-        document.formSaveProject.sPanel2.value = JSON.stringify(canvas2);
-        document.formSaveProject.sPanel3.value = JSON.stringify(canvas3);
-        document.formSaveProject.sPanel4.value = JSON.stringify(canvas4);
-        document.formSaveProject.submit();
-    }
-    
+ 
 
     
 

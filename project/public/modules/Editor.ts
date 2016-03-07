@@ -35,6 +35,7 @@ class Editor{
   private saveButton: HTMLButtonElement;
   private publishButton: HTMLButtonElement;
   private saveProjectForm: HTMLFormElement;
+  private editorID;
 
   private canvases: fabric.ICanvas[];
 
@@ -99,7 +100,7 @@ class Editor{
       this.publishButton = publishButton;
       this.saveProjectForm = saveProjectForm;
       this.forwardButton = forwardButton;
-
+      this.editorID = "0";
 
       this.canvases = [];
       for (var i = 0; i < 4; i++) {
@@ -134,6 +135,7 @@ class Editor{
     var reader = new FileReader();
     reader.onload = function() { console.log('loadimage');
       var imgObj = new Image();
+      imgObj.setAttribute('crossOrigin', 'anonymous');
       imgObj.src = reader.result;
       imgObj.onload = function() {
           var image = new fabric.Image(imgObj, {left: 0, top: 0, angle: 0, padding: 0});
@@ -154,7 +156,7 @@ class Editor{
     fabric.Image.fromURL(this.speech, function(obj) {
         canvas1.add(obj);
         canvas1.setActiveObject(obj);
-    });
+    }, { crossOrigin: 'anonymous' });
     
   }
 
@@ -203,6 +205,8 @@ class Editor{
   publishProject(){
     this.saveProjectForm.elements['published'].value = true;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+    this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
+    this.saveProjectForm.elements['editorID'].value = this.editorID;
  //   console.log(JSON.stringify(this.canvases[0]));
  //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
  //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
@@ -217,6 +221,9 @@ class Editor{
     */
     this.saveProjectForm.elements['published'].value = false;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+    this.saveProjectForm.elements['thumbnail'].value = null;
+    this.saveProjectForm.elements['editorID'].value = this.editorID;
+    console.log(this.editorID);
  //   console.log(JSON.stringify(this.canvases[0]));
  //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
  //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
@@ -262,6 +269,10 @@ class Editor{
       canvas.add(this.panelLine2); 
       canvas.add(this.panelLine3);  
    }
+   setEditorID(ID){
+       this.editorID = ID;
+       console.log("set"+this.editorID);
+   }
 }
 
 window.onload = function() {
@@ -287,7 +298,7 @@ window.onload = function() {
   var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
-
+  
   var editor = new Editor(
     panels, 
     imgLoader, 
@@ -312,6 +323,7 @@ window.onload = function() {
       console.log("nothing");
   } else {
       editor.loadProject(loadProject);
+      editor.setEditorID(loadProject[0]._id);
   }
   
 };
