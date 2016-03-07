@@ -222,8 +222,20 @@ var Router = (function () {
             });
         });
         // viewer
+        //testing
         router.get('/viewer', function (req, res, next) {
             res.render('viewComic', { title: 'Viewer' });
+        });
+        router.get('/viewer/:id', function (req, res, next) {
+            var comicID = req.params.id;
+            var db = req.db;
+            var projectlistCollection = db.get('EditingComic');
+            projectlistCollection.find({ _id: ObjectId(comicID) }, {}, function (e, docs) {
+                res.render('viewComic', {
+                    title: 'viewComic',
+                    "loadProject": docs
+                });
+            });
         });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
