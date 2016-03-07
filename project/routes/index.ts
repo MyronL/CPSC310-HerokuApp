@@ -244,7 +244,7 @@ class Router {
 // viewer
     //testing
     router.get('/viewer', function(req,res,next){
-        res.render('viewComic', {title: 'Viewer'});
+        res.render('viewComic', {title: 'Viewer', "loadProject": null});
     });
 
     router.get('/viewer/:id', function(req,res,next){
