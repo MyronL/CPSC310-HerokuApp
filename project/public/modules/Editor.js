@@ -12,7 +12,7 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
         var _this = this;
         // images for speech bubble hosted on imgur
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
@@ -21,6 +21,8 @@ var Editor = (function () {
         this.box = 'http://i.imgur.com/sCXVrzn.png';
         // fonts for text in editor
         this.font = 'ComicSans';
+        this.style = 'normal';
+        this.weight = 'normal';
         this.panelLine1 = new fabric.Rect({
             left: 400,
             top: -1,
@@ -53,6 +55,7 @@ var Editor = (function () {
         this.boxButton = boxButton;
         this.dialogue = dialogue;
         this.textButton = textButton;
+        this.styleSelect = styleSelect;
         this.fontSelect = fontSelect;
         this.colourText = colourText;
         this.colourButton = colourButton;
@@ -62,15 +65,17 @@ var Editor = (function () {
         this.saveProjectForm = saveProjectForm;
         this.forwardButton = forwardButton;
         this.canvases = [];
-        for (var i = 0; i < 4; i++) {
-            this.canvases.push(new fabric.Canvas(this.panels[i]));
-        }
+        this.canvases.push(new fabric.Canvas(this.panels[0]));
+        // for (var i = 0; i < 4; i++) {
+        //   this.canvases.push(new fabric.Canvas(this.panels[i]));
+        // }
         imgLoader.onchange = function (e) { return _this.showImage(e); };
         bubbleButton.onclick = function () { return _this.clickBubbleButton(); };
         squareButton.onclick = function () { return _this.clickSquareButton(); };
         thoughtButton.onclick = function () { return _this.clickThoughtButton(); };
         boxButton.onclick = function () { return _this.clickBoxButton(); };
         textButton.onclick = function () { return _this.addText(); };
+        styleSelect.onchange = function () { return _this.selectStyle(); };
         fontSelect.onchange = function () { return _this.selectFont(); };
         colourButton.onclick = function () { return _this.setColour(); };
         rmTextButton.onclick = function () { return _this.removeSelected(); };
@@ -129,15 +134,36 @@ var Editor = (function () {
     Editor.prototype.addText = function () {
         var text = this.dialogue.value;
         var textToAdd = new fabric.IText(text, {
-            fontFamily: this.font
+            fontFamily: this.font,
+            fontWeight: this.weight,
+            fontStyle: this.style // stub
         });
         this.canvases[0].add(textToAdd);
         this.canvases[0].renderAll();
         this.canvases[0].setActiveObject(textToAdd);
     };
+    Editor.prototype.selectStyle = function () {
+        var textStyle = document.getElementById("styleSelect").value;
+        if (textStyle === "Normal") {
+            this.style = "normal";
+            this.weight = "normal";
+        }
+        else if (textStyle === "Bold") {
+            this.style = "normal";
+            this.weight = 800;
+        }
+        else if (textStyle === "Italic") {
+            this.style = "italic";
+            this.weight = "normal";
+        }
+        else if (textStyle === "BoldItalic") {
+            this.style = "italic";
+            this.weight = 800;
+        }
+    };
     Editor.prototype.selectFont = function () {
         this.font = document.getElementById("fontSelect").value;
-        // this throws a false error
+        // this throws a false error: typescript doesn't know about the class relationships
         this.canvases[0].getActiveObject().setFontFamily(this.font);
         this.canvases[0].renderAll();
     };
@@ -227,6 +253,7 @@ window.onload = function () {
     var boxButton = document.getElementById("boxButton");
     var dialogue = document.getElementById("dialogue");
     var textButton = document.getElementById("textButton");
+    var styleSelect = document.getElementById("styleSelect");
     var fontSelect = document.getElementById("fontSelect");
     var colourText = document.getElementById("colour");
     var colourButton = document.getElementById("colourButton");
@@ -235,7 +262,7 @@ window.onload = function () {
     var saveButton = document.getElementById("saveButton");
     var publishButton = document.getElementById("publishButton");
     var saveProjectForm = document.getElementById("formSaveProject");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
     // load project is not defined
     if (loadProject == null) {
         editor.loadEmptyPanels();
