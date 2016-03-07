@@ -1,6 +1,7 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 append styles
     link(rel='stylesheet',href='/stylesheets/style.css')
+    link(rel='stylesheet',href='/stylesheets/fonts.css')
 block body
   div.btm-links
     a(href='/homepagenlLogin')#home
@@ -39,6 +40,16 @@ block body
                             button#boxButton Text Box
                             textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
                             button#textButton Add Text
+                            select#styleSelect
+                                option(value="Normal") Normal
+                                option(value="Bold") Bold
+                                option(value="Italic") Italic
+                                option(value="BoldItalic") BoldItalic
+                            select#fontSelect
+                                option(value="ComicSans") Comic Sans
+                                option(value="WildWordsRoman") Wild Words Roman
+                                //option(value="WildWordsItalic") Wild Words Italic
+                                //option(value="WildWordsBoldItalic") Wild Words Bold Italic
                             textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
                             button#colourButton Set Text Colour
                             button#rmTextButton Remove                            

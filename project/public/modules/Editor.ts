@@ -28,6 +28,8 @@ class Editor{
   private boxButton: HTMLButtonElement;
   private dialogue: HTMLTextAreaElement;
   private textButton: HTMLButtonElement;
+  private styleSelect: HTMLSelectElement;
+  private fontSelect: HTMLSelectElement;
   private colourText: HTMLTextAreaElement;
   private colourButton: HTMLButtonElement;
   private rmTextButton: HTMLButtonElement;
@@ -39,11 +41,18 @@ class Editor{
 
   private canvases: fabric.ICanvas[];
 
+  // images for speech bubble hosted on imgur
   private bubble = 'http://i.imgur.com/qtDmgzK.png';
   private square = 'http://i.imgur.com/Co7HFts.png';
   private thought = 'http://i.imgur.com/EZruJfs.png';
   private box = 'http://i.imgur.com/sCXVrzn.png';
   private speech: string;
+
+  // fonts for text in editor
+  private font = 'ComicSans';
+  private style = 'normal';
+  private weight = 'normal';
+
   private panelLine1 = new fabric.Rect({
           left: 400,
           top: -1,
@@ -77,6 +86,8 @@ class Editor{
     boxButton: HTMLButtonElement,
     dialogue: HTMLTextAreaElement, 
     textButton: HTMLButtonElement,
+    styleSelect: HTMLSelectElement,
+    fontSelect: HTMLSelectElement,
     colourText: HTMLTextAreaElement, 
     colourButton: HTMLButtonElement, 
     rmTextButton: HTMLButtonElement, 
@@ -93,6 +104,8 @@ class Editor{
       this.boxButton = boxButton;
       this.dialogue = dialogue;
       this.textButton = textButton;
+      this.styleSelect = styleSelect;
+      this.fontSelect = fontSelect;
       this.colourText = colourText;
       this.colourButton = colourButton;
       this.rmTextButton = rmTextButton;
@@ -103,9 +116,10 @@ class Editor{
       this.editorID = "0";
 
       this.canvases = [];
-      for (var i = 0; i < 4; i++) {
-        this.canvases.push(new fabric.Canvas(this.panels[i]));
-      }
+      this.canvases.push(new fabric.Canvas(this.panels[0]));
+      // for (var i = 0; i < 4; i++) {
+      //   this.canvases.push(new fabric.Canvas(this.panels[i]));
+      // }
 
       imgLoader.onchange = (e: Event) => this.showImage(e);
       bubbleButton.onclick = () => this.clickBubbleButton();
@@ -113,6 +127,8 @@ class Editor{
       thoughtButton.onclick = () => this.clickThoughtButton();
       boxButton.onclick = () => this.clickBoxButton();
       textButton.onclick = () => this.addText();
+      styleSelect.onchange = () => this.selectStyle();
+      fontSelect.onchange = () => this.selectFont();
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
       forwardButton.onclick = () => this.forwards();
@@ -156,8 +172,9 @@ class Editor{
     fabric.Image.fromURL(this.speech, function(obj) {
         canvas1.add(obj);
         canvas1.setActiveObject(obj);
+        this.canvases[0].renderAll();
     }, { crossOrigin: 'anonymous' });
-    
+
   }
 
   clickBubbleButton() {
@@ -179,11 +196,38 @@ class Editor{
 
   addText() {
     var text = this.dialogue.value;
-    var textToAdd = new fabric.Text(text, {
-        fontFamily: 'Comic Sans'
+    var textToAdd = new fabric.IText(text, {
+        fontFamily: this.font,
+        fontWeight: this.weight, // stub
+        fontStyle: this.style // stub
       });
     this.canvases[0].add(textToAdd);
+    this.canvases[0].renderAll();
     this.canvases[0].setActiveObject(textToAdd);
+  }
+
+  selectStyle() {
+    var textStyle = (<HTMLInputElement>document.getElementById("styleSelect")).value;
+    if (textStyle === "Normal") {
+      this.style = "normal";
+      this.weight = "normal";
+    } else if (textStyle === "Bold") {
+      this.style = "normal";
+      this.weight = 800;
+    } else if (textStyle === "Italic") {
+      this.style = "italic";
+      this.weight = "normal";
+    } else if (textStyle === "BoldItalic") {
+      this.style = "italic";
+      this.weight = 800;
+    }
+  }
+
+  selectFont() {
+    this.font = (<HTMLInputElement>document.getElementById("fontSelect")).value;
+    // this throws a false error: typescript doesn't know about the class relationships
+    this.canvases[0].getActiveObject().setFontFamily(this.font);
+    this.canvases[0].renderAll();
   }
 
   setColour() {
@@ -290,6 +334,8 @@ window.onload = function() {
   var boxButton = <HTMLButtonElement>document.getElementById("boxButton");
   var dialogue = <HTMLTextAreaElement> document.getElementById("dialogue");
   var textButton = <HTMLButtonElement> document.getElementById("textButton");
+  var styleSelect = <HTMLSelectElement>document.getElementById("styleSelect");
+  var fontSelect = <HTMLSelectElement> document.getElementById("fontSelect");
   var colourText = <HTMLTextAreaElement> document.getElementById("colour");
   var colourButton = <HTMLButtonElement> document.getElementById("colourButton");
   var rmTextButton = <HTMLButtonElement> document.getElementById("rmTextButton");
@@ -308,6 +354,8 @@ window.onload = function() {
     boxButton, 
     dialogue, 
     textButton,
+    styleSelect,
+    fontSelect,
     colourText, 
     colourButton, 
     rmTextButton, 
