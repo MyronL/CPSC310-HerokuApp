@@ -198,15 +198,16 @@ class Editor{
     var text = this.dialogue.value;
     var textToAdd = new fabric.IText(text, {
         fontFamily: this.font,
-        fontWeight: this.weight, // stub
-        fontStyle: this.style // stub
+        fontWeight: this.weight, 
+        fontStyle: this.style 
       });
     this.canvases[0].add(textToAdd);
     this.canvases[0].renderAll();
     this.canvases[0].setActiveObject(textToAdd);
   }
 
-  selectStyle() {
+  selectStyle() { // errors are false positives
+    var active = this.canvases[0].getActiveObject();
     var textStyle = (<HTMLInputElement>document.getElementById("styleSelect")).value;
     if (textStyle === "Normal") {
       this.style = "normal";
@@ -221,6 +222,9 @@ class Editor{
       this.style = "italic";
       this.weight = 800;
     }
+    active.setFontStyle(this.style);
+    active.setFontWeight(this.weight);
+    this.canvases[0].renderAll();
   }
 
   selectFont() {

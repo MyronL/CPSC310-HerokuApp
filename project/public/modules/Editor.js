@@ -138,13 +138,14 @@ var Editor = (function () {
         var textToAdd = new fabric.IText(text, {
             fontFamily: this.font,
             fontWeight: this.weight,
-            fontStyle: this.style // stub
+            fontStyle: this.style
         });
         this.canvases[0].add(textToAdd);
         this.canvases[0].renderAll();
         this.canvases[0].setActiveObject(textToAdd);
     };
     Editor.prototype.selectStyle = function () {
+        var active = this.canvases[0].getActiveObject();
         var textStyle = document.getElementById("styleSelect").value;
         if (textStyle === "Normal") {
             this.style = "normal";
@@ -162,6 +163,9 @@ var Editor = (function () {
             this.style = "italic";
             this.weight = 800;
         }
+        active.setFontStyle(this.style);
+        active.setFontWeight(this.weight);
+        this.canvases[0].renderAll();
     };
     Editor.prototype.selectFont = function () {
         this.font = document.getElementById("fontSelect").value;
