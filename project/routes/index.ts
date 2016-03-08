@@ -312,7 +312,10 @@ class Router {
       else { 
         projectlistCollection.deleteOne(
           // stub for testing the removal of a specific project
-          { "author": "hentai" },
+          { "author": req.session.user.user,
+            "title": req.body.comicTitle,
+            "description": req.body.comicDescription,
+            "tags": req.body.comicTags },
           function(err, doc) {
               if (err) {
                 console.log("Comic deletion failed");
