@@ -1,33 +1,37 @@
-doctype html.no-js(lang='en')
-head
-  // this is me attempting to create a bar on the top of the page for easy navigation everywhere
-  extends loginlayout
-  block content
-    div.navbar.navbar-fixed-top
-      div.navbar-inner
-        div.container-fluid
-          .top-bar-left
-            ul.menu
-              li
-                input(type='search', placeholder='Search')
-              li
-                button.button(type='button') Search
-          .top-bar-right
-            ul.menu
-              li
-                a(href='/signup') Sign Up
-              li
-                a(href='/home') Account Profile
+div.navbar.navbar-fixed-top
+      <div class="top-bar">
+      <div class="top-bar-left">
+      <ul class="menu">
+      <li><input type="search" placeholder="Search"></li>
+      <li><button type="button" class="button">Search</button></li>
+      </ul>
+      </div>
+      <div class="top-bar-right">
+      <ul class="menu">
+      <li><a href="/home">Account Info</a></li>
+      <li>
+      button#btn-logout.btn.btn-primary
+        i.icon-lock.icon-white
+        | Sign Out
+      </li>
+      </ul>
+      </div>
+      </div>
 
+doctype html
+html.no-js(lang='en')
+  head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title Overpriced Hotdogs
+    title Foundation | Welcome
     link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
     link(href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css', rel='stylesheet', type='text/css')
-    // logo here
-    center
-      a(href='/homepagenlLogin')#home
-        img(src='http://i.imgur.com/iwDCnm8.png', width="300")
+
+    .row
+      .medium-4.columns
+        img(src='http://i.imgur.com/iwDCnm8.png')
+      .medium-8.columns
+        img(src='http://images.cooltext.com/4586341.png')
     br
     .title-bar(data-responsive-toggle='main-menu', data-hide-for='medium')
       button.menu-icon(type='button', data-toggle='')
@@ -44,9 +48,47 @@ head
           a(href='#') My Comics
     br
     .row
+      .medium-8.columns
+        p
+          img(src='http://media.salon.com/2014/10/archie_comics.jpg', alt='main comic')
+      .medium-4.columns
+        p
+          img(src='https://s-media-cache-ak0.pinimg.com/originals/2c/3f/d5/2c3fd5b729c1ff805637212f284ad29b.jpg', alt='random comic')
+        p
+          img(src='http://images1.fanpop.com/images/photos/2500000/Calvin-and-Hobbes-Comic-Strips-calvin-and-hobbes-2509543-600-191.gif', alt='alternate comic')
+    hr
+    .row.column
+      h4.text-center(style='margin: 0;') Comics
+    hr
+    .row.small-up-3.medium-up-4.large-up-5
+      .column
+        img(src='http://www.myfreewallpapers.net/cartoons/wallpapers/calvin-and-hobbes-friends.jpg', alt='random image')
+      .column
+        img(src='https://upload.wikimedia.org/wikipedia/en/thumb/b/bc/Garfield_the_Cat.svg/1280px-Garfield_the_Cat.svg.png', alt='random image')
+      .column
+        img(src='http://bloximages.newyork1.vip.townnews.com/stltoday.com/content/tncms/assets/v3/editorial/f/3a/f3a4e3e4-0678-11e2-8f4e-001a4bcf6878/5060ac0426cf9.preview-620.jpg', alt='random image')
+      .column.show-for-medium
+        img(src='https://upload.wikimedia.org/wikipedia/en/4/40/Peanuts_gang.png', alt='random image')
+      .column.show-for-large
+        img(src='http://s3.amazonaws.com/tf-wordpress/wp-content/uploads/2013/01/asterix-and-obelix.jpg', alt='random image')
+
+    script(src='https://code.jquery.com/jquery-2.1.4.min.js')
+    script(src='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js')
+    script.
+      $(document).foundation();
+    br
+    .row
         include PublishedProject     
     footer
       .medium-6.columns
         ul.menu.align-right
           li.menu-text Copyright &copy; OverPricedHotdogs
 
+block scripts
+    script(src='/vendor/jquery.min.js')
+    script(src='/vendor/jquery.form.js')
+    script(src='/vendor/bootstrap-modal.js')
+    script(src='/vendor/bootstrap-transition.js')
+    script(src='/js/views/home.js')
+    script(src='/js/controllers/homeController.js')
+    script(src='/js/form-validators/accountValidator.js')
