@@ -37,7 +37,7 @@ block body
                         .panel-body
                             button#saveButton Save Comic   
                             button#publishButton Publish Comic
-                            form#deleteForm(name="formDeleteProject", method="delete", action="/deleteProject")
+                            form#deleteForm(name="formDeleteProject", method="post", action="/deleteProject/"+loadProject[0]._id+"?_method=DELETE")
                               button#deleteButton Delete Comic              
             .col-sm-10                
                 ul.nav.nav-pills
@@ -81,11 +81,7 @@ block body
 
 
                 h2 Comic Panels
-                        .container
-                            style
-                            .row
-                                .col-lg-12
-                                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+                      canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
 
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")

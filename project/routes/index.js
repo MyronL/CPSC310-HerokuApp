@@ -245,12 +245,34 @@ var Router = (function () {
             else {
                 projectlistCollection.find({ _id: ObjectId(comicID) }, {}, function (e, docs) {
                     res.render('viewComic', {
-                        title: 'viewComic',
+                        title: 'Viewer',
                         "loadProject": docs,
                         udata: req.session.user
                     });
                 });
             }
+        });
+        //post comment
+        router.post('/newComment', function (req, res) {
+            var comicID = req.body.comicID;
+            var comment = req.body.comment;
+            var user = req.session.user.user;
+            var db = req.db;
+            var comicCollection = db.get('EditingComic');
+            comicCollection.findAndModify({
+                _id: ObjectId(comicID)
+            }, {
+                $push: {
+                    "commentList": comment + "   from   " + user
+                }
+            }, function (err, doc) {
+                if (err) {
+                    res.send("There was a problem adding the information to DB");
+                }
+                else {
+                    res.redirect('/viewer/' + comicID);
+                }
+            });
         });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
@@ -281,24 +303,22 @@ var Router = (function () {
             }
         });
         // TODO: HELP ME I DON'T KNOW WHAT I'M DOING
-        router.delete('/deleteProject', function (req, res) {
+        router.delete('/deleteProject/:id', function (req, res) {
             var db = req.db;
+            var comicID = req.params.id;
+            var author = req.session.user.user;
             var projectlistCollection = db.get('EditingComic');
-            if (req.session.user == null) {
-                // if user is not logged-in redirect back to login page //
-                res.redirect('/');
-            }
-            else {
-                projectlistCollection.deleteOne({ "author": "hentai" }, function (err, doc) {
-                    if (err) {
-                        console.log("Comic deletion failed");
-                    }
-                    else {
-                        console.log("Comic Deletion Successful");
-                        res.redirect('/home');
-                    }
-                });
-            }
+            projectlistCollection.remove(
+            // stub for testing the removal of a specific project
+            { "author": author, _id: ObjectId(comicID) }, function (err, doc) {
+                if (err) {
+                    console.log("Comic deletion failed");
+                }
+                else {
+                    console.log("Comic Deletion Successful");
+                    res.redirect('/home');
+                }
+            });
         });
         router.post('/saveProject', function (req, res) {
             var editor_title = req.body.comicTitle;
@@ -323,7 +343,8 @@ var Router = (function () {
                     "published": published,
                     "tags": editor_tags,
                     "panel1": panel1_JSON,
-                    "thumbnail": thumbnail
+                    "thumbnail": thumbnail,
+                    "commentList": []
                 }, function (err, doc) {
                     if (err) {
                         res.send("There was a problem adding the information to DB");
