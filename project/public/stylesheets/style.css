@@ -3,6 +3,14 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+h1 {
+  font-family: "WildWordsRoman";
+}
+
+h2 {
+  font-family: "ComicSans";
+}
+
 a {
   color: #00B7FF;
 }

@@ -31,6 +31,7 @@ var Router = (function () {
             var projectlistCollection = db.get('EditingComic');
             projectlistCollection.find({ "published": "true" }, {}, function (e, docs) {
                 res.render('homepagenlLogin', {
+                    udata: req.session.user,
                     "projectList": docs
                 });
             });
@@ -87,7 +88,8 @@ var Router = (function () {
         router.get('/home', function (req, res) {
             var db = req.db;
             var projectlistCollection = db.get('EditingComic');
-            projectlistCollection.find({ "author": "test" }, {}, function (e, docs) {
+            var author = req.session.user.user;
+            projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                 if (req.session.user == null) {
                     // if user is not logged-in redirect back to login page //
                     res.redirect('/');
@@ -222,63 +224,133 @@ var Router = (function () {
             });
         });
         // viewer
+        //testing
         router.get('/viewer', function (req, res, next) {
-            res.render('viewComic', { title: 'Viewer' });
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                res.render('viewComic', { title: 'Viewer', "loadProject": null, udata: req.session.user });
+            }
+        });
+        router.get('/viewer/:id', function (req, res, next) {
+            var comicID = req.params.id;
+            var db = req.db;
+            var projectlistCollection = db.get('EditingComic');
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                projectlistCollection.find({ _id: ObjectId(comicID) }, {}, function (e, docs) {
+                    res.render('viewComic', {
+                        title: 'viewComic',
+                        "loadProject": docs,
+                        udata: req.session.user
+                    });
+                });
+            }
         });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
-            res.render('editor', { title: 'Editor', "loadProject": null });
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null, udata: req.session.user });
+            }
         });
         router.get('/editor/:id', function (req, res, next) {
             var editID = req.params.id;
             var db = req.db;
             var projectlistCollection = db.get('EditingComic');
-            projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
-                res.render('editor', {
-                    title: 'Editor',
-                    "loadProject": docs
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
+                    res.render('editor', {
+                        title: 'Editor',
+                        "loadProject": docs,
+                        udata: req.session.user
+                    });
                 });
-            });
+            }
         });
         router.post('/saveProject', function (req, res) {
             var editor_title = req.body.comicTitle;
             var editor_des = req.body.comicDescription;
             var editor_tags = req.body.comicTags;
             var panel1_JSON = req.body.sPanel1;
-            var panel2_JSON = req.body.sPanel2;
-            var panel3_JSON = req.body.sPanel3;
-            var panel4_JSON = req.body.sPanel4;
             var published = req.body.published;
+            var thumbnail = req.body.thumbnail;
+            var editorID = req.body.editorID;
+            console.log(req.session.user.user);
             var db = req.db;
             var comicCollection = db.get('EditingComic');
-            var author = "test";
+            var author = req.session.user.user;
             console.log("updateField");
             console.log(editor_title);
-            comicCollection.insert({
-                "title": editor_title,
-                "author": "test",
-                "description": editor_des,
-                "published": published,
-                "tags": editor_tags,
-                "panel1": panel1_JSON,
-                "panel2": panel2_JSON,
-                "panel3": panel3_JSON,
-                "panel4": panel4_JSON
-            }, function (err, doc) {
-                if (err) {
-                    res.send("There was a problem adding the information to DB");
-                }
-                else {
-                    if (published == "true") {
-                        console.log("success publish");
-                        res.redirect('/homepage');
+            console.log("before" + editorID);
+            if (editorID == "0") {
+                comicCollection.insert({
+                    "title": editor_title,
+                    "author": author,
+                    "description": editor_des,
+                    "published": published,
+                    "tags": editor_tags,
+                    "panel1": panel1_JSON,
+                    "thumbnail": thumbnail
+                }, function (err, doc) {
+                    if (err) {
+                        res.send("There was a problem adding the information to DB");
                     }
                     else {
-                        console.log("success save");
-                        res.redirect('/home');
+                        if (published == "true") {
+                            console.log("success publish");
+                            res.redirect('/homepage');
+                        }
+                        else {
+                            console.log("success save");
+                            res.redirect('/home');
+                        }
                     }
-                }
-            });
+                });
+            }
+            else {
+                console.log("in else case" + editorID);
+                comicCollection.findAndModify({
+                    _id: ObjectId(editorID)
+                }, {
+                    $set: {
+                        "title": editor_title,
+                        "author": author,
+                        "description": editor_des,
+                        "published": published,
+                        "tags": editor_tags,
+                        "panel1": panel1_JSON,
+                        "thumbnail": thumbnail
+                    }
+                }, function (err, doc) {
+                    if (err) {
+                        res.send("There was a problem adding the information to DB");
+                    }
+                    else {
+                        if (published == "true") {
+                            console.log("success publish");
+                            res.redirect('/homepage');
+                        }
+                        else {
+                            console.log("success save");
+                            res.redirect('/home');
+                        }
+                    }
+                });
+            }
+            ;
         });
         router.get('*', function (req, res) { res.render('404', { title: 'Page Not Found' }); });
         module.exports = router;
