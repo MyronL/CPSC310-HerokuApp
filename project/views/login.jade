@@ -3,6 +3,9 @@ extends loginlayout
 
 block content
 	//page at localhost:3000
+	//- a(href="#login-container")
+	//- 	center
+	//- 		h1 Login!
 	#login-container
 		form( method="post")#login-form.well.span4
 			// .well creates the login box
@@ -39,3 +42,6 @@ block scripts
 	script(src='/js/controllers/loginController.js')
 	script(src='/js/form-validators/loginValidator.js')
 	script(src='/js/form-validators/emailValidator.js')
+	script(src='https://rawgit.com/Prinzhorn/skrollr/master/src/skrollr.js')
+	script.
+		var s = skrollr.init();
