@@ -108,6 +108,7 @@ class Application {
     };
 
     module.exports = app;
+   
   }
 
 }
