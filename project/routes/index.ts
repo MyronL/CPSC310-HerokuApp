@@ -323,17 +323,14 @@ class Router {
         });
 
     // TODO: HELP ME I DON'T KNOW WHAT I'M DOING
-    router.delete('/deleteProject', function(req, res){
+    router.delete('/deleteProject/:id', function(req, res){
       var db = req.db;
+      var comicID = req.params.id;
+      var author = req.session.user.user;
       var projectlistCollection = db.get('EditingComic');
-      if (req.session.user == null) {
-        // if user is not logged-in redirect back to login page //
-        res.redirect('/');
-      }
-      else { 
-        projectlistCollection.deleteOne(
+        projectlistCollection.remove(
           // stub for testing the removal of a specific project
-          { "author": "hentai" },
+          { "author": author, _id: ObjectId(comicID) },
           function(err, doc) {
               if (err) {
                 console.log("Comic deletion failed");
@@ -342,7 +339,6 @@ class Router {
               res.redirect('/home');
               }
           });
-      }
     });
               
          router.post('/saveProject', function(req,res){

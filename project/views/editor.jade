@@ -37,7 +37,7 @@ block body
                         .panel-body
                             button#saveButton Save Comic   
                             button#publishButton Publish Comic
-                            form#deleteForm(name="formDeleteProject", method="delete", action="/deleteProject")
+                            form#deleteForm(name="formDeleteProject", method="post", action="/deleteProject/"+loadProject[0]._id+"?_method=DELETE")
                               button#deleteButton Delete Comic              
             .col-sm-10                
                 ul.nav.nav-pills
