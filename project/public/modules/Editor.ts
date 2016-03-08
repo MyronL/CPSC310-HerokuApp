@@ -3,6 +3,7 @@
 /// <reference path='../../types/DefinitelyTyped/mongodb/mongodb.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/fabricjs/fabricjs.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
+/// <reference path='../../types/DefinitelyTyped/jquery/jquery.d.ts'/>
 
 
 // server
@@ -15,14 +16,13 @@
 //import speech = require('Speech');
 
 
-
 class Editor{
   //private tools: editorTool.Tool[];
   //private editingComic: comicItem.Comic;
   //private selectedPanel: number;
   private panels: HTMLCanvasElement[];
   private imgLoader: HTMLInputElement;
-  private bubbleButton: HTMLButtonElement;
+  private bubbleButton: HTMLElement;
   private squareButton: HTMLButtonElement;
   private thoughtButton: HTMLButtonElement;
   private boxButton: HTMLButtonElement;
@@ -80,7 +80,7 @@ class Editor{
   
   constructor(panels: HTMLCanvasElement[], 
     imgLoader: HTMLInputElement, 
-    bubbleButton: HTMLButtonElement, 
+    bubbleButton: HTMLElement, 
     squareButton: HTMLButtonElement, 
     thoughtButton: HTMLButtonElement,
     boxButton: HTMLButtonElement,
@@ -94,7 +94,8 @@ class Editor{
     forwardButton: HTMLButtonElement,
     saveButton: HTMLButtonElement, 
     saveProjectForm: HTMLFormElement, 
-    publishButton: HTMLButtonElement) {
+    publishButton: HTMLButtonElement
+    ) {
 
       this.panels = panels;
       this.imgLoader = imgLoader;
@@ -144,6 +145,7 @@ class Editor{
   //selectPanel = function(){
       
   //}
+  
   
   showImage(e)   {
     var canvas = this.canvases[0];
@@ -323,6 +325,7 @@ class Editor{
    }
 }
 
+
 window.onload = function() {
   var panels: HTMLCanvasElement[] = [];
   panels.push(<HTMLCanvasElement>document.getElementById("panel1"));
@@ -332,7 +335,7 @@ window.onload = function() {
   
 
   var imgLoader = <HTMLInputElement> document.getElementById("imgLoader");
-  var bubbleButton = <HTMLButtonElement> document.getElementById("bubbleButton");
+  var bubbleButton = <HTMLElement> document.getElementById("bubbleButton");
   var squareButton = <HTMLButtonElement> document.getElementById("squareButton");
   var thoughtButton = <HTMLButtonElement> document.getElementById("thoughtButton");
   var boxButton = <HTMLButtonElement>document.getElementById("boxButton");
@@ -348,7 +351,6 @@ window.onload = function() {
   var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
-  
   var editor = new Editor(
     panels, 
     imgLoader, 
@@ -379,3 +381,4 @@ window.onload = function() {
   }
   
 };
+

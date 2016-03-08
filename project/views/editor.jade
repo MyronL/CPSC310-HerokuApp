@@ -1,6 +1,7 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 append styles
     link(rel='stylesheet',href='/stylesheets/style.css')
+    link(rel='stylesheet',href='/font-awesome-4.5.0/css/font-awesome.min.css')  
     link(rel='stylesheet',href='/stylesheets/fonts.css')
 block body
   div.btm-links
@@ -25,56 +26,79 @@ block body
                                 br
                                 input(type="hidden",name="published")
                                 input(type="hidden",name="sPanel1")
+                                input(type="hidden",name="sPanel2")
+                                input(type="hidden",name="sPanel3")
+                                input(type="hidden",name="sPanel4")
                                 input(type="hidden", name="thumbnail")
                                 input(type="hidden", name="editorID")
-                    .panel.panel-success
-                        .panel-heading Upload Image
-                        .panel-body                        
-                            input#imgLoader(type="file" accept="image/*")
-                    .panel.panel-success
-                        .panel-heading Speech Bubble
-                        .panel-body                        
-                            button#bubbleButton Normal Bubble
-                            button#squareButton Square Bubble
-                            button#thoughtButton Thought Bubble
-                            button#boxButton Text Box
-                            textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
-                            button#textButton Add Text
-                            select#styleSelect
-                                option(value="Normal") Normal
-                                option(value="Bold") Bold
-                                option(value="Italic") Italic
-                                option(value="BoldItalic") BoldItalic
-                            select#fontSelect
-                                option(value="ComicSans") Comic Sans
-                                option(value="WildWordsRoman") Wild Words Roman
-                                //option(value="WildWordsItalic") Wild Words Italic
-                                //option(value="WildWordsBoldItalic") Wild Words Bold Italic
-                            textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
-                            button#colourButton Set Text Colour
-                            button#rmTextButton Remove                            
-                            button#forwardButton Bring Forward
+                    
                     .panel.panel-success
                         .panel-heading Save or Publish
                         .panel-body
                             button#saveButton Save Comic   
                             button#publishButton Publish Comic                 
-            .col-sm-10
+            .col-sm-10                
+                ul.nav.nav-pills
+                    li.active
+                        a.btn.btn-default(data-toggle="pill" href="#image")
+                            i.fa.fa-picture-o
+                    li
+                        a.btn.btn-default(data-toggle="pill" href="#speechBubble")
+                            i.fa.fa-comment
+                    li
+                        a.btn.btn-default(data-toggle="pill" href="#Text")
+                            i.fa.fa-pencil   
+                    li
+                        a#rmTextButton.btn.btn-default(href="#")
+                            i.fa.fa-times
+                    li
+                        a#forwardButton.btn.btn-default(href="#")
+                            i.fa.fa-eject
+
+                .tab-content
+                    #image.tab-pane.fade.in.active
+                        input#imgLoader(type="file" accept="image/*")
+                    #speechBubble.tab-pane.fade
+                        button#bubbleButton Normal Bubble
+                        button#squareButton Square Bubble
+                        button#thoughtButton Thought Bubble
+                        button#boxButton Text Box
+                    #Text.tab-pane.fade
+                        select#styleSelect
+                            option(value="Normal") Normal
+                            option(value="Bold") Bold
+                            option(value="Italic") Italic
+                            option(value="BoldItalic") BoldItalic
+                        select#fontSelect
+                            option(value="ComicSans") Comic Sans
+                            option(value="WildWordsRoman") Wild Words Roman
+                        textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
+                        button#textButton Add Text
+                        textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
+                        button#colourButton Set Text Colour
+
+
                 h2 Comic Panels
-                        .container
-                            style
-                            .row
-                                .col-lg-12
-                                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+                      canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
   script(src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js")
-   // reference:http://jsfiddle.net/jaibuu/Vp6wa/
+  
+  //script(src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js")
+  // reference:http://jsfiddle.net/jaibuu/Vp6wa/   
   script.
+    $(document).ready(function(){
+        $("[data-toggle=popover]").popover();
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+
     var loadProject =!{JSON.stringify(loadProject)};
+  
   script(type="text/javascript", src="/modules/Editor.js")
- 
+
 
     
 

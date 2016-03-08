@@ -32,25 +32,21 @@ block body
         .row
             .col-sm-12
                 h2 
-                        .container
-                            style
-                            .row
-                                .col-lg-12
-                                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+                   canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+        h2 Comment        
         .row
             .col-sm-4
-                h2 Comment
                 h4 
                     form#newComment(name="formNewComment", method="post", action="/newComment")
-                        textarea#comment(type="text",placeholder="New Comment",style="resize:none",name="comment")
-                        input(type="hidden", name="commentUserID")
+                        textarea#comment(type="text",placeholder="New Comment",style="resize:none;width:75%",name="comment")
+                        input(type="hidden", name="comicID")
                         br
                         input(type="submit", value="Comment")
             .col-sm-8
-                  - if (loadProject == null) {var commentList = [];} else {var commentList = loadProject[0].commentList;}
-                  u1                   
+                  - if (loadProject == null) {var commentList = [];} else {var commentList = loadProject[0].commentList;};console.log(commentList);
+                  u1#commentList                   
                     each comment, i in commentList
-                        li
+                        li= comment 
                                                  
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
@@ -75,6 +71,7 @@ block scripts
             $('#comicTitle').val(title);
             $('#comicDescription').val(description);
             $('#comicTags').val(tags);
+            document.formNewComment.comicID.value = loadProject[0]._id;
             var canvas1 = new fabric.Canvas(panel1);
             fabric.Image.fromURL(img, function(obj){
                 canvas1.add(obj);

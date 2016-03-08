@@ -245,12 +245,34 @@ var Router = (function () {
             else {
                 projectlistCollection.find({ _id: ObjectId(comicID) }, {}, function (e, docs) {
                     res.render('viewComic', {
-                        title: 'viewComic',
+                        title: 'Viewer',
                         "loadProject": docs,
                         udata: req.session.user
                     });
                 });
             }
+        });
+        //post comment
+        router.post('/newComment', function (req, res) {
+            var comicID = req.body.comicID;
+            var comment = req.body.comment;
+            var user = req.session.user.user;
+            var db = req.db;
+            var comicCollection = db.get('EditingComic');
+            comicCollection.findAndModify({
+                _id: ObjectId(comicID)
+            }, {
+                $push: {
+                    "commentList": comment + "   from   " + user
+                }
+            }, function (err, doc) {
+                if (err) {
+                    res.send("There was a problem adding the information to DB");
+                }
+                else {
+                    res.redirect('/viewer/' + comicID);
+                }
+            });
         });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
