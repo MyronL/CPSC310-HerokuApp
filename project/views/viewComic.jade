@@ -35,17 +35,17 @@ block body
                         .container
                             style
                             .row
-                                .col-lg-3
-                                    canvas#panel1(name="panel1", width="400",height="400",style="border: 1px solid black;")
-                                .col-lg-3
-                                    canvas#panel2(name="panel2", width="400",height="400",style="border: 1px solid black;")
-                                .col-lg-3
-                                    canvas#panel3(name="panel3", width="400",height="400",style="border: 1px solid black;")
-                                .col-lg-3
-                                    canvas#panel4(name="panel4", width="400",height="400",style="border: 1px solid black;")
+                                .col-lg-12
+                                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
         .row
             .col-sm-12
                 h2 Comment
+                h4 
+                    form#newComment(name="formNewComment", method="post", action="/newComment")
+                        textarea#comment(type="text",placeholder="New Comment",style="resize:none",name="comment")
+                        input(type="hidden", name="commentUserID")
+                        br
+                        input(type="submit", value="Comment")
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
@@ -54,11 +54,8 @@ block scripts
    // reference:http://jsfiddle.net/jaibuu/Vp6wa/
   script.
     var loadProject =!{JSON.stringify(loadProject)};
-  script(type="text/javascript", src="/modules/Editor.js")
   script(type="text/javascript").
-    /*
     window.onload = function(){
-        var loadProject =!{JSON.stringify(loadProject)};
         console.log("Hi Loading");
         if (loadProject == null){
             console.log("nothing");
@@ -67,16 +64,16 @@ block scripts
             var description = loadProject[0].description;
             var tags = loadProject[0].tags;
             var author = loadProject[0].author;
-            var JsonPanel1 = loadProject[0].panel1;
-            var JsonPanel2 = loadProject[0].panel2;
-            var JsonPanel3 = loadProject[0].panel3;
-            var JsonPanel4 = loadProject[0].panel4;
+            var img = loadProject[0].thumbnail;
             console.log(title);
             $('#comicTitle').val(title);
             $('#comicDescription').val(description);
             $('#comicTags').val(tags);
-            console.log(loadProject[0])
-            canvas1.loadFromJSON(JsonPanel1, canvas1.renderAll.bind(canvas1));
+            var canvas1 = new fabric.Canvas(panel1);
+            fabric.Image.fromURL(img, function(obj){
+                canvas1.add(obj);
+                obj.selectable = false;
+            })
         }
     };  
 
