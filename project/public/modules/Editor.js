@@ -13,7 +13,7 @@
 // speech bubbles
 //import speech = require('Speech');
 var Editor = (function () {
-    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton, deleteButton, deleteForm) {
+    function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
         var _this = this;
         // images for speech bubble hosted on imgur
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
@@ -63,8 +63,8 @@ var Editor = (function () {
         this.rmTextButton = rmTextButton;
         this.saveButton = saveButton;
         this.publishButton = publishButton;
-        this.deleteButton = deleteButton;
-        this.deleteForm = deleteForm;
+        //   this.deleteButton = deleteButton;
+        //    this.deleteForm = deleteForm;
         this.saveProjectForm = saveProjectForm;
         this.forwardButton = forwardButton;
         this.editorID = "0";
@@ -86,7 +86,7 @@ var Editor = (function () {
         forwardButton.onclick = function () { return _this.forwards(); };
         saveButton.onclick = function () { return _this.saveProject(); };
         publishButton.onclick = function () { return _this.publishProject(); };
-        deleteButton.onclick = function () { return _this.deleteProject(); };
+        //   deleteButton.onclick = () => this.confirmDelete();
         //this.tools = null;
         //this.editingComic = null;
         //this.selectedPanel = null;
@@ -225,11 +225,24 @@ var Editor = (function () {
         //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
         this.saveProjectForm.submit();
     };
-    // TODO: I don't know what I'm doing
-    Editor.prototype.deleteProject = function () {
+    /*
+      confirmDelete(){
+         var r = confirm("Do you really want to delete the project? Deletion cannot be recovered")
+        if (r == true){
+           console.log("Deleting");
+           this.deleteProject();
+        } else {
+            console.log("Do Nothing");
+        }
+         
+      }
+      
+      // TODO: I don't know what I'm doing
+      deleteProject(){
         //stub
-        this.deleteForm.submit();
-    };
+           this.deleteForm.submit();
+      }
+   */
     Editor.prototype.loadProject = function (loadProject) {
         var title = loadProject[0].title;
         var description = loadProject[0].description;
@@ -285,10 +298,10 @@ window.onload = function () {
     var forwardButton = document.getElementById("forwardButton");
     var saveButton = document.getElementById("saveButton");
     var publishButton = document.getElementById("publishButton");
-    var deleteButton = document.getElementById("deleteButton");
-    var deleteForm = document.getElementById("deleteForm");
+    //  var deleteButton = <HTMLButtonElement> document.getElementById("deleteButton");
+    //  var deleteForm = <HTMLFormElement>document.getElementById("deleteForm");
     var saveProjectForm = document.getElementById("formSaveProject");
-    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton, deleteButton, deleteForm);
+    var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton);
     // load project is not defined
     if (loadProject == null) {
         editor.loadEmptyPanels();

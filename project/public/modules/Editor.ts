@@ -36,8 +36,8 @@ class Editor{
   private forwardButton: HTMLButtonElement;
   private saveButton: HTMLButtonElement;
   private publishButton: HTMLButtonElement;
-  private deleteButton: HTMLButtonElement;
-  private deleteForm: HTMLFormElement;
+//  private deleteButton: HTMLButtonElement;
+//  private deleteForm: HTMLFormElement;
   private saveProjectForm: HTMLFormElement;
   private editorID;
 
@@ -96,9 +96,7 @@ class Editor{
     forwardButton: HTMLButtonElement,
     saveButton: HTMLButtonElement, 
     saveProjectForm: HTMLFormElement, 
-    publishButton: HTMLButtonElement,
-    deleteButton: HTMLButtonElement,
-    deleteForm: HTMLFormElement
+    publishButton: HTMLButtonElement
     ) {
 
       this.panels = panels;
@@ -116,8 +114,8 @@ class Editor{
       this.rmTextButton = rmTextButton;
       this.saveButton = saveButton;
       this.publishButton = publishButton;
-      this.deleteButton = deleteButton;
-      this.deleteForm = deleteForm;
+   //   this.deleteButton = deleteButton;
+  //    this.deleteForm = deleteForm;
       this.saveProjectForm = saveProjectForm;
       this.forwardButton = forwardButton;
       this.editorID = "0";
@@ -141,7 +139,7 @@ class Editor{
       forwardButton.onclick = () => this.forwards();
       saveButton.onclick = () => this.saveProject();
       publishButton.onclick = () => this.publishProject();
-      deleteButton.onclick = () => this.deleteProject();
+   //   deleteButton.onclick = () => this.confirmDelete();
       //this.tools = null;
       //this.editingComic = null;
       //this.selectedPanel = null;
@@ -294,13 +292,24 @@ class Editor{
  //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
     this.saveProjectForm.submit();
    }
+ /*  
+   confirmDelete(){
+      var r = confirm("Do you really want to delete the project? Deletion cannot be recovered")
+     if (r == true){
+        console.log("Deleting");
+        this.deleteProject();
+     } else {
+         console.log("Do Nothing");
+     }
+      
+   }
    
    // TODO: I don't know what I'm doing
    deleteProject(){
      //stub
-     this.deleteForm.submit();
+        this.deleteForm.submit();
    }
-
+*/
    loadProject(loadProject) {
       var title = loadProject[0].title;
       var description = loadProject[0].description;
@@ -363,8 +372,8 @@ window.onload = function() {
   var forwardButton = <HTMLButtonElement>document.getElementById("forwardButton");
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
   var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
-  var deleteButton = <HTMLButtonElement> document.getElementById("deleteButton");
-  var deleteForm = <HTMLFormElement>document.getElementById("deleteForm");
+//  var deleteButton = <HTMLButtonElement> document.getElementById("deleteButton");
+//  var deleteForm = <HTMLFormElement>document.getElementById("deleteForm");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
   var editor = new Editor(
@@ -384,9 +393,7 @@ window.onload = function() {
     forwardButton, 
     saveButton, 
     saveProjectForm, 
-    publishButton,
-    deleteButton,
-    deleteForm
+    publishButton
     );
 
   // load project is not defined

@@ -37,8 +37,9 @@ block body
                         .panel-body
                             button#saveButton Save Comic   
                             button#publishButton Publish Comic
-                            form#deleteForm(name="formDeleteProject", method="post", action="/deleteProject/"+loadProject[0]._id+"?_method=DELETE")
-                              button#deleteButton Delete Comic              
+                            - if (loadProject == null) {var comicID = "0";} else {var comicID = loadProject[0]._id;};
+                            form#deleteForm(name="formDeleteProject", method="post", action="/deleteProject/"+comicID+"?_method=DELETE")
+                              input(type="submit", value="Delete Comic", onclick = "return confirm('Do you really want to delete the project? Deletion cannot be recovered');")              
             .col-sm-10                
                 ul.nav.nav-pills
                     li.active

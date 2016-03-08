@@ -308,6 +308,9 @@ var Router = (function () {
             var comicID = req.params.id;
             var author = req.session.user.user;
             var projectlistCollection = db.get('EditingComic');
+            if (comicID == "0") {
+                res.status(400).send("Unable to Delete ");
+            }
             projectlistCollection.remove(
             // stub for testing the removal of a specific project
             { "author": author, _id: ObjectId(comicID) }, function (err, doc) {
