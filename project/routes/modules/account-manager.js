@@ -82,17 +82,29 @@ exports.updateAccount = function(newData, callback)
 		o.name 		= newData.name;
 		o.email 	= newData.email;
 		if (newData.pass == ''){
+			accounts.update({user:newData.user},o,{safe: true}, function(err) {
+				if (err) callback(err);
+				else callback(null, o);
+			});            
+            /*
 			accounts.save(o, {safe: true}, function(err) {
 				if (err) callback(err);
 				else callback(null, o);
 			});
-		}	else{
+            */
+		}else{
 			saltAndHash(newData.pass, function(hash){
 				o.pass = hash;
+			    accounts.update({user:newData.user},o,{safe: true}, function(err) {
+				    if (err) callback(err);
+				    else callback(null, o);
+			     });                   
+                /*
 				accounts.save(o, {safe: true}, function(err) {
 					if (err) callback(err);
 					else callback(null, o);
 				});
+                */
 			});
 		}
 	});
@@ -106,7 +118,10 @@ exports.updatePassword = function(email, newPass, callback)
 		}	else{
 			saltAndHash(newPass, function(hash){
 		        o.pass = hash;
+                accounts.update({email:email},o, {safe: true}, callback);
+                /*
 		        accounts.save(o, {safe: true}, callback);
+                */
 			});
 		}
 	});

@@ -3,12 +3,18 @@ extends loginlayout
 
 block content
 	//page at localhost:3000
+	//- a#login-button(href="#login-container" position="fixed")
+	//- 	.row
+	//- 		img(src=logo width = "300" data-bottom-top="opacity:0;" data-center="opacity:1;")
+	//- 	center
+	//- 		h1 Login!
 	#login-container
 		form( method="post")#login-form.well.span4
 			// .well creates the login box
 			// .span<int> changes the width of the beige loginbox
 			<center>
-			img(src="https://www.berksfoods.com/wp-content/uploads/2014/02/ph_home_1.png" width = "300")
+			a(href=homeURL)
+				img(src=logo width = "300" data-bottom-top="opacity:0;" data-center="opacity:1;")
 			h1 Hello!
 			p.subheading Please sign in to access comics
 			label Username 
@@ -38,3 +44,6 @@ block scripts
 	script(src='/js/controllers/loginController.js')
 	script(src='/js/form-validators/loginValidator.js')
 	script(src='/js/form-validators/emailValidator.js')
+	script(src='https://rawgit.com/Prinzhorn/skrollr/master/src/skrollr.js')
+	script.
+		var s = skrollr.init();

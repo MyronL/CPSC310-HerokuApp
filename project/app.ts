@@ -23,6 +23,8 @@ class Application {
     var session = require('express-session');
     var errorHandler = require('errorhandler');
     var MongoStore = require('connect-mongo')(session);
+    
+    var methodOverride = require('method-override');
 
     var routes = require('./routes/index');
     var users = require('./routes/users');
@@ -35,6 +37,7 @@ class Application {
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
 
+    app.use(methodOverride('_method'));
     
     app.use(session({
 	   secret: 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4',
@@ -97,6 +100,12 @@ class Application {
       });
     });
 
+    // universal global variables
+    app.locals = {
+      siteTitle: "OVERPRICED HOTDOGS",
+      homeURL: "/homepage",
+      logo: "http://i.imgur.com/iwDCnm8.png"
+    };
 
     module.exports = app;
   }

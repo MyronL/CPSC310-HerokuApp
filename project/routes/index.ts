@@ -27,7 +27,7 @@ class Router {
         projectlistCollection.find({"published":"true"},{},function(e,docs){
            if (req.session.user == null){
 	// if user is not logged-in redirect back to login page //
-            res.render('homepage', {  title: 'Home Page'});
+            //res.render('homepage', {  title: 'Home Page'});
 			res.redirect('/homepagenl');
 		  }else{
             res.redirect('/homepagenlLogin');
@@ -45,6 +45,7 @@ class Router {
         var projectlistCollection = db.get('EditingComic');
         projectlistCollection.find({"published":"true"},{},function(e,docs){
             res.render('homepagenlLogin',{
+               udata : req.session.user,
                "projectList": docs 
             });
         });                   
@@ -103,18 +104,19 @@ class Router {
 	router.get('/home', function(req, res) {
         var db = req.db;
         var projectlistCollection = db.get('EditingComic');
-        projectlistCollection.find({"author":"test"},{},function(e,docs){
-           if (req.session.user == null){
-	// if user is not logged-in redirect back to login page //
-			res.redirect('/');
-		  }else{
-			res.render('home', {
-				udata : req.session.user,
-                "projectList": docs
-			});
-		  } 
-        });       
-	});
+        if (req.session.user == null) {
+                    // if user is not logged-in redirect back to login page //
+                    res.redirect('/');
+            } else{
+                var author = req.session.user.user; 
+                projectlistCollection.find({ "author": author }, {}, function (e, docs) {
+                  res.render('home', {
+                        udata: req.session.user,
+                        "projectList": docs
+                    });
+                });
+            }
+        });
 	
 	router.post('/home', function(req, res){
 		if (req.body['user'] != undefined) {
@@ -241,50 +243,133 @@ class Router {
 	});
 	
 
+// viewer
+    //testing
+    router.get('/viewer', function(req,res,next){
+        if (req.session.user == null){
+	       // if user is not logged-in redirect back to login page //
+			res.redirect('/');
+	    }else{  
+        res.render('viewComic', {title: 'Viewer', "loadProject": null, udata : req.session.user});
+        }
+    });
+
+    router.get('/viewer/:id', function(req,res,next){
+        var comicID = req.params.id;
+        var db = req.db;
+        var projectlistCollection = db.get('EditingComic');
+        if (req.session.user == null){
+	       // if user is not logged-in redirect back to login page //
+			res.redirect('/');
+	    }else{        
+            projectlistCollection.find({_id: ObjectId(comicID)},{},function(e,docs){
+              res.render('viewComic',{
+                 title: 'Viewer',
+                 "loadProject": docs,
+                 udata : req.session.user
+              });
+        });
+        }        
+    });
+    
+    //post comment
+    router.post('/newComment' , function(req,res){
+        var comicID = req.body.comicID;
+        var comment = req.body.comment;
+        var user = req.session.user.user;
+        var db = req.db;
+        var comicCollection = db.get('EditingComic');
+        comicCollection.findAndModify({
+                    _id: ObjectId(comicID)
+                },{
+                    $push: {
+                     "commentList": comment+"   from   "+ user                       
+                    }
+                },function(err,doc){
+                   if (err) {res.send("There was a problem adding the information to DB");
+                } else {
+                    res.redirect('/viewer/'+comicID);    
+                }
+                });
+    });
+
 
 // editor stuff	
         router.get('/editor', function(req, res, next) {
-            res.render('editor', { title: 'Editor', "loadProject" : null });
+            if (req.session.user == null){
+	       // if user is not logged-in redirect back to login page //
+			res.redirect('/');
+	       }else{  
+            res.render('editor', { title: 'Editor', "loadProject" : null, "editorID": null, udata : req.session.user});
+           }
         });
         
         router.get('/editor/:id', function(req,res,next){
            var editID = req.params.id;
            var db = req.db;
            var projectlistCollection = db.get('EditingComic');
-           projectlistCollection.find({_id: ObjectId(editID)},{},function(e,docs){
+           if (req.session.user == null){
+	       // if user is not logged-in redirect back to login page //
+			res.redirect('/');
+	       }else{  
+            projectlistCollection.find({_id: ObjectId(editID)},{},function(e,docs){
               res.render('editor',{
                  title: 'Editor',
-                 "loadProject": docs 
+                 "loadProject": docs,
+                 udata : req.session.user
               });
            });
+           }
         });
 
-
-        router.post('/saveProject', function(req,res){
+    // Delete a comic
+    router.delete('/deleteProject/:id', function(req, res){
+      var db = req.db;
+      var comicID = req.params.id;
+      var author = req.session.user.user;
+      var projectlistCollection = db.get('EditingComic');
+        if(comicID == "0"){
+            res.status(400).send("Unable to Delete ");
+        }
+        projectlistCollection.remove(
+          // stub for testing the removal of a specific project
+          { "author": author, _id: ObjectId(comicID) },
+          function(err, doc) {
+              if (err) {
+                console.log("Comic Deletion Failed");
+            } else {
+              console.log("Comic Deletion Successful");
+              res.redirect('/home');
+              }
+          });
+    });
+              
+         router.post('/saveProject', function(req,res){
             var editor_title = req.body.comicTitle;
             var editor_des = req.body.comicDescription;
             var editor_tags = req.body.comicTags;
             var panel1_JSON = req.body.sPanel1;
-            var panel2_JSON = req.body.sPanel2;
-            var panel3_JSON = req.body.sPanel3;
-            var panel4_JSON = req.body.sPanel4;
             var published = req.body.published;
+            var thumbnail = req.body.thumbnail;
+            var editorID = req.body.editorID;
+            console.log(req.session.user.user);
             var db = req.db;
             var comicCollection = db.get('EditingComic');
-            var author = "test"
+            var author = req.session.user.user;
             
             console.log("updateField");
             console.log(editor_title);
-            comicCollection.insert({
+            console.log("before"+editorID);
+            if (editorID == "0"){
+                comicCollection.insert({
                             "title": editor_title,
-                            "author": "test",
+                            "author": author,
                             "description": editor_des,
                             "published": published,
                             "tags": editor_tags,
                             "panel1": panel1_JSON,
-                            "panel2": panel2_JSON,
-                            "panel3": panel3_JSON,
-                            "panel4": panel4_JSON
+                            "thumbnail": thumbnail,
+                            "commentList": []
                         }, function(err,doc){
                             if (err) {res.send("There was a problem adding the information to DB");}
                             else {
@@ -298,6 +383,34 @@ class Router {
                                                   
                             }
                         });
+            } else {
+                console.log("in else case"+editorID);
+                comicCollection.findAndModify({
+                    _id: ObjectId(editorID)
+                },{
+                    $set: {
+                     "title": editor_title,
+                     "author": author,
+                     "description": editor_des,
+                     "published": published,
+                     "tags": editor_tags,
+                     "panel1": panel1_JSON,
+                     "thumbnail": thumbnail                        
+                    }
+                },function(err,doc){
+                   if (err) {res.send("There was a problem adding the information to DB");}
+                   else {
+                      if (published == "true"){
+                           console.log("success publish");
+                           res.redirect('/homepage');  
+                      } else {
+                           console.log("success save");
+                           res.redirect('/home');                                      
+                      }
+                                                  
+                   }
+                });
+            };
         });
     router.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
 		module.exports = router;
