@@ -280,6 +280,26 @@ var Router = (function () {
                 });
             }
         });
+        // TODO: HELP ME I DON'T KNOW WHAT I'M DOING
+        router.delete('/deleteProject', function (req, res) {
+            var db = req.db;
+            var projectlistCollection = db.get('EditingComic');
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                projectlistCollection.deleteOne({ "author": "hentai" }, function (err, doc) {
+                    if (err) {
+                        console.log("Comic deletion failed");
+                    }
+                    else {
+                        console.log("Comic Deletion Successful");
+                        res.redirect('/home');
+                    }
+                });
+            }
+        });
         router.post('/saveProject', function (req, res) {
             var editor_title = req.body.comicTitle;
             var editor_des = req.body.comicDescription;

@@ -6,7 +6,7 @@ append styles
 block body
   div.btm-links
     a(href='/homepagenlLogin')#home
-      img(src="http://i.imgur.com/iwDCnm8.png",width = "100")
+      img(src="http://i.imgur.com/iwDCnm8.png",width = "100", span title="Home")
     // this goes to /homepagenlLogin
     // is homepagel just a test page? the one with all the comic pictures?
   h1  Comic Editor
@@ -33,26 +33,28 @@ block body
                                 input(type="hidden", name="editorID")
                     
                     .panel.panel-success
-                        .panel-heading Save or Publish
+                        .panel-heading Comic Options
                         .panel-body
                             button#saveButton Save Comic   
-                            button#publishButton Publish Comic                 
+                            button#publishButton Publish Comic
+                            form#deleteForm(name="formDeleteProject", method="delete", action="/deleteProject")
+                              button#deleteButton Delete Comic              
             .col-sm-10                
                 ul.nav.nav-pills
                     li.active
-                        a.btn.btn-default(data-toggle="pill" href="#image")
+                        a.btn.btn-default(data-toggle="pill" href="#image" span title="Upload Image")
                             i.fa.fa-picture-o
                     li
-                        a.btn.btn-default(data-toggle="pill" href="#speechBubble")
+                        a.btn.btn-default(data-toggle="pill" href="#speechBubble" span title="Dialogue Bubbles")
                             i.fa.fa-comment
                     li
-                        a.btn.btn-default(data-toggle="pill" href="#Text")
+                        a.btn.btn-default(data-toggle="pill" href="#Text" span title="Text")
                             i.fa.fa-pencil   
                     li
-                        a#rmTextButton.btn.btn-default(href="#")
+                        a#rmTextButton.btn.btn-default(href="#" span title="Remove")
                             i.fa.fa-times
                     li
-                        a#forwardButton.btn.btn-default(href="#")
+                        a#forwardButton.btn.btn-default(href="#" span title="Bring Forwards")
                             i.fa.fa-eject
 
                 .tab-content
