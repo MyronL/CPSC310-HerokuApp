@@ -4,14 +4,6 @@
 /// <reference path='../../types/DefinitelyTyped/fabricjs/fabricjs.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jquery/jquery.d.ts'/>
-// server
-//import mongodb = require('mongodb');
-// image tools: resize, rotate, etc.
-//import editorTool = require('EditorTool');
-// for panels
-//import comicItem = require('ComicItem');
-// speech bubbles
-//import speech = require('Speech');
 var Editor = (function () {
     function Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, colourText, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton) {
         var _this = this;
@@ -70,6 +62,9 @@ var Editor = (function () {
         this.editorID = "0";
         this.canvases = [];
         this.canvases.push(new fabric.Canvas(this.panels[0]));
+        this.canvases[0].setBackgroundColor("white", function (b) {
+            console.log("Canvas background set to white");
+        });
         // for (var i = 0; i < 4; i++) {
         //   this.canvases.push(new fabric.Canvas(this.panels[i]));
         // }

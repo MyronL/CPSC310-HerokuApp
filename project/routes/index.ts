@@ -322,7 +322,7 @@ class Router {
            }
         });
 
-    // TODO: HELP ME I DON'T KNOW WHAT I'M DOING
+    // Delete a comic
     router.delete('/deleteProject/:id', function(req, res){
       var db = req.db;
       var comicID = req.params.id;
@@ -336,7 +336,7 @@ class Router {
           { "author": author, _id: ObjectId(comicID) },
           function(err, doc) {
               if (err) {
-                console.log("Comic deletion failed");
+                console.log("Comic Deletion Failed");
             } else {
               console.log("Comic Deletion Successful");
               res.redirect('/home');

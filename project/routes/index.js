@@ -302,7 +302,7 @@ var Router = (function () {
                 });
             }
         });
-        // TODO: HELP ME I DON'T KNOW WHAT I'M DOING
+        // Delete a comic
         router.delete('/deleteProject/:id', function (req, res) {
             var db = req.db;
             var comicID = req.params.id;
@@ -315,7 +315,7 @@ var Router = (function () {
             // stub for testing the removal of a specific project
             { "author": author, _id: ObjectId(comicID) }, function (err, doc) {
                 if (err) {
-                    console.log("Comic deletion failed");
+                    console.log("Comic Deletion Failed");
                 }
                 else {
                     console.log("Comic Deletion Successful");
