@@ -5,17 +5,6 @@
 /// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jquery/jquery.d.ts'/>
 
-
-// server
-//import mongodb = require('mongodb');
-// image tools: resize, rotate, etc.
-//import editorTool = require('EditorTool');
-// for panels
-//import comicItem = require('ComicItem');
-// speech bubbles
-//import speech = require('Speech');
-
-
 class Editor{
   //private tools: editorTool.Tool[];
   //private editingComic: comicItem.Comic;
@@ -122,6 +111,9 @@ class Editor{
 
       this.canvases = [];
       this.canvases.push(new fabric.Canvas(this.panels[0]));
+      this.canvases[0].setBackgroundColor("white", function(b){
+        console.log("Canvas background set to white")
+      });
       // for (var i = 0; i < 4; i++) {
       //   this.canvases.push(new fabric.Canvas(this.panels[i]));
       // }

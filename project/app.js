@@ -76,7 +76,7 @@ var Application = (function () {
         });
         // universal global variables
         app.locals = {
-            siteTitle: "OverPriced Hotdogs",
+            siteTitle: "OVERPRICED HOTDOGS",
             homeURL: "/homepage",
             logo: "http://i.imgur.com/iwDCnm8.png"
         };
