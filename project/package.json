@@ -23,7 +23,8 @@
     "connect-mongo": "~0.8.2",
     "errorhandler": "~1.4.2",
     "jade-bootstrap": "1.0.1",
-    "method-override": "2.3.5"
+    "method-override": "2.3.5",
+    "jasmine-core": "2.4.1"
   },
   "engines": {
 	"node": "5.4.0"
