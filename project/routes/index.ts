@@ -326,7 +326,8 @@ class Router {
                             "published": published,
                             "tags": editor_tags,
                             "panel1": panel1_JSON,
-                            "thumbnail": thumbnail
+                            "thumbnail": thumbnail,
+                            "commentList": []
                         }, function(err,doc){
                             if (err) {res.send("There was a problem adding the information to DB");}
                             else {
