@@ -5,17 +5,6 @@
 /// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jquery/jquery.d.ts'/>
 
-
-// server
-//import mongodb = require('mongodb');
-// image tools: resize, rotate, etc.
-//import editorTool = require('EditorTool');
-// for panels
-//import comicItem = require('ComicItem');
-// speech bubbles
-//import speech = require('Speech');
-
-
 class Editor{
   //private tools: editorTool.Tool[];
   //private editingComic: comicItem.Comic;
@@ -36,6 +25,8 @@ class Editor{
   private forwardButton: HTMLButtonElement;
   private saveButton: HTMLButtonElement;
   private publishButton: HTMLButtonElement;
+//  private deleteButton: HTMLButtonElement;
+//  private deleteForm: HTMLFormElement;
   private saveProjectForm: HTMLFormElement;
   private editorID;
 
@@ -112,12 +103,17 @@ class Editor{
       this.rmTextButton = rmTextButton;
       this.saveButton = saveButton;
       this.publishButton = publishButton;
+   //   this.deleteButton = deleteButton;
+  //    this.deleteForm = deleteForm;
       this.saveProjectForm = saveProjectForm;
       this.forwardButton = forwardButton;
       this.editorID = "0";
 
       this.canvases = [];
       this.canvases.push(new fabric.Canvas(this.panels[0]));
+      this.canvases[0].setBackgroundColor("white", function(b){
+        console.log("Canvas background set to white")
+      });
       // for (var i = 0; i < 4; i++) {
       //   this.canvases.push(new fabric.Canvas(this.panels[i]));
       // }
@@ -135,6 +131,7 @@ class Editor{
       forwardButton.onclick = () => this.forwards();
       saveButton.onclick = () => this.saveProject();
       publishButton.onclick = () => this.publishProject();
+   //   deleteButton.onclick = () => this.confirmDelete();
       //this.tools = null;
       //this.editingComic = null;
       //this.selectedPanel = null;
@@ -252,7 +249,15 @@ class Editor{
       this.canvases[0].renderAll();  
    }
 
+  forwards() {
+     var forward = this.canvases[0].getActiveObject();
+     this.canvases [0].bringForward(forward);
+     this.canvases[0].bringForward(forward);
+     this.canvases[0].renderAll(); 
+  } 
+
   publishProject(){
+    this.canvases[0].deactivateAll();
     this.saveProjectForm.elements['published'].value = true;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
     this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
@@ -269,6 +274,7 @@ class Editor{
         console.log(obj.sourcePath);
     });
     */
+    this.canvases[0].deactivateAll();
     this.saveProjectForm.elements['published'].value = false;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
     this.saveProjectForm.elements['thumbnail'].value = null;
@@ -280,13 +286,24 @@ class Editor{
  //   this.saveProjectForm.elements['sPanel4'].value = JSON.stringify(this.canvases[3]);
     this.saveProjectForm.submit();
    }
+ /*  
+   confirmDelete(){
+      var r = confirm("Do you really want to delete the project? Deletion cannot be recovered")
+     if (r == true){
+        console.log("Deleting");
+        this.deleteProject();
+     } else {
+         console.log("Do Nothing");
+     }
+      
+   }
    
-   forwards() {
-     var forward = this.canvases[0].getActiveObject();
-     this.canvases[0].bringForward(forward);
-     this.canvases[0].bringForward(forward);
-     this.canvases[0].renderAll(); 
-  }
+   // TODO: I don't know what I'm doing
+   deleteProject(){
+     //stub
+        this.deleteForm.submit();
+   }
+*/
    loadProject(loadProject) {
       var title = loadProject[0].title;
       var description = loadProject[0].description;
@@ -349,6 +366,8 @@ window.onload = function() {
   var forwardButton = <HTMLButtonElement>document.getElementById("forwardButton");
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
   var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
+//  var deleteButton = <HTMLButtonElement> document.getElementById("deleteButton");
+//  var deleteForm = <HTMLFormElement>document.getElementById("deleteForm");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
 
   var editor = new Editor(

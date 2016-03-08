@@ -1,6 +1,6 @@
-/*body {
+body {
     background-color: lightyellow;
-}*/
+}
 @font-face {
 font-family: WildWordsRoman;
 src: url('WildWordsRoman.TTF');
@@ -17,6 +17,3 @@ src: url('WildWordsbolditalic.TTF');
 font-family: ComicSans;
 src: url('ComicSans.ttf');
 }
-/*canvas {
-	background-color: White;
-}*/

@@ -5,8 +5,8 @@ append styles
     link(rel='stylesheet',href='/stylesheets/fonts.css')
 block body
   div.btm-links
-    a(href='/homepagenlLogin')#home
-      img(src="http://i.imgur.com/iwDCnm8.png",width = "100")
+    a(href=homeURL)#home
+      img(src=logo,width = "100", span title="Home")
     // this goes to /homepagenlLogin
     // is homepagel just a test page? the one with all the comic pictures?
   h1  Comic Editor
@@ -33,26 +33,29 @@ block body
                                 input(type="hidden", name="editorID")
                     
                     .panel.panel-success
-                        .panel-heading Save or Publish
+                        .panel-heading Comic Options
                         .panel-body
                             button#saveButton Save Comic   
-                            button#publishButton Publish Comic                 
+                            button#publishButton Publish Comic
+                            - if (loadProject == null) {var comicID = "0";} else {var comicID = loadProject[0]._id;};
+                            form#deleteForm(name="formDeleteProject", method="post", action="/deleteProject/"+comicID+"?_method=DELETE")
+                              input(type="submit", value="Delete Comic", onclick = "return confirm('Do you really want to delete the project? Deletion cannot be recovered');")              
             .col-sm-10                
                 ul.nav.nav-pills
                     li.active
-                        a.btn.btn-default(data-toggle="pill" href="#image")
+                        a.btn.btn-default(data-toggle="pill" href="#image" span title="Upload Image")
                             i.fa.fa-picture-o
                     li
-                        a.btn.btn-default(data-toggle="pill" href="#speechBubble")
+                        a.btn.btn-default(data-toggle="pill" href="#speechBubble" span title="Dialogue Bubbles")
                             i.fa.fa-comment
                     li
-                        a.btn.btn-default(data-toggle="pill" href="#Text")
+                        a.btn.btn-default(data-toggle="pill" href="#Text" span title="Text")
                             i.fa.fa-pencil   
                     li
-                        a#rmTextButton.btn.btn-default(href="#")
+                        a#rmTextButton.btn.btn-default(href="#" span title="Remove")
                             i.fa.fa-times
                     li
-                        a#forwardButton.btn.btn-default(href="#")
+                        a#forwardButton.btn.btn-default(href="#" span title="Bring Forwards")
                             i.fa.fa-eject
 
                 .tab-content
@@ -79,11 +82,7 @@ block body
 
 
                 h2 Comic Panels
-                        .container
-                            style
-                            .row
-                                .col-lg-12
-                                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+                      canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
 
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
