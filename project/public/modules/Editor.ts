@@ -265,6 +265,7 @@ class Editor{
   } 
 
   publishProject(){
+    this.canvases[0].deactivateAll();
     this.saveProjectForm.elements['published'].value = true;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
     this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
@@ -281,6 +282,7 @@ class Editor{
         console.log(obj.sourcePath);
     });
     */
+    this.canvases[0].deactivateAll();
     this.saveProjectForm.elements['published'].value = false;
     this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
     this.saveProjectForm.elements['thumbnail'].value = null;

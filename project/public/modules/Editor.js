@@ -198,6 +198,7 @@ var Editor = (function () {
         this.canvases[0].renderAll();
     };
     Editor.prototype.publishProject = function () {
+        this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = true;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
         this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
@@ -214,6 +215,7 @@ var Editor = (function () {
                 console.log(obj.sourcePath);
             });
             */
+        this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
         this.saveProjectForm.elements['thumbnail'].value = null;
