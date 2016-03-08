@@ -88,7 +88,8 @@ var Router = (function () {
         router.get('/home', function (req, res) {
             var db = req.db;
             var projectlistCollection = db.get('EditingComic');
-            projectlistCollection.find({ "author": "test" }, {}, function (e, docs) {
+            var author = req.session.user.user;
+            projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                 if (req.session.user == null) {
                     // if user is not logged-in redirect back to login page //
                     res.redirect('/');
@@ -230,7 +231,7 @@ var Router = (function () {
                 res.redirect('/');
             }
             else {
-                res.render('viewComic', { title: 'Viewer', "loadProject": null });
+                res.render('viewComic', { title: 'Viewer', "loadProject": null, udata: req.session.user });
             }
         });
         router.get('/viewer/:id', function (req, res, next) {
@@ -253,18 +254,31 @@ var Router = (function () {
         });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
-            res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null });
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null, udata: req.session.user });
+            }
         });
         router.get('/editor/:id', function (req, res, next) {
             var editID = req.params.id;
             var db = req.db;
             var projectlistCollection = db.get('EditingComic');
-            projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
-                res.render('editor', {
-                    title: 'Editor',
-                    "loadProject": docs
+            if (req.session.user == null) {
+                // if user is not logged-in redirect back to login page //
+                res.redirect('/');
+            }
+            else {
+                projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
+                    res.render('editor', {
+                        title: 'Editor',
+                        "loadProject": docs,
+                        udata: req.session.user
+                    });
                 });
-            });
+            }
         });
         router.post('/saveProject', function (req, res) {
             var editor_title = req.body.comicTitle;
@@ -274,9 +288,10 @@ var Router = (function () {
             var published = req.body.published;
             var thumbnail = req.body.thumbnail;
             var editorID = req.body.editorID;
+            console.log(req.session.user.user);
             var db = req.db;
             var comicCollection = db.get('EditingComic');
-            var author = "test";
+            var author = req.session.user.user;
             console.log("updateField");
             console.log(editor_title);
             console.log("before" + editorID);
