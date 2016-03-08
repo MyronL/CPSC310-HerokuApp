@@ -27,7 +27,7 @@ class Router {
         projectlistCollection.find({"published":"true"},{},function(e,docs){
            if (req.session.user == null){
 	// if user is not logged-in redirect back to login page //
-            res.render('homepage', {  title: 'Home Page'});
+            //res.render('homepage', {  title: 'Home Page'});
 			res.redirect('/homepagenl');
 		  }else{
             res.redirect('/homepagenlLogin');
@@ -104,19 +104,19 @@ class Router {
 	router.get('/home', function(req, res) {
         var db = req.db;
         var projectlistCollection = db.get('EditingComic');
-        var author = req.session.user.user;
-        projectlistCollection.find({"author":author},{},function(e,docs){
-           if (req.session.user == null){
-	// if user is not logged-in redirect back to login page //
-			res.redirect('/');
-		  }else{
-			res.render('home', {
-				udata : req.session.user,
-                "projectList": docs
-			});
-		  } 
-        });       
-	});
+        if (req.session.user == null) {
+                    // if user is not logged-in redirect back to login page //
+                    res.redirect('/');
+            } else{
+                var author = req.session.user.user; 
+                projectlistCollection.find({ "author": author }, {}, function (e, docs) {
+                  res.render('home', {
+                        udata: req.session.user,
+                        "projectList": docs
+                    });
+                });
+            }
+        });
 	
 	router.post('/home', function(req, res){
 		if (req.body['user'] != undefined) {
