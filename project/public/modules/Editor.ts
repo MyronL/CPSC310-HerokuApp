@@ -3,7 +3,12 @@
 /// <reference path='../../types/DefinitelyTyped/mongodb/mongodb.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/fabricjs/fabricjs.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
+/// <reference path='../../types/DefinitelyTyped/jquery/jquery.d.ts'/>
 
+
+$(document).ready(function(){
+    console.log("hi");
+});
 
 // server
 //import mongodb = require('mongodb');
@@ -15,14 +20,13 @@
 //import speech = require('Speech');
 
 
-
 class Editor{
   //private tools: editorTool.Tool[];
   //private editingComic: comicItem.Comic;
   //private selectedPanel: number;
   private panels: HTMLCanvasElement[];
   private imgLoader: HTMLInputElement;
-  private bubbleButton: HTMLButtonElement;
+  private bubbleButton: HTMLElement;
   private squareButton: HTMLButtonElement;
   private thoughtButton: HTMLButtonElement;
   private dialogue: HTMLTextAreaElement;
@@ -34,6 +38,9 @@ class Editor{
   private saveButton: HTMLButtonElement;
   private publishButton: HTMLButtonElement;
   private saveProjectForm: HTMLFormElement;
+  private imageTool: HTMLElement;
+  //private textTool: HTMLElement;
+  private tool: HTMLElement;
 
   private canvases: fabric.ICanvas[];
 
@@ -45,7 +52,7 @@ class Editor{
   
   constructor(panels: HTMLCanvasElement[], 
     imgLoader: HTMLInputElement, 
-    bubbleButton: HTMLButtonElement, 
+    bubbleButton: HTMLElement, 
     squareButton: HTMLButtonElement, 
     thoughtButton: HTMLButtonElement,
     dialogue: HTMLTextAreaElement, 
@@ -56,7 +63,8 @@ class Editor{
     forwardButton: HTMLButtonElement,
     saveButton: HTMLButtonElement, 
     saveProjectForm: HTMLFormElement, 
-    publishButton: HTMLButtonElement) {
+    publishButton: HTMLButtonElement
+    ) {
 
       this.panels = panels;
       this.imgLoader = imgLoader;
@@ -72,6 +80,8 @@ class Editor{
       this.publishButton = publishButton;
       this.saveProjectForm = saveProjectForm;
       this.forwardButton = forwardButton;
+          
+     
 
 
       this.canvases = [];
@@ -99,6 +109,7 @@ class Editor{
   //selectPanel = function(){
       
   //}
+  
   
   showImage(e)   {
     var canvas = this.canvases[0];
@@ -218,6 +229,7 @@ class Editor{
    }
 }
 
+
 window.onload = function() {
   var panels: HTMLCanvasElement[] = [];
   panels.push(<HTMLCanvasElement>document.getElementById("panel1"));
@@ -227,7 +239,7 @@ window.onload = function() {
   
 
   var imgLoader = <HTMLInputElement> document.getElementById("imgLoader");
-  var bubbleButton = <HTMLButtonElement> document.getElementById("bubbleButton");
+  var bubbleButton = <HTMLElement> document.getElementById("bubbleButton");
   var squareButton = <HTMLButtonElement> document.getElementById("squareButton");
   var thoughtButton = <HTMLButtonElement> document.getElementById("thoughtButton");
   var dialogue = <HTMLTextAreaElement> document.getElementById("dialogue");
@@ -239,8 +251,7 @@ window.onload = function() {
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
   var publishButton = <HTMLButtonElement> document.getElementById("publishButton");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
-
-
+ 
   var editor = new Editor(
     panels, 
     imgLoader, 
@@ -266,3 +277,4 @@ window.onload = function() {
   }
   
 };
+

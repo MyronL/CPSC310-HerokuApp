@@ -3,6 +3,10 @@
 /// <reference path='../../types/DefinitelyTyped/mongodb/mongodb.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/fabricjs/fabricjs.d.ts'/>
 /// <reference path='../../types/DefinitelyTyped/jqueryui/jqueryui.d.ts'/>
+/// <reference path='../../types/DefinitelyTyped/jquery/jquery.d.ts'/>
+$(document).ready(function () {
+    console.log("hi");
+});
 // server
 //import mongodb = require('mongodb');
 // image tools: resize, rotate, etc.
