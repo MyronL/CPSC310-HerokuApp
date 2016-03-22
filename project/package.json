@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "jasmine-node spec"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
@@ -26,9 +27,6 @@
     "method-override": "2.3.5",
     "jasmine-node": "^1.14.5",
     "request": "^2.69.0"
-  },
-  "scripts": {
-    "test": "jasmine-node spec"
   },
   "engines": {
     "node": "5.4.0"
