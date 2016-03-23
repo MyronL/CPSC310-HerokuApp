@@ -382,7 +382,8 @@ var Editor = (function () {
         var colourString = "rgb(" + r + "," + g + "," + b + ")";
         this.selectedPanel.setColor(colourString);
         this.canvases[0].add(this.selectedPanel);
-        this.putBordertoFront();
+        this.canvases[0].sendToBack(this.selectedPanel);
+        //this.putBordertoFront();
     };
     Editor.prototype.updatePanelPreview = function () {
         var r = document.getElementById("panelRed").value;

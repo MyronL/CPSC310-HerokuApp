@@ -474,7 +474,9 @@ class Editor{
     var colourString = "rgb(" + r + "," + g + "," + b + ")";
     this.selectedPanel.setColor(colourString);
     this.canvases[0].add(this.selectedPanel);
-    this.putBordertoFront();
+    this.canvases[0].sendToBack(this.selectedPanel);
+    //this.putBordertoFront();
+
    }
 
    updatePanelPreview() {
