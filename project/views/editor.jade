@@ -50,13 +50,16 @@ block body
                             i.fa.fa-comment
                     li
                         a.btn.btn-default(data-toggle="pill" href="#Text" span title="Text")
-                            i.fa.fa-pencil   
+                            i.fa.fa-font 
                     li
                         a#rmTextButton.btn.btn-default(href="#" span title="Remove")
                             i.fa.fa-times
                     li
                         a#forwardButton.btn.btn-default(href="#" span title="Bring Forwards")
                             i.fa.fa-eject
+                    li
+                        a.btn.btn-default(data-toggle="pill" href="#Panel" span title="Panel Options")
+                            i.fa.fa-columns
 
                 .tab-content
                     #image.tab-pane.fade.in.active
@@ -77,12 +80,33 @@ block body
                             option(value="WildWordsRoman") Wild Words Roman
                         textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
                         button#textButton Add Text
-                        textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
+                        //textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
+                        p Red
+                            input#textRed(type="range" max="255" value="0")
+                        p Green
+                            input#textGreen(type="range" max="255" value="0")
+                        p Blue
+                            input#textBlue(type="range" max="255" value="0")
+                        canvas#textColourCanvas(name="textColourCanvas" width="50" height="50" style="border: 1px solid black")
                         button#colourButton Set Text Colour
+                    #Panel.tab-pane.fade
+                        select#panelSelect
+                            option(value="Panel1") Panel 1
+                            option(value="Panel2") Panel 2
+                            option(value="Panel3") Panel 3
+                            option(value="Panel4") Panel 4
+                        p Red
+                            input#panelRed(type="range" max="255" value="255")
+                        p Green
+                            input#panelGreen(type="range" max="255" value="255")
+                        p Blue
+                            input#panelBlue(type="range" max="255" value="255")
+                        canvas#panelColourCanvas(name="panelColourCanvas" width="50" height="50" style="border: 1px solid black")
+                        button#panelColourButton Set Panel Colour
 
 
                 h2 Comic Panels
-                      canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+                      canvas#panel1(name="panel1", width="1600",height="400",style="border: 3px solid black;")
 
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
