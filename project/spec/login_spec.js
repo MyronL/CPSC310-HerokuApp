@@ -1,8 +1,13 @@
 var request = require("request");
 var project = require("../app.js")
 
+<<<<<<< HEAD
 var login_url = "http://overpricedcomics.herokuapp.com/"
 var signup_url = "http://overpricedcomics.herokuapp.com/signup"
+=======
+var login_url = "http://localhost:3000/"
+var signup_url = "http://localhost:3000/signup"
+>>>>>>> 10df194ac7f674745b017bd758634e0449af7237
 
 describe("Login Page Test", function() {
 	describe("GET /", function() {

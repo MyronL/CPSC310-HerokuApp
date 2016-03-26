@@ -19,7 +19,7 @@
     "monk": "~1.0.1",
     "stylus": "~0.52.4",
     "express-session": "~1.11.3",
-    "moment" : "~2.10.3",
+    "moment": "~2.10.3",
     "emailjs": "~1.0.0",
     "connect-mongo": "~0.8.2",
     "errorhandler": "~1.4.2",
@@ -30,5 +30,8 @@
   },
   "engines": {
     "node": "5.4.0"
+  },
+  "devDependencies": {
+    "jasmine-core": "2.4.1"
   }
 }

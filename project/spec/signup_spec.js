@@ -2,8 +2,13 @@ var request = require("request");
 var project = require("../app.js")
 
 describe("Signup Page Test", function() {
+<<<<<<< HEAD
 	var signup_url = "http://overpricedcomics.herokuapp.com/signup"
 	var login_url = "http://overpricedcomics.herokuapp.com/"
+=======
+	var signup_url = "http://localhost:3000/signup"
+	var login_url = "http://localhost:3000/"
+>>>>>>> 10df194ac7f674745b017bd758634e0449af7237
 	
 	describe("GET /", function() {
 
@@ -32,7 +37,11 @@ describe("Signup Page Test", function() {
 				done();
 			});
 		});
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 10df194ac7f674745b017bd758634e0449af7237
 	});
 
 	describe("Create a new user with duplicate username", function() {
