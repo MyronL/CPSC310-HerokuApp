@@ -238,17 +238,51 @@ var Router = (function () {
             var comicID = req.params.id;
             var db = req.db;
             var projectlistCollection = db.get('EditingComic');
+            var favCollection = db.get('favorites');
+            var user = req.session.user.user;
+            var favRecord = 0;
             if (req.session.user == null) {
                 // if user is not logged-in redirect back to login page //
                 res.redirect('/');
             }
             else {
                 projectlistCollection.find({ _id: ObjectId(comicID) }, {}, function (e, docs) {
-                    res.render('viewComic', {
-                        title: 'Viewer',
-                        "loadProject": docs,
-                        udata: req.session.user
+                    favCollection.count({ "comicID": comicID }, function (e, count) {
+                        favCollection.findOne({ "user": user, "comicID": comicID }, function (e, o) {
+                            if (o) {
+                                favRecord = 1;
+                            }
+                            res.render('viewComic', { title: 'Viewer', "loadProject": docs, udata: req.session.user, liked: favRecord, favCount: count });
+                        });
                     });
+                });
+            }
+        });
+        //like a comic
+        router.post('/favorites', function (req, res) {
+            var comicID = req.body.comicID;
+            var user = req.session.user.user;
+            var liked = req.body.like;
+            var db = req.db;
+            var favCollection = db.get('favorites');
+            if (liked == 1) {
+                favCollection.insert({ "user": user, "comicID": comicID }, function (err, doc) {
+                    if (err) {
+                        res.send("There was a problem adding the information to DB");
+                    }
+                    else {
+                        res.redirect('/viewer/' + comicID);
+                    }
+                });
+            }
+            else {
+                favCollection.remove({ "user": user, "comicID": comicID }, function (err, doc) {
+                    if (err) {
+                        res.send("There was a problem deleting a document in DB");
+                    }
+                    else {
+                        res.redirect('/viewer/' + comicID);
+                    }
                 });
             }
         });

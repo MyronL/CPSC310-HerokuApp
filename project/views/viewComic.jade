@@ -2,6 +2,7 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 append styles
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
     link(rel='stylesheet',href='/stylesheets/style.css')
+    link(rel='stylesheet',href='/font-awesome-4.5.0/css/font-awesome.min.css')  
 block body
   div.btm-links
     a(href=homeURL)#home
@@ -33,7 +34,22 @@ block body
             .col-sm-12
                 h2 
                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
-        h2 Comment        
+        .row
+            .col-sm-12
+              form#likeForm(name="likeForm", method="post", action="/favorites")
+                input(type="hidden", name="comicID")
+                if liked == 0
+                  button.btn.btn-success(type='submit' name='like' value='1')
+                    i.fa.fa-thumbs-up.fa-lg Like
+                else 
+                  button.btn.btn-danger(type='submit' name='like' value='0')
+                    i.fa.fa-thumbs-down.fa-lg Dislike
+              if favCount <= 1
+                p #{favCount} person likes this comic
+              else if favCount > 1
+                p #{favCount} people like this comic
+                 
+        h2 Comment
         .row
             .col-sm-4
                 h4 
@@ -56,6 +72,8 @@ block scripts
    // reference:http://jsfiddle.net/jaibuu/Vp6wa/
   script.
     var loadProject =!{JSON.stringify(loadProject)};
+    var liked = #{liked};
+    var favCount = #{favCount};
   script(type="text/javascript").
     window.onload = function(){
         console.log("Hi Loading");
@@ -72,6 +90,7 @@ block scripts
             $('#comicDescription').val(description);
             $('#comicTags').val(tags);
             document.formNewComment.comicID.value = loadProject[0]._id;
+            document.likeForm.comicID.value = loadProject[0]._id;
             var canvas1 = new fabric.Canvas(panel1);
             fabric.Image.fromURL(img, function(obj){
                 canvas1.add(obj);

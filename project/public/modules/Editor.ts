@@ -19,7 +19,12 @@ class Editor{
   private textButton: HTMLButtonElement;
   private styleSelect: HTMLSelectElement;
   private fontSelect: HTMLSelectElement;
-  private colourText: HTMLTextAreaElement;
+  //private colourText: HTMLTextAreaElement;
+  private textRed: HTMLInputElement;
+  private textGreen: HTMLInputElement;
+  private textBlue: HTMLInputElement;
+  private textColourCanvas: HTMLCanvasElement;
+  private textCanvas: fabric.ICanvas;
   private colourButton: HTMLButtonElement;
   private rmTextButton: HTMLButtonElement;
   private forwardButton: HTMLButtonElement;
@@ -31,6 +36,15 @@ class Editor{
   private editorID;
 
   private canvases: fabric.ICanvas[];
+  // change panel properties
+  private panelSelect: HTMLSelectElement;
+  private panelRed: HTMLInputElement;
+  private panelGreen: HTMLInputElement;
+  private panelBlue: HTMLInputElement;
+  private panelColourCanvas: HTMLCanvasElement;
+  private panelCanvas: fabric.ICanvas;
+  //private panelColour: HTMLTextAreaElement;
+  private panelColourButton: HTMLButtonElement;
 
   // images for speech bubble hosted on imgur
   private bubble = 'http://i.imgur.com/qtDmgzK.png';
@@ -44,6 +58,9 @@ class Editor{
   private style = 'normal';
   private weight = 'normal';
 
+  // panel variables
+  // rectangles are set to lines on the canvas
+  // you need to adjust them first to actual comic panels
   private panelLine1 = new fabric.Rect({
           left: 400,
           top: -1,
@@ -53,7 +70,7 @@ class Editor{
           selectable: false
   });
   private panelLine2 = new fabric.Rect({
-          left: 810,
+          left: 800, // was 810
           top: -1,
           width: 3,
           height: 401,
@@ -61,15 +78,55 @@ class Editor{
           selectable: false
   });
   private panelLine3 = new fabric.Rect({
-          left: 1220,
+          left: 1200, // 1220
           top: -1,
           width: 3,
           height: 401,
           fill: "black",
           selectable: false
   });
+  // actual panels
+  private panelRect1 = new fabric.Rect({
+          left: -1,
+          top: -1,
+          width: 402,
+          height: 401,
+          fill: "rgb(255,255,255)",
+          //fill: "red",
+          selectable: false
+  });
+
+  private panelRect2 = new fabric.Rect({
+          left: 400,
+          top: -1,
+          width: 402,
+          height: 401,
+          fill: "rgb(255,255,255)",
+          selectable: false
+  });
   
-  constructor(panels: HTMLCanvasElement[], 
+  private panelRect3 = new fabric.Rect({
+          left: 800,
+          top: -1,
+          width: 402,
+          height: 401,
+          fill: "rgb(255,255,255)",
+          selectable: false
+  });
+  
+  private panelRect4 = new fabric.Rect({
+          left: 1200,
+          top: -1,
+          width: 402,
+          height: 401,
+          fill: "rgb(255,255,255)",
+          selectable: false 
+  });
+
+  private selectedPanel = this.panelRect1;
+  
+  constructor(
+    panels: HTMLCanvasElement[], 
     imgLoader: HTMLInputElement, 
     bubbleButton: HTMLElement, 
     squareButton: HTMLButtonElement, 
@@ -79,13 +136,24 @@ class Editor{
     textButton: HTMLButtonElement,
     styleSelect: HTMLSelectElement,
     fontSelect: HTMLSelectElement,
-    colourText: HTMLTextAreaElement, 
+    //colourText: HTMLTextAreaElement,
+    textRed: HTMLInputElement,
+    textGreen: HTMLInputElement,
+    textBlue: HTMLInputElement,
+    textColourCanvas: HTMLCanvasElement, 
     colourButton: HTMLButtonElement, 
     rmTextButton: HTMLButtonElement, 
     forwardButton: HTMLButtonElement,
     saveButton: HTMLButtonElement, 
     saveProjectForm: HTMLFormElement, 
-    publishButton: HTMLButtonElement
+    publishButton: HTMLButtonElement,
+    panelSelect: HTMLSelectElement,
+    panelRed: HTMLInputElement,
+    panelGreen: HTMLInputElement,
+    panelBlue: HTMLInputElement,
+    panelColourCanvas: HTMLCanvasElement,
+    //panelColour: HTMLTextAreaElement,
+    panelColourButton: HTMLButtonElement
     ) {
 
       this.panels = panels;
@@ -98,7 +166,13 @@ class Editor{
       this.textButton = textButton;
       this.styleSelect = styleSelect;
       this.fontSelect = fontSelect;
-      this.colourText = colourText;
+      //this.colourText = colourText;
+      this.textRed = textRed;
+      this.textGreen = textGreen;
+      this.textBlue = textBlue;
+      this.textColourCanvas = textColourCanvas;
+      this.textCanvas = new fabric.Canvas(this.textColourCanvas);
+      this.textCanvas.setBackgroundColor("rgb(0,0,0)", this.textCanvas.renderAll.bind(this.textCanvas));
       this.colourButton = colourButton;
       this.rmTextButton = rmTextButton;
       this.saveButton = saveButton;
@@ -117,6 +191,15 @@ class Editor{
       // for (var i = 0; i < 4; i++) {
       //   this.canvases.push(new fabric.Canvas(this.panels[i]));
       // }
+      this.panelSelect = panelSelect;
+      this.panelRed = panelRed;
+      this.panelGreen = panelGreen;
+      this.panelBlue = panelBlue;
+      this.panelColourCanvas = panelColourCanvas;
+      this.panelCanvas = new fabric.Canvas(this.panelColourCanvas);
+      this.panelCanvas.setBackgroundColor("rgb(255,255,255)", this.panelCanvas.renderAll.bind(this.panelCanvas));
+      //this.panelColour = panelColour;
+      this.panelColourButton = panelColourButton;
 
       imgLoader.onchange = (e: Event) => this.showImage(e);
       bubbleButton.onclick = () => this.clickBubbleButton();
@@ -126,11 +209,19 @@ class Editor{
       textButton.onclick = () => this.addText();
       styleSelect.onchange = () => this.selectStyle();
       fontSelect.onchange = () => this.selectFont();
+      textRed.oninput = () => this.updateTextPreview();
+      textGreen.oninput = () => this.updateTextPreview();
+      textBlue.oninput = () => this.updateTextPreview();
       colourButton.onclick = () => this.setColour();
       rmTextButton.onclick = () => this.removeSelected();
       forwardButton.onclick = () => this.forwards();
       saveButton.onclick = () => this.saveProject();
       publishButton.onclick = () => this.publishProject();
+      panelSelect.onchange = () => this.selectPanel();
+      panelRed.oninput = () => this.updatePanelPreview();
+      panelGreen.oninput = () => this.updatePanelPreview();
+      panelBlue.oninput = () => this.updatePanelPreview();
+      panelColourButton.onclick = () => this.setPanelColor();
    //   deleteButton.onclick = () => this.confirmDelete();
       //this.tools = null;
       //this.editingComic = null;
@@ -160,7 +251,7 @@ class Editor{
         }
    }
    reader.readAsDataURL(e.target.files[0]);
-      
+   // consider resetting selected image in loader after it's been successfully loaded
   } 
   
   helperBubble() {
@@ -233,14 +324,27 @@ class Editor{
     this.canvases[0].renderAll();
   }
 
+  // for text
   setColour() {
     console.log("setcolor");
-    var colour = this.colourText.value;
+    //var colour = this.colourText.value;
     var selected = this.canvases[0].getActiveObject();
+    var r = (<HTMLInputElement>document.getElementById("textRed")).value;
+    var g = (<HTMLInputElement>document.getElementById("textGreen")).value;
+    var b = (<HTMLInputElement>document.getElementById("textBlue")).value;
+    var colourString = "rgb(" + r + "," + g + "," + b + ")";
     if (selected instanceof fabric.Text) {
-      selected.setColor(colour);
+    selected.setColor(colourString);
       this.canvases[0].renderAll();
     }
+  }
+
+  updateTextPreview() {
+    var r = (<HTMLInputElement>document.getElementById("textRed")).value;
+    var g = (<HTMLInputElement>document.getElementById("textGreen")).value;
+    var b = (<HTMLInputElement>document.getElementById("textBlue")).value;
+    var colourString = "rgb(" + r + "," + g + "," + b + ")";
+    this.textCanvas.setBackgroundColor(colourString, this.textCanvas.renderAll.bind(this.textCanvas));
   }
 
   removeSelected() {
@@ -256,6 +360,9 @@ class Editor{
      this.canvases[0].renderAll(); 
   } 
 
+  backwards() {
+    // TODO?: may need to factor in a backwards button
+  }
   publishProject(){
     this.canvases[0].deactivateAll();
     this.saveProjectForm.elements['published'].value = true;
@@ -309,7 +416,7 @@ class Editor{
       
    }
    
-   // TODO: I don't know what I'm doing
+   // I don't know what I'm doing
    deleteProject(){
      //stub
         this.deleteForm.submit();
@@ -340,16 +447,55 @@ class Editor{
        this.canvases[0].bringToFront(this.panelLine3);
    }
    
-   
+   // TODO: add rectangles to this if you want to load your panels
    loadEmptyPanels(){
       var canvas = this.canvases[0];
       canvas.add(this.panelLine1);
       canvas.add(this.panelLine2); 
-      canvas.add(this.panelLine3);  
+      canvas.add(this.panelLine3);
+      canvas.add(this.panelRect1);
+      canvas.add(this.panelRect2);
+      canvas.add(this.panelRect3);
+      canvas.add(this.panelRect4);
+      this.putBordertoFront();
    }
    setEditorID(ID){
        this.editorID = ID;
        console.log("set"+this.editorID);
+   }
+
+   selectPanel() {
+     var selected = (<HTMLInputElement>document.getElementById("panelSelect")).value;
+     if (selected === "Panel1") {
+       this.selectedPanel = this.panelRect1;
+     } else if (selected === "Panel2") {
+       this.selectedPanel = this.panelRect2;
+     } else if (selected === "Panel3") {
+       this.selectedPanel = this.panelRect3;
+     } else if (selected === "Panel4") {
+       this.selectedPanel = this.panelRect4;
+     }
+   }
+
+   setPanelColor() {
+    this.canvases[0].remove(this.selectedPanel);
+    var r = (<HTMLInputElement>document.getElementById("panelRed")).value;
+    var g = (<HTMLInputElement>document.getElementById("panelGreen")).value;
+    var b = (<HTMLInputElement>document.getElementById("panelBlue")).value;
+    var colourString = "rgb(" + r + "," + g + "," + b + ")";
+    this.selectedPanel.setColor(colourString);
+    this.canvases[0].add(this.selectedPanel);
+    this.canvases[0].sendToBack(this.selectedPanel);
+    //this.putBordertoFront();
+
+   }
+
+   updatePanelPreview() {
+    var r = (<HTMLInputElement>document.getElementById("panelRed")).value;
+    var g = (<HTMLInputElement>document.getElementById("panelGreen")).value;
+    var b = (<HTMLInputElement>document.getElementById("panelBlue")).value;
+    var colourString = "rgb(" + r + "," + g + "," + b + ")";
+    this.panelCanvas.setBackgroundColor(colourString, this.panelCanvas.renderAll.bind(this.panelCanvas));
    }
 }
 
@@ -371,8 +517,12 @@ window.onload = function() {
   var textButton = <HTMLButtonElement> document.getElementById("textButton");
   var styleSelect = <HTMLSelectElement>document.getElementById("styleSelect");
   var fontSelect = <HTMLSelectElement> document.getElementById("fontSelect");
-  var colourText = <HTMLTextAreaElement> document.getElementById("colour");
-  var colourButton = <HTMLButtonElement> document.getElementById("colourButton");
+  //var colourText = <HTMLTextAreaElement> document.getElementById("colour");
+  var textRed = <HTMLInputElement>document.getElementById("textRed");
+  var textGreen = <HTMLInputElement>document.getElementById("textGreen");
+  var textBlue = <HTMLInputElement>document.getElementById("textBlue");
+  var textColourCanvas = <HTMLCanvasElement>document.getElementById("textColourCanvas");
+  var colourButton = <HTMLButtonElement>document.getElementById("colourButton");
   var rmTextButton = <HTMLButtonElement> document.getElementById("rmTextButton");
   var forwardButton = <HTMLButtonElement>document.getElementById("forwardButton");
   var saveButton = <HTMLButtonElement> document.getElementById("saveButton");
@@ -380,6 +530,13 @@ window.onload = function() {
 //  var deleteButton = <HTMLButtonElement> document.getElementById("deleteButton");
 //  var deleteForm = <HTMLFormElement>document.getElementById("deleteForm");
   var saveProjectForm = <HTMLFormElement> document.getElementById("formSaveProject");
+  var panelSelect = <HTMLSelectElement> document.getElementById("panelSelect");
+  var panelRed = <HTMLInputElement>document.getElementById("panelRed");
+  var panelGreen = <HTMLInputElement>document.getElementById("panelGreen");
+  var panelBlue = <HTMLInputElement>document.getElementById("panelBlue");
+  var panelColourCanvas = <HTMLCanvasElement>document.getElementById("panelColourCanvas");
+  //var panelColour = <HTMLTextAreaElement> document.getElementById("panelColour");
+  var panelColourButton = <HTMLButtonElement>document.getElementById("panelColourButton");
 
 
   var editor = new Editor(
@@ -393,13 +550,24 @@ window.onload = function() {
     textButton,
     styleSelect,
     fontSelect,
-    colourText, 
+    //colourText,
+    textRed,
+    textGreen,
+    textBlue,
+    textColourCanvas, 
     colourButton, 
     rmTextButton, 
     forwardButton, 
     saveButton, 
     saveProjectForm, 
-    publishButton
+    publishButton,
+    panelSelect,
+    //panelColour,
+    panelRed,
+    panelGreen,
+    panelBlue,
+    panelColourCanvas,
+    panelColourButton
     );
 
   // load project is not defined
