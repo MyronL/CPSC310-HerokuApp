@@ -246,6 +246,7 @@ var Router = (function () {
                 res.redirect('/');
             }
             else {
+                projectlistCollection.update({ _id: ObjectId(comicID) }, { $inc: { "viewCount": 1 } });
                 projectlistCollection.find({ _id: ObjectId(comicID) }, {}, function (e, docs) {
                     favCollection.count({ "comicID": comicID }, function (e, count) {
                         favCollection.findOne({ "user": user, "comicID": comicID }, function (e, o) {
@@ -381,7 +382,8 @@ var Router = (function () {
                     "tags": editor_tags,
                     "panel1": panel1_JSON,
                     "thumbnail": thumbnail,
-                    "commentList": []
+                    "commentList": [],
+                    "viewCount": 0
                 }, function (err, doc) {
                     if (err) {
                         res.send("There was a problem adding the information to DB");
