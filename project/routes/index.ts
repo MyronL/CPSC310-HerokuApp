@@ -352,7 +352,11 @@ class Router {
             var published = req.body.published;
             var thumbnail = req.body.thumbnail;
             var editorID = req.body.editorID;
-            console.log(req.session.user.user);
+            var series = req.body.seriesSelect;
+            var newSeries = req.body.newSeries;
+            console.log("series:"+series);
+            console.log("newSeries:"+newSeries);
+            //console.log(req.session.user.user);
             var db = req.db;
             var comicCollection = db.get('EditingComic');
             var author = req.session.user.user;

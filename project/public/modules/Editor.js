@@ -198,6 +198,10 @@ var Editor = (function () {
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
         this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
         this.saveProjectForm.elements['editorID'].value = this.editorID;
+        var seriesSelect = document.getElementById("seriesSelect");
+        var newSeries = document.getElementById("newSeries");
+        this.saveProjectForm.elements['seriesSelect'].value = seriesSelect.value;
+        this.saveProjectForm.elements['newSeries'].value = newSeries.value;
         //   console.log(JSON.stringify(this.canvases[0]));
         //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
         //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
@@ -216,6 +220,10 @@ var Editor = (function () {
         this.saveProjectForm.elements['thumbnail'].value = null;
         this.saveProjectForm.elements['editorID'].value = this.editorID;
         console.log(this.editorID);
+        var seriesSelect = document.getElementById("seriesSelect2");
+        var newSeries = document.getElementById("newSeries2");
+        this.saveProjectForm.elements['seriesSelect'].value = seriesSelect.value;
+        this.saveProjectForm.elements['newSeries'].value = newSeries.value;
         //   console.log(JSON.stringify(this.canvases[0]));
         //   this.saveProjectForm.elements['sPanel2'].value = JSON.stringify(this.canvases[1]);
         //   this.saveProjectForm.elements['sPanel3'].value = JSON.stringify(this.canvases[2]);
