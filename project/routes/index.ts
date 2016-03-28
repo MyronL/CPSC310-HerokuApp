@@ -9,6 +9,7 @@ var EM = require('./modules/email-dispatcher');
 
 var ObjectId = require('mongodb').ObjectID;
 
+// REMEMBER TO RESTART NPM AND COMPILE TSC TO OBSERVE CHANGES
 class Router {
 	
 	constructor(){}
@@ -265,12 +266,15 @@ class Router {
         if (req.session.user == null){
 	       // if user is not logged-in redirect back to login page //
 			res.redirect('/');
-	    }else{           
+	    }else{
+            // increments view count per view           
             projectlistCollection.update({_id: ObjectId(comicID)}, {$inc: {"viewCount": 1}});
+            // gets the favourite count from the favourite collection
             projectlistCollection.find({_id: ObjectId(comicID)},{},function(e,docs){
               favCollection.count({"comicID": comicID}, function(e, count) {
                 favCollection.findOne({"user": user, "comicID": comicID}, function(e,o) {
                    if (o) { favRecord = 1; }
+                   // renders the different variables to viewComic
                    res.render('viewComic',
                     {title: 'Viewer', "loadProject": docs, udata : req.session.user, liked: favRecord, favCount: count}
                     );
@@ -376,7 +380,8 @@ class Router {
               }
           });
     });
-              
+
+    // save a project
          router.post('/saveProject', function(req,res){
             var editor_title = req.body.comicTitle;
             var editor_des = req.body.comicDescription;
@@ -389,6 +394,8 @@ class Router {
             var db = req.db;
             var comicCollection = db.get('EditingComic');
             var author = req.session.user.user;
+            var date = new Date(Date.now());
+            //var favUpdate = projectlistCollection.find({});
             
             console.log("updateField");
             console.log(editor_title);
@@ -403,7 +410,9 @@ class Router {
                             "panel1": panel1_JSON,
                             "thumbnail": thumbnail,
                             "commentList": [],
-                            "viewCount":0
+                            "viewCount":0,
+                            //"favCount":0, // consider making a favourite count if sorting is too difficult
+                            "date": date
                         }, function(err,doc){
                             if (err) {res.send("There was a problem adding the information to DB");}
                             else {
@@ -429,7 +438,8 @@ class Router {
                      "published": published,
                      "tags": editor_tags,
                      "panel1": panel1_JSON,
-                     "thumbnail": thumbnail                        
+                     "thumbnail": thumbnail,
+                     "date": date
                     }
                 },function(err,doc){
                    if (err) {res.send("There was a problem adding the information to DB");}
