@@ -256,6 +256,7 @@ var Router = (function () {
                             if (o) {
                                 favRecord = 1;
                             }
+                            projectlistCollection.findAndModify({ _id: ObjectId(comicID) }, { $set: { "favCount": count } });
                             // renders the different variables to viewComic
                             res.render('viewComic', { title: 'Viewer', "loadProject": docs, udata: req.session.user, liked: favRecord, favCount: count });
                         });
@@ -376,7 +377,6 @@ var Router = (function () {
             var comicCollection = db.get('EditingComic');
             var author = req.session.user.user;
             var date = new Date(Date.now());
-            //var favUpdate = projectlistCollection.find({});
             console.log("updateField");
             console.log(editor_title);
             console.log("before" + editorID);
@@ -391,7 +391,7 @@ var Router = (function () {
                     "thumbnail": thumbnail,
                     "commentList": [],
                     "viewCount": 0,
-                    //"favCount":0, // consider making a favourite count if sorting is too difficult
+                    "favCount": 0,
                     "date": date
                 }, function (err, doc) {
                     if (err) {

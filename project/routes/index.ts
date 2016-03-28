@@ -273,7 +273,11 @@ class Router {
             projectlistCollection.find({_id: ObjectId(comicID)},{},function(e,docs){
               favCollection.count({"comicID": comicID}, function(e, count) {
                 favCollection.findOne({"user": user, "comicID": comicID}, function(e,o) {
-                   if (o) { favRecord = 1; }
+                   if (o) { 
+                     favRecord = 1; 
+                   }
+                   // updates favCount field in the comicCollection
+                   projectlistCollection.findAndModify({_id: ObjectId(comicID)}, {$set: {"favCount": count}});
                    // renders the different variables to viewComic
                    res.render('viewComic',
                     {title: 'Viewer', "loadProject": docs, udata : req.session.user, liked: favRecord, favCount: count}
@@ -395,7 +399,6 @@ class Router {
             var comicCollection = db.get('EditingComic');
             var author = req.session.user.user;
             var date = new Date(Date.now());
-            //var favUpdate = projectlistCollection.find({});
             
             console.log("updateField");
             console.log(editor_title);
@@ -411,7 +414,7 @@ class Router {
                             "thumbnail": thumbnail,
                             "commentList": [],
                             "viewCount":0,
-                            //"favCount":0, // consider making a favourite count if sorting is too difficult
+                            "favCount":0, // consider making a favourite count if sorting is too difficult
                             "date": date
                         }, function(err,doc){
                             if (err) {res.send("There was a problem adding the information to DB");}
