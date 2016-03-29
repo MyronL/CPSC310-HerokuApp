@@ -55,7 +55,8 @@ class Router {
                     projectlistCollection.find({ "published": "true" }, {}, function (e, docs) {
                         res.render('homepagenlLogin', {
                             udata: req.session.user,
-                            "projectList": docs
+                            "projectList": docs,
+                            title:"Published Project"
                         });
                     });
                 }
@@ -75,13 +76,15 @@ class Router {
                     if(o.country == 'Viewer') {
                         res.render('homepagenlLoginViewer', {
                             udata: req.session.user,
-                            "projectList": docs
+                            "projectList": docs,
+                            title: "Top Viewed Comic"
                         });
                     }
                     else {
                         res.render('homepagenlLogin', {
                             udata: req.session.user,
-                            "projectList": docs
+                            "projectList": docs,
+                            title: "Top Viewed Comic"
                         });     
                     }
                 });
@@ -94,7 +97,8 @@ class Router {
                     projectlistCollection.find({ "published": "true" }, {}, function (e, docs) {
                         res.render('homepagenlLoginViewer', {
                             udata: req.session.user,
-                            "projectList": docs
+                            "projectList": docs,
+                            title: "Published Comic"
                         });
                     });
         var projectlistCollection = db.get('EditingComic');
@@ -448,7 +452,7 @@ class Router {
               return ObjectId(item)
             });
             projectlistCollection.find({_id: {"$in": obj_ids}}, function(e, doc) {
-                res.render('homepagenlLogin', {udata : req.session.user, "projectList": doc});
+                res.render('homepagenlLogin', {udata : req.session.user, "projectList": doc,title: "My Favorite Comic"});
               });         
           });
       }
