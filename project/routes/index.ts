@@ -323,9 +323,9 @@ class Router {
                      favRecord = 1; 
                    }
                    var sameSeries = docs.series;
-                   var series = null;
+                   var series = [];
                    var promise = projectlistCollection.find({"series":sameSeries},function(e,docs){
-                      series = docs; 
+                      series = docs;
                    });
                    // updates favCount field in the comicCollection
                    projectlistCollection.findAndModify({_id: ObjectId(comicID)}, {$set: {"favCount": count}});
@@ -333,7 +333,8 @@ class Router {
                    promise.success(res.render('viewComic',
                     {title: 'Viewer', 
                     "loadProject": docs, 
-                    udata : req.session.user, 
+                    udata : req.session.user,
+                    "series": series, 
                     liked: favRecord, 
                     favCount: count}
                     ));
