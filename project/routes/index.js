@@ -545,7 +545,7 @@ var Router = (function () {
                     "description": editor_des,
                     "published": published,
                     "tags": editor_tags,
-                    //"panel1": panel1_JSON,
+                    "panel1": panel1_JSON,
                     "thumbnail": thumbnail,
                     "commentList": [],
                     "series": insertSeries,
@@ -579,7 +579,7 @@ var Router = (function () {
                         "description": editor_des,
                         "published": published,
                         "tags": editor_tags,
-                        //"panel1": panel1_JSON,
+                        "panel1": panel1_JSON,
                         "series": insertSeries,
                         "thumbnail": thumbnail,
                         "date": date
