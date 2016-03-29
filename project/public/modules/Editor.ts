@@ -252,15 +252,15 @@ class Editor{
           canvas.renderAll();
           imgObj = null; // dereference
 
-          // var originalPhotoObject = canvas.getActiveObject();
-          // var newImg = new Image();
-          // newImg.onload = function(){
-          //   var imgInstance = new fabric.Image(newImg, options);
-          //   canvas.remove(originalPhotoObject);
-          //   canvas.add(imgInstance);
-          //   canvas.renderAll();
-          //   newImg = null;
-          //}
+          var originalPhotoObject = canvas.getActiveObject();
+          var newImg = new Image();
+          newImg.onload = function(){
+            var imgInstance = new fabric.Image(newImg, options);
+            canvas.remove(originalPhotoObject);
+            canvas.add(imgInstance);
+            canvas.renderAll();
+            newImg = null;
+          }
         }
    }
    reader.readAsDataURL(e.target.files[0]);
