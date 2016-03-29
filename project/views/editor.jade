@@ -107,6 +107,9 @@ block body
                     li
                         a.btn.btn-default(data-toggle="pill" href="#Panel" span title="Panel Options")
                             i.fa.fa-columns
+                    li
+                        a.btn.btn-default(data-toggle="pill" href='#ClipArt' span title="Clip Art")
+                            i.fa.fa-paperclip
 
                 .tab-content
                     #image.tab-pane.fade.in.active
@@ -150,6 +153,8 @@ block body
                             input#panelBlue(type="range" max="255" value="255")
                         canvas#panelColourCanvas(name="panelColourCanvas" width="50" height="50" style="border: 1px solid black")
                         button#panelColourButton Set Panel Colour
+                    #ClipArt.tab-pane.fade
+                        p stub
 
 
                 h2 Comic Panels
