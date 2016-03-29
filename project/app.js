@@ -78,7 +78,8 @@ var Application = (function () {
         app.locals = {
             siteTitle: "OVERPRICED HOTDOGS",
             homeURL: "/homepage",
-            logo: "http://i.imgur.com/iwDCnm8.png"
+            logo: "http://i.imgur.com/iwDCnm8.png",
+            banner: "http://i.imgur.com/q0ODD1i.png"
         };
         module.exports = app;
     };
