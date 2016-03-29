@@ -29,3 +29,22 @@ block scripts
     script(src='/js/views/home.js')
     script(src='/js/controllers/homeController.js')
     script(src='/js/form-validators/accountValidator.js')
+    script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
+    script.
+        var canvas = new fabric.Canvas('avatar');
+
+        document.getElementById('imgLoader').onchange = function uploadAvatar(e) {
+            var reader = new FileReader();
+              reader.onload = function (event){
+                var imgObj = new Image();
+                imgObj.src = event.target.result;
+                imgObj.onload = function () {
+                  var image = new fabric.Image(imgObj);
+                  image.scaleToHeight(canvas.getHeight());
+                  canvas.centerObject(image);
+                  canvas.add(image);
+                  canvas.renderAll();
+                }
+              }
+              reader.readAsDataURL(e.target.files[0]);
+            }
