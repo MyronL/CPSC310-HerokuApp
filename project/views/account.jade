@@ -7,12 +7,16 @@ input(type='hidden', value= user._id)#userId
 // README: current dependencies are home.jade and signup.jade
 // changes made here will reflect on both Account Settings on home.jade and for signup.jade
 #account-form-container
+	<center>
+	a(href=homeURL)#home
+		img(src=logo, width="300")
+	input#imgLoader(type="file" accept="image/*" onchange="uploadAvatar(e)")
 	form( method="post")#account-form.form-horizontal.well.span6
 		<center>
-		a(href=homeURL)#home
-			img(src=logo, width="300")
 		h1 Sign Up
 		hr
+		canvas#avatar(height="100px" width="100px" style="border: 1px solid black")
+		p Profile Picture
 		fieldset
 			#user-cg.control-group
 				label.control-label(for='user-tf') Username
