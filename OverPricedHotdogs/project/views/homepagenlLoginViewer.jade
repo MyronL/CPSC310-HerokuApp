@@ -1,0 +1,140 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title OverPricedHotdogs
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', type='text/css', href='source/bootstrap-3.3.6-dist/css/bootstrap.css')
+    link(rel='stylesheet', type='text/css', href='style/mystyle.css')
+    link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
+  body
+    // Header
+    .right
+      .header
+      // Navbar Up
+      nav.topnavbar.navbar-default.topnav
+        .container
+          .navbar-header
+            a.navbar-brand.logo(href=homeURL)
+              img(src='image/hotdog.png', alt='logo')
+        #upmenu.collapse.navbar-collapse
+          ul#navbarontop.nav.navbar-nav
+            li.active
+              a(href='/home') Account Info
+            li.active
+              a(href='/favorites') Favorites
+            li.active
+              a(href='/topComic') Top Comics
+            li.active
+              a(href='/myComic') My Comics
+    // _______________________________________ Carousel__________________________________
+    .allcontain
+      #carousel-up.carousel.slide(data-ride='carousel')
+        .carousel-inner(role='listbox')
+          .item.active
+            img(src='image/banner.png', alt='')
+        nav.navbar.navbar-default.midle-nav
+          .navbar-header
+            button.navbar-toggle.collapsed.textcostume(type='button', data-toggle='collapse', data-target='#navbarmidle', aria-expanded='false')
+              h1 SEARCH TEXT
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+          #navbarmidle.collapse.navbar-collapse
+            .searchtxt
+              h1 SEARCH TEXT
+            form#search(name="search",method="post",action="/searchComic")
+              ul.menu
+                li
+                  input(type="search", placeholder="Search",name="search")
+                  input(type="hidden",name="sort",value="new")
+                li
+                  button(type="submit", class="button") Search
+    // ____________________Featured Section ______________________________
+    .allcontain
+      .feturedsection
+        h1.text-center
+          span.bdots •
+          | F E A T U R E D
+          span.carstxt C O M I C S
+          | •
+      .feturedimage
+        .rowing.firstrow
+          .col-lg-6.costumcol.colborder1
+            .rowing.costumrow
+              .col-xs-12.col-sm-6.col-md-6.col-lg-6.img1colon
+                img(src='image/calvinh.png', alt='')
+              .col-xs-12.col-sm-6.col-md-6.col-lg-6.txt1colon
+                .featurecontant
+                  h1 Calvin and Hobbes
+                  p
+                    | "You know, Hobbes, some days
+                    br
+                    |                   even my lucky rocket ship underpants don't help.” 
+                  h2 Bill Watterson
+                  button(onclick="location.href='viewer/56fa459420d576d32c5722fa'") READ 
+          .col-lg-6.costumcol.colborder2
+            .row.costumrow
+              .col-xs-12.col-sm-6.col-md-6.col-lg-6.img2colon
+                img(src='image/jeremy.jpg', alt='')
+              .col-xs-12.col-sm-6.col-md-6.col-lg-6.txt1colon
+                .featurecontant
+                  h1 Zits
+                  p
+                    | "There's no place like home! 
+                    br
+                    |                   How did the S.A.T. practice test go?"
+                  h2  Jim Borgman
+                  button(onclick="location.href='viewer/56fa5b0dd1d9bdb357034735'") READ
+      // ________________________LATEST COMICS SECTION _______________________
+      .latestcomics
+        h1.text-center • LATEST   COMICS •
+
+      // ________________________Latest Comics________________
+      br
+      .comics
+        include PublishedProject
+
+      // ______________________________________________________Bottom Menu ______________________________
+      .bottommenu
+        .bottomlogo
+          span.dotlogo •
+          img(src='image/hotdog.png', alt='logo1')
+          span.dotlogo •;
+        p
+          | "Sometimes I think the surest sign that intelligent life exists elsewhere in
+          | the universe is that none of it has tried to contact us." 
+          br
+          |  - Calvin
+        img(src='image/line.png', alt='line')
+        br
+        .bottomsocial
+          a(href='#')
+            i.fa.fa-facebook
+          a(href='#')
+            i.fa.fa-twitter
+          a(href='#')
+            i.fa.fa-google-plus
+          a(href='#')
+            i.fa.fa-pinterest
+        .footer
+          .copyright
+            | © Copyright 2016 
+            a(href='#') Privacy 
+            | 
+            a(href='#') Policy
+          .atisda
+            | Designed by OverPricedHotdogs
+
+
+
+block scripts
+    script(src='/vendor/jquery.min.js')
+    script(src='/vendor/jquery.form.js')
+    script(src='/vendor/bootstrap-modal.js')
+    script(src='/vendor/bootstrap-transition.js')
+    script(src='/js/views/home.js')
+    script(src='/js/controllers/homeController.js')
+    script(src='/js/form-validators/accountValidator.js')
+

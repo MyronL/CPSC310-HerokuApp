@@ -1,0 +1,160 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title OverPricedHotdogs
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', type='text/css', href='source/bootstrap-3.3.6-dist/css/bootstrap.css')
+    link(rel='stylesheet', type='text/css', href='style/mystyle.css')
+    link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
+  body
+    // Header
+    .right
+      .header
+      // Navbar Up
+      nav.topnavbar.navbar-default.topnav
+        .container
+          .navbar-header
+            a.navbar-brand.logo(href=homeURL)
+              img(src='image/hotdog.png', alt='logo')
+        #upmenu.collapse.navbar-collapse
+          ul#navbarontop.nav.navbar-nav
+            li.active
+              a(href='/home') Account Info
+            li.active
+              a(href='/favorites') Favorites
+            li.active
+              a(href='/topComic') Top Comics
+            li.active
+              a(href='/myComic') My Comics
+            li.active
+              a(href='/editor') Make Comic
+    // _______________________________________ Carousel__________________________________
+    .allcontain
+      #carousel-up.carousel.slide(data-ride='carousel')
+        .carousel-inner(role='listbox')
+          .item.active
+            img(src='image/banner.png', alt='')
+        nav.navbar.navbar-default.midle-nav
+          .navbar-header
+            button.navbar-toggle.collapsed.textcostume(type='button', data-toggle='collapse', data-target='#navbarmidle', aria-expanded='false')
+              h1 SEARCH TEXT
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+          #navbarmidle.collapse.navbar-collapse
+            .searchtxt
+              h1 SEARCH TEXT
+            form#formSearch(name="search",method="post",action="/searchComic")
+              ul.menu
+                li
+                  input(type="search", placeholder="Search",name="search")
+                  input(type="hidden",name="sort",value="new")
+                li
+                  button(type="submit", class="button") Search
+
+    .allcontain
+      .feturedsection
+        h1.text-center
+          span.bdots •
+          | S E A R C H
+          span.carstxt R E S U L T S
+          | •   
+    #upmenu.collapse.navbar-collapse
+      ul#navbarontop.nav.navbar-nav
+        li.active
+          a(onclick="sendMFav()") Most Favourited
+        li.active
+          a(href='#',onclick="sendLFav()") Least Favourited
+        li.active
+          a(href='#',onclick="sendMView()") Most Viewed
+        li.active
+          a(href='#',onclick="sendLview()") Least Viewed
+        li.active
+          a(href='#',onclick="sendNew()") Newest
+        li.active
+          a(href='#',onclick="sendOld()") Oldest
+              
+br
+.comics
+  u1 
+    each project, i in searchList
+      li
+        a(href="/viewer/"+project._id)= project.title
+          img(src=project.thumbnail, style = "border: 1px solid black;")
+
+.bottommenu
+  .bottomlogo
+    span.dotlogo •
+    img(src='image/hotdog.png', alt='logo1')
+    span.dotlogo •;
+  p
+    | "Sometimes I think the surest sign that intelligent life exists elsewhere in
+    | the universe is that none of it has tried to contact us." 
+    br
+    |  - Calvin
+  img(src='image/line.png', alt='line')
+  br
+  .bottomsocial
+    a(href='#')
+      i.fa.fa-facebook
+    a(href='#')
+      i.fa.fa-twitter
+    a(href='#')
+      i.fa.fa-google-plus
+    a(href='#')
+      i.fa.fa-pinterest
+  .footer
+    .copyright
+      | © Copyright 2016 
+      a(href='#') Privacy 
+      | 
+      a(href='#') Policy
+    .atisda
+      | Designed by OverPricedHotdogs
+                    
+block scripts
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
+  script(src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js")
+  script.
+      var searchWord = !{JSON.stringify(searchWord)};
+      console.log("search "+searchWord);
+  script.
+
+      function sendMFav(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "mFav";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();           
+      }
+      function sendLFav(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "lFav";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();           
+      }
+      function sendMView(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "mView";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();           
+      }
+      function sendLview(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "lView";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();          
+      }
+      function sendNew(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "new";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();          
+      }
+      function sendOld(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "old";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();
+      }

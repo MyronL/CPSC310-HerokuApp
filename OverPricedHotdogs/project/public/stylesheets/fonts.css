@@ -1,0 +1,26 @@
+body {
+    background-color: lightyellow;
+}
+@font-face {
+font-family: WildWordsRoman;
+src: url('WildWordsRoman.TTF');
+}
+@font-face {
+font-family: WildWordsItalic;
+src: url('WildWordsitalic.TTF');
+}
+@font-face {
+font-family: WildWordsBoldItalic;
+src: url('WildWordsbolditalic.TTF');
+}
+@font-face {
+font-family: ComicSans;
+src: url('ComicSans.ttf');
+}
+img.centered{
+  display: block;
+  margin: 15px auto;
+}
+h1 {
+  font-family: "WildWordsRoman";
+}
