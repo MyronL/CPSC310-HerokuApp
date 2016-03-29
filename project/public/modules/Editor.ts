@@ -241,13 +241,26 @@ class Editor{
     var reader = new FileReader();
     reader.onload = function() { console.log('loadimage');
       var imgObj = new Image();
+      var options = { left: 0, top: 0, angle: 0, padding: 0 };
       imgObj.setAttribute('crossOrigin', 'anonymous');
       imgObj.src = reader.result;
       imgObj.onload = function() {
-          var image = new fabric.Image(imgObj, {left: 0, top: 0, angle: 0, padding: 0});
-          image.scaleToWidth(300);
+          var image = new fabric.Image(imgObj, options);
+          image.scaleToHeight(canvas.getHeight());
           canvas.add(image);
           canvas.setActiveObject(image);
+          canvas.renderAll();
+          imgObj = null; // dereference
+
+          var originalPhotoObject = canvas.getActiveObject();
+          var newImg = new Image();
+          newImg.onload = function(){
+            var imgInstance = new fabric.Image(newImg, options);
+            canvas.remove(originalPhotoObject);
+            canvas.add(imgInstance);
+            canvas.renderAll();
+            newImg = null;
+          }
         }
    }
    reader.readAsDataURL(e.target.files[0]);
