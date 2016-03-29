@@ -49,7 +49,22 @@ block body
                 p #{favCount} person likes this comic
               else if favCount > 1
                 p #{favCount} people like this comic
-                 
+        .row
+            .col-sm-12
+              button.btn.btn-info(data-target='#seriesPopup', role='button', data-toggle='modal') Next in Series
+              #seriesPopup.modal.fade(tabindex='-1', role='dialog')
+                  .modal-dialog
+                       .modal-content  
+                            .modal-header
+                                 button.close(type='button', data-dismiss='modal') ×
+                                 h3.modal-title Choose Series
+                            .modal-body
+                                u1
+                                    each comic, i in series
+                                        li
+                                            a(href="/viewer/"+comic._id = comic.title)
+                            .modal-footer
+                                 button.btn(data-dismiss='modal') Cancel              
         h2 Comment
         .row
             .col-sm-4
