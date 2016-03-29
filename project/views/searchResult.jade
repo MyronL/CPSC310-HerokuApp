@@ -1,9 +1,53 @@
-extends layout
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title OverPricedHotdogs
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/vendor/bootstrap.min.css')
+    link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
+    link(href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css', rel='stylesheet', type='text/css')
+    link(rel='stylesheet',href='/stylesheets/fonts.css')
 
+    .top-bar
+      .top-bar-left
+        ul.menu
+          li
+            input(type="search" placeholder="Search")
+          li
+            button(type="button" class="button") Search
+      .top-bar-right
+        ul.menu
+          li
+            a(href="/home") Account Info
+          li
+            button#btn-logout.btn.btn-primary
+              i.icon-lock.icon-white
+              | Sign Out
+
+    a(href=homeURL)
+      img.centered(src=banner width="50%" height="50%")
+
+    //.title-bar(data-responsive-toggle='main-menu', data-hide-for='medium')
+      button.menu-icon(type='button', data-toggle='')
+      .title-bar-title Menu
+    #main-menu.top-bar
+      ul.menu.vertical.medium-horizontal.expanded.medium-text-center(data-responsive-menu='drilldown medium-dropdown')
+        li
+          a(href='#') Most Favourited
+          a(href='#') Least Favourited
+        li.has-submenu
+          a(href='#') Most Viewed
+          a(href='#') Least Viewed
+        li
+          a(href='#') Newest
+          a(href='#') Oldest
+
+              
 block content
   #wrapper
-    h1 Search Result
-    u1 
+    h1 Search Results
+    //u1 
         each project, i in searchList
             li
                 a(href="/viewer/"+project._id)= project.title
