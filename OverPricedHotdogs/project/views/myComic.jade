@@ -51,50 +51,14 @@ html
                   input(type="hidden",name="sort",value="new")
                 li
                   button(type="submit", class="button") Search
-    // ____________________Featured Section ______________________________
-    .allcontain
-      .feturedsection
-        h1.text-center
-          span.bdots •
-          | F E A T U R E D
-          span.carstxt C O M I C S
-          | •
-      .feturedimage
-        .rowing.firstrow
-          .col-lg-6.costumcol.colborder1
-            .rowing.costumrow
-              .col-xs-12.col-sm-6.col-md-6.col-lg-6.img1colon
-                img(src='image/calvinh.png', alt='')
-              .col-xs-12.col-sm-6.col-md-6.col-lg-6.txt1colon
-                .featurecontant
-                  h1 Calvin and Hobbes
-                  p
-                    | "You know, Hobbes, some days
-                    br
-                    |                   even my lucky rocket ship underpants don't help.” 
-                  h2 Bill Watterson
-                  button(onclick="location.href='viewer/56fa459420d576d32c5722fa'") READ 
-          .col-lg-6.costumcol.colborder2
-            .row.costumrow
-              .col-xs-12.col-sm-6.col-md-6.col-lg-6.img2colon
-                img(src='image/jeremy.jpg', alt='')
-              .col-xs-12.col-sm-6.col-md-6.col-lg-6.txt1colon
-                .featurecontant
-                  h1 Zits
-                  p
-                    | "There's no place like home! 
-                    br
-                    |                   How did the S.A.T. practice test go?"
-                  h2  Jim Borgman
-                  button(onclick="location.href='viewer/56fa5b0dd1d9bdb357034735'") READ
-      // ________________________LATEST COMICS SECTION _______________________
+  
       .latestcomics
-        h1.text-center • LATEST   COMICS •
+        h1.text-center • MY   COMICS •
 
       // ________________________Latest Comics________________
       br
       .comics
-        include PublishedProject
+        include testProjectList
 
       // ______________________________________________________Bottom Menu ______________________________
       .bottommenu

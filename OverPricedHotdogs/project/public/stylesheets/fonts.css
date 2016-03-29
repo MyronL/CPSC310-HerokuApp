@@ -21,3 +21,6 @@ img.centered{
   display: block;
   margin: 15px auto;
 }
+h1 {
+  font-family: "WildWordsRoman";
+}

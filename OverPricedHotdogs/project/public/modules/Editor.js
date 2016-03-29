@@ -161,13 +161,25 @@ var Editor = (function () {
         reader.onload = function () {
             console.log('loadimage');
             var imgObj = new Image();
+            var options = { left: 0, top: 0, angle: 0, padding: 0 };
             imgObj.setAttribute('crossOrigin', 'anonymous');
             imgObj.src = reader.result;
             imgObj.onload = function () {
-                var image = new fabric.Image(imgObj, { left: 0, top: 0, angle: 0, padding: 0 });
-                image.scaleToWidth(300);
+                var image = new fabric.Image(imgObj, options);
+                image.scaleToHeight(canvas.getHeight());
                 canvas.add(image);
                 canvas.setActiveObject(image);
+                canvas.renderAll();
+                imgObj = null; // dereference
+                var originalPhotoObject = canvas.getActiveObject();
+                var newImg = new Image();
+                newImg.onload = function () {
+                    var imgInstance = new fabric.Image(newImg, options);
+                    canvas.remove(originalPhotoObject);
+                    canvas.add(imgInstance);
+                    canvas.renderAll();
+                    newImg = null;
+                };
             };
         };
         reader.readAsDataURL(e.target.files[0]);
@@ -276,6 +288,7 @@ var Editor = (function () {
     Editor.prototype.publishProject = function () {
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = true;
+        this.canvases[0].includeDefaultValues = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
         this.saveProjectForm.elements['editorID'].value = this.editorID;
@@ -290,13 +303,9 @@ var Editor = (function () {
         this.saveProjectForm.submit();
     };
     Editor.prototype.saveProject = function () {
-        /*    this.canvases[0].forEachObject(function(obj){
-                obj.sourcePath = '/uploadIMG/FILE.svg';
-                console.log(obj.sourcePath);
-            });
-            */
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = false;
+        this.canvases[0].includeDefaultValues = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = null;
         this.saveProjectForm.elements['editorID'].value = this.editorID;
