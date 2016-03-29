@@ -21,7 +21,7 @@ var Router = (function () {
                 if (req.session.user == null) {
                     // if user is not logged-in redirect back to login page //
                     //res.render('homepage', {  title: 'Home Page'});
-                    res.redirect('/homepagenl');
+                    res.redirect('/');
                 }
                 else {
                     res.redirect('/homepagenlLogin');
@@ -48,6 +48,30 @@ var Router = (function () {
                 }
             });
         });
+        router.get('/topComic', function (req, res) {
+            var db = req.db;
+            var projectlistCollection = db.get('EditingComic');
+            var accounts = db.get('accounts');
+            if (req.session.user == null) {
+                res.redirect('/');
+            }
+            projectlistCollection.find({}, { sort: { viewCount: -1 } }, function (e, docs) {
+                accounts.findOne({ user: req.session.user.user }, function (e, o) {
+                    if (o.country == 'Viewer') {
+                        res.render('homepagenlLoginViewer', {
+                            udata: req.session.user,
+                            "projectList": docs
+                        });
+                    }
+                    else {
+                        res.render('homepagenlLogin', {
+                            udata: req.session.user,
+                            "projectList": docs
+                        });
+                    }
+                });
+            });
+        });
         router.get('/homepagenlLoginViewer', function (req, res) {
             var db = req.db;
             var projectlistCollection = db.get('EditingComic');
@@ -69,7 +93,7 @@ var Router = (function () {
             });
         });
         router.get('/homepagenl', function (req, res) {
-            res.render('homepagenl', { title: 'Home Page 1' });
+            res.redirect('/');
         });
         /* GET login page. */
         router.get('/', function (req, res, next) {
@@ -105,6 +129,7 @@ var Router = (function () {
                 }
             });
         });
+        // search the database for comics
         router.post('/searchComic', function (req, res, next) {
             var db = req.db;
             var search = req.body.search;

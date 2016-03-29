@@ -30,7 +30,7 @@ class Router {
            if (req.session.user == null){
 	// if user is not logged-in redirect back to login page //
             //res.render('homepage', {  title: 'Home Page'});
-			res.redirect('/homepagenl');
+			res.redirect('/');
 		  }else{
             res.redirect('/homepagenlLogin');
 			/*
@@ -62,6 +62,31 @@ class Router {
             });
 
         });
+        
+        router.get('/topComic', function(req,res){
+            var db = req.db;
+            var projectlistCollection = db.get('EditingComic');
+            var accounts = db.get('accounts');
+            if (req.session.user == null){
+                res.redirect('/');
+            }
+            projectlistCollection.find({},{sort:{viewCount:-1}},function(e,docs){
+                accounts.findOne({user:req.session.user.user}, function(e, o) {
+                    if(o.country == 'Viewer') {
+                        res.render('homepagenlLoginViewer', {
+                            udata: req.session.user,
+                            "projectList": docs
+                        });
+                    }
+                    else {
+                        res.render('homepagenlLogin', {
+                            udata: req.session.user,
+                            "projectList": docs
+                        });     
+                    }
+                });
+        });
+        });
 
         router.get('/homepagenlLoginViewer', function(req, res){
             var db = req.db;
@@ -85,7 +110,7 @@ class Router {
     });
     
 	router.get('/homepagenl', function(req, res) {
-		res.render('homepagenl', {  title: 'Home Page 1'});
+		res.redirect('/');
 	});
 
 
