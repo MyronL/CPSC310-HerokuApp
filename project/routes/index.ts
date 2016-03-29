@@ -315,6 +315,28 @@ class Router {
         }
     });
 
+    router.get('/favorites', function(req, res){
+      var db = req.db;
+      var favCollection = db.get('favorites');
+      var projectlistCollection = db.get('EditingComic');
+      var user = req.session.user.user;
+      var favList = [];
+
+      if (req.session.user == null){
+        res.redirect('/');
+      }else{
+        var cursor = favCollection.find({"user":user,},{'comicID': 1});
+        cursor.each(function(err, doc) {
+          projectlistCollection.findOne({_id: ObjectId(doc.comicID)}, function(err, o) {
+            if (o) {
+              favList.push(o);
+            }
+          });
+        });
+        res.render('favorites',{udata : req.session.user,"favList": favList});
+      }
+    });
+
     //post comment
     router.post('/newComment' , function(req,res){
         var comicID = req.body.comicID;
