@@ -276,6 +276,7 @@ var Editor = (function () {
     Editor.prototype.publishProject = function () {
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = true;
+        this.canvases[0].includeDefaultValues = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
         this.saveProjectForm.elements['editorID'].value = this.editorID;
@@ -290,13 +291,9 @@ var Editor = (function () {
         this.saveProjectForm.submit();
     };
     Editor.prototype.saveProject = function () {
-        /*    this.canvases[0].forEachObject(function(obj){
-                obj.sourcePath = '/uploadIMG/FILE.svg';
-                console.log(obj.sourcePath);
-            });
-            */
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = false;
+        this.canvases[0].includeDefaultValues = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = null;
         this.saveProjectForm.elements['editorID'].value = this.editorID;
