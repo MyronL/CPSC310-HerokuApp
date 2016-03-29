@@ -97,6 +97,7 @@ var Router = (function () {
                 res.redirect('/');
             }
             else {
+                // display the comics that the author has created
                 var author = req.session.user.user;
                 projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                     res.render('home', {
@@ -106,6 +107,7 @@ var Router = (function () {
                 });
             }
         });
+        // update the account info
         router.post('/home', function (req, res) {
             if (req.body['user'] != undefined) {
                 AM.updateAccount({
@@ -259,20 +261,20 @@ var Router = (function () {
                             if (o) {
                                 favRecord = 1;
                             }
-                            var sameSeries = docs.series;
+                            var sameSeries = docs[0].series;
                             var series = [];
-                            var promise = projectlistCollection.find({ "series": sameSeries }, function (e, docs) {
-                                series = docs;
-                            });
                             // updates favCount field in the comicCollection
                             projectlistCollection.findAndModify({ _id: ObjectId(comicID) }, { $set: { "favCount": count } });
-                            // renders the different variables to viewComic
-                            promise.success(res.render('viewComic', { title: 'Viewer',
-                                "loadProject": docs,
-                                udata: req.session.user,
-                                "series": series,
-                                liked: favRecord,
-                                favCount: count }));
+                            projectlistCollection.find({ "series": sameSeries }, function (e, doc) {
+                                series = doc;
+                                // renders the different variables to viewComic
+                                res.render('viewComic', { title: 'Viewer',
+                                    "loadProject": docs,
+                                    udata: req.session.user,
+                                    "series": series,
+                                    liked: favRecord,
+                                    favCount: count });
+                            });
                         });
                     });
                 });
@@ -311,20 +313,24 @@ var Router = (function () {
             var favCollection = db.get('favorites');
             var projectlistCollection = db.get('EditingComic');
             var user = req.session.user.user;
-            var favList = [];
+            var comics = [];
+            //var favList = [];
             if (req.session.user == null) {
                 res.redirect('/');
             }
             else {
-                var cursor = favCollection.find({ "user": user }, { 'comicID': 1 });
-                cursor.each(function (err, doc) {
-                    projectlistCollection.findOne({ _id: ObjectId(doc.comicID) }, function (err, o) {
-                        if (o) {
-                            favList.push(o);
-                        }
+                favCollection.find({ "user": user })
+                    .each(function (o) {
+                    comics.push(o.comicID);
+                })
+                    .success(function () {
+                    var obj_ids = comics.map(function (item) {
+                        return ObjectId(item);
+                    });
+                    projectlistCollection.find({ _id: { "$in": obj_ids } }, function (e, doc) {
+                        res.render('favorites', { udata: req.session.user, "favList": doc, "number": comics.length });
                     });
                 });
-                res.render('favorites', { udata: req.session.user, "favList": favList });
             }
         });
         //post comment
@@ -362,6 +368,8 @@ var Router = (function () {
             else {
                 seriesCollection.find({ "user": user }, {}, function (e, docs) {
                     userSeries = docs;
+                    console.log(e);
+                    console.log(userSeries);
                     res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null, "userSeries": userSeries, udata: req.session.user });
                 });
             }
@@ -378,7 +386,7 @@ var Router = (function () {
                 res.redirect('/');
             }
             else {
-                seriesCollection.find({ "user": user }, {}, function (e, docs) {
+                seriesCollection.findOne({ "user": user }, {}, function (e, docs) {
                     userSeries = docs;
                     projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
                         res.render('editor', {

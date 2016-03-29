@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  #wrapper
+    h1 My Favorites
+    u1 
+        each project, i in favList
+            li
+                a(href="/viewer/"+project._id)= project.title
+                    img(src=project.thumbnail, style = "border: 1px solid black;")
