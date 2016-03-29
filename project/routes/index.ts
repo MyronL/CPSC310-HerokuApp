@@ -565,12 +565,12 @@ class Router {
                             "description": editor_des,
                             "published": published,
                             "tags": editor_tags,
-                            //"panel1": panel1_JSON,
+                            "panel1": panel1_JSON,
                             "thumbnail": thumbnail,
                             "commentList": [],
                             "series":insertSeries,
                             "viewCount":0,
-                            "favCount":0, // consider making a favourite count if sorting is too difficult
+                            "favCount":0,
                             "date": date
                         }, function(err,doc){
                             if (err) {res.send("There was a problem adding the information to DB");}
@@ -596,7 +596,7 @@ class Router {
                      "description": editor_des,
                      "published": published,
                      "tags": editor_tags,
-                     //"panel1": panel1_JSON,
+                     "panel1": panel1_JSON,
                      "series":insertSeries,
                      "thumbnail": thumbnail,
                      "date": date
