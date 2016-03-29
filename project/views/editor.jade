@@ -21,6 +21,8 @@ block body
                             form#formSaveProject(name="formSaveProject", method="post", action="/saveProject")
                                 textarea#comicTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
                                 br
+                                textarea#series(type="text",name="series", style="width:100%;resize:none;height:1%", readonly=true)
+                                br
                                 textarea#comicDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
                                 br
                                 textarea#comicTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
@@ -49,7 +51,12 @@ block body
                                         .modal-body
                                             select#seriesSelect2
                                                 option(label="Select a Series",selected,disabled,value="")
-                                                option(value="") None
+                                                -if(userSeries == null){userSeries = ["None"]}else{userSeries = userSeries[0].series};
+                                                each series, i in userSeries
+                                                    if series=="None"
+                                                        option(value="") None
+                                                    else
+                                                        option(value=series) #{series}
                                             br
                                             textarea#newSeries2(type="text", placeholder="New Series",name="newSeries",style="resize:none")
                                         .modal-footer
@@ -66,7 +73,11 @@ block body
                                         .modal-body
                                             select#seriesSelect
                                                 option(label="Select a Series",selected,disabled,value="")
-                                                option(value="") None
+                                                each series, i in userSeries
+                                                    if series=="None"
+                                                        option(value="") None
+                                                    else
+                                                        option(value=series) #{series}
                                             br
                                             textarea#newSeries(type="text", placeholder="New Series",name="newSeries",style="resize:none")
                                         .modal-footer
@@ -157,7 +168,8 @@ block scripts
     });
 
     var loadProject =!{JSON.stringify(loadProject)};
-  
+    var userSeries = !{JSON.stringify(userSeries)};
+
   script(type="text/javascript", src="/modules/Editor.js")
 
 

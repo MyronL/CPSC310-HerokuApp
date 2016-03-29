@@ -256,6 +256,7 @@ var Router = (function () {
                             if (o) {
                                 favRecord = 1;
                             }
+                            // updates favCount field in the comicCollection
                             projectlistCollection.findAndModify({ _id: ObjectId(comicID) }, { $set: { "favCount": count } });
                             // renders the different variables to viewComic
                             res.render('viewComic', { title: 'Viewer', "loadProject": docs, udata: req.session.user, liked: favRecord, favCount: count });
@@ -316,28 +317,42 @@ var Router = (function () {
         });
         // editor stuff	
         router.get('/editor', function (req, res, next) {
+            var db = req.db;
+            var user = req.session.user.user;
+            var seriesCollection = db.get('Series');
+            var userSeries = null;
             if (req.session.user == null) {
                 // if user is not logged-in redirect back to login page //
                 res.redirect('/');
             }
             else {
-                res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null, udata: req.session.user });
+                seriesCollection.find({ "user": user }, {}, function (e, docs) {
+                    userSeries = docs;
+                    res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null, "userSeries": userSeries, udata: req.session.user });
+                });
             }
         });
         router.get('/editor/:id', function (req, res, next) {
             var editID = req.params.id;
             var db = req.db;
+            var user = req.session.user.user;
             var projectlistCollection = db.get('EditingComic');
+            var seriesCollection = db.get('Series');
+            var userSeries = null;
             if (req.session.user == null) {
                 // if user is not logged-in redirect back to login page //
                 res.redirect('/');
             }
             else {
-                projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
-                    res.render('editor', {
-                        title: 'Editor',
-                        "loadProject": docs,
-                        udata: req.session.user
+                seriesCollection.find({ "user": user }, {}, function (e, docs) {
+                    userSeries = docs;
+                    projectlistCollection.find({ _id: ObjectId(editID) }, {}, function (e, docs) {
+                        res.render('editor', {
+                            title: 'Editor',
+                            "loadProject": docs,
+                            "userSeries": userSeries,
+                            udata: req.session.user
+                        });
                     });
                 });
             }
@@ -374,13 +389,32 @@ var Router = (function () {
             var editorID = req.body.editorID;
             var series = req.body.seriesSelect;
             var newSeries = req.body.newSeries;
+            var insertSeries = null;
             console.log("series:" + series);
             console.log("newSeries:" + newSeries);
             //console.log(req.session.user.user);
             var db = req.db;
             var comicCollection = db.get('EditingComic');
+            var seriesCollection = db.get('Series');
             var author = req.session.user.user;
             var date = new Date(Date.now());
+            if (series == "") {
+                insertSeries = newSeries;
+                seriesCollection.findAndModify({
+                    "user": author
+                }, {
+                    $push: {
+                        "series": newSeries
+                    }
+                }, function (err, doc) {
+                    if (doc == null) {
+                        seriesCollection.insert({ "user": author, "series": [newSeries] });
+                    }
+                });
+            }
+            else {
+                insertSeries = series;
+            }
             console.log("updateField");
             console.log(editor_title);
             console.log("before" + editorID);
@@ -394,6 +428,7 @@ var Router = (function () {
                     "panel1": panel1_JSON,
                     "thumbnail": thumbnail,
                     "commentList": [],
+                    "series": insertSeries,
                     "viewCount": 0,
                     "favCount": 0,
                     "date": date
@@ -425,6 +460,7 @@ var Router = (function () {
                         "published": published,
                         "tags": editor_tags,
                         "panel1": panel1_JSON,
+                        "series": insertSeries,
                         "thumbnail": thumbnail,
                         "date": date
                     }

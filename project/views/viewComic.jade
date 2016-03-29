@@ -60,7 +60,7 @@ block body
                         br
                         input(type="submit", value="Comment")
             .col-sm-8
-                  - if (loadProject == null) {var commentList = [];} else {var commentList = loadProject[0].commentList;};console.log(commentList);
+                  - if (loadProject == null) {var commentList = [];} else {var commentList = loadProject[0].commentList;};
                   u1#commentList                   
                     each comment, i in commentList
                         li= comment 

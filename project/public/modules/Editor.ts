@@ -428,17 +428,21 @@ class Editor{
       var tags = loadProject[0].tags;
       var author = loadProject[0].author;
       var JsonPanel1 = loadProject[0].panel1;
+      var series = loadProject[0].series;
  //     var JsonPanel2 = loadProject[0].panel2;
  //     var JsonPanel3 = loadProject[0].panel3;
  //     var JsonPanel4 = loadProject[0].panel4;
       console.log(title);
       $('#comicTitle').val(title);
       $('#comicDescription').val(description);
-      $('#comicTags').val(tags);      
-      console.log(loadProject[0])
+      $('#comicTags').val(tags);
+      $('#series').val("Series: "+series);
+      //console.log(loadProject[0])
       this.canvases[0].loadFromJSON(JsonPanel1, this.canvases[0].renderAll.bind(this.canvases[0]));
 
    }
+   
+
    
    //move border to front -> working but not in use
    putBordertoFront(){
@@ -461,7 +465,7 @@ class Editor{
    }
    setEditorID(ID){
        this.editorID = ID;
-       console.log("set"+this.editorID);
+       //console.log("set"+this.editorID);
    }
 
    selectPanel() {
@@ -571,6 +575,16 @@ window.onload = function() {
     );
 
   // load project is not defined
+  /*
+  if(userSeries == null){
+      userSeries = ["None"];
+      console.log(userSeries);
+  } else {
+      userSeries = userSeries[0].series;
+      //console.log(userSeries);
+  }
+  */
+  
   if (loadProject == null){
       editor.loadEmptyPanels();
       console.log("nothing");
