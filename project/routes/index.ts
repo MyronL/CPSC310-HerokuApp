@@ -122,7 +122,7 @@ class Router {
 		});
 	});
 
-
+      // search the database for comics
         router.post('/searchComic', function(req,res,next){
           var db = req.db;
           var search = req.body.search;
