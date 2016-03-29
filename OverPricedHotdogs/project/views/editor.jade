@@ -1,0 +1,177 @@
+extends ../node_modules/jade-bootstrap/_bootstrap
+append styles
+    link(rel='stylesheet',href='/stylesheets/style.css')
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
+    link(rel='stylesheet',href='/font-awesome-4.5.0/css/font-awesome.min.css')  
+    link(rel='stylesheet',href='/stylesheets/fonts.css')
+block body
+  div.btm-links
+    a(href=homeURL)#home
+      img(src=logo,width = "100", span title="Home")
+    // this goes to /homepagenlLogin
+    // is homepagel just a test page? the one with all the comic pictures?
+  h1  Comic Editor
+  body
+    .container-fluid 
+        .row
+            .col-sm-2
+                    .panel.panel-success
+                        .panel-heading Comic Fields
+                        .panel-body
+                            form#formSaveProject(name="formSaveProject", method="post", action="/saveProject")
+                                textarea#comicTitle(type="text", placeholder="Title",name="comicTitle", style="width:100%;resize:none;height:1%")
+                                br
+                                textarea#series(type="text",name="series", placeholder="Series", style="width:100%;resize:none;height:1%", readonly=true)
+                                br
+                                textarea#comicDescription(placeholder="Description",name="comicDescription", style="height: 200px;resize: none;width:100%;")
+                                br
+                                textarea#comicTags(type="text", placeholder="Tags",name="comicTags",style="width:100%;resize:none;height:1%")
+                                br
+                                input(type="hidden",name="published")
+                                input(type="hidden",name="sPanel1")
+                                input(type="hidden",name="sPanel2")
+                                input(type="hidden",name="sPanel3")
+                                input(type="hidden",name="sPanel4")
+                                input(type="hidden", name="thumbnail")
+                                input(type="hidden", name="editorID")
+                                input(type="hidden",name="seriesSelect")
+                                input(type="hidden",name="newSeries")
+                    
+                    .panel.panel-success
+                        .panel-heading Comic Options
+                        .panel-body
+                            //button#saveButton Save Comic
+                            button(data-target='#seriesPopup2', role='button', data-toggle='modal') Save Comic
+                            #seriesPopup2.modal.fade(tabindex='-1', role='dialog')
+                                .modal-dialog
+                                    .modal-content  
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal') ×
+                                            h3.modal-title Choose Series
+                                        .modal-body
+                                            select#seriesSelect2
+                                                option(label="Select a Series",selected,disabled,value="")
+                                                -if(userSeries == null){userSeries = ["None"]}else{userSeries = userSeries.series};
+                                                each series, i in userSeries
+                                                    if series=="None"
+                                                        option(value="") None
+                                                    else
+                                                        option(value=series) #{series}
+                                            br
+                                            textarea#newSeries2(type="text", placeholder="New Series",name="newSeries",style="resize:none")
+                                        .modal-footer
+                                            button.btn(data-dismiss='modal') Cancel
+                                            button.btn.btn-primary#saveButton Save                               
+                            //button#publishButton Publish Comic 1
+                            button(data-target='#seriesPopup', role='button', data-toggle='modal') Publish Comic
+                            #seriesPopup.modal.fade(tabindex='-1', role='dialog')
+                                .modal-dialog
+                                    .modal-content  
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal') ×
+                                            h3.modal-title Choose Series
+                                        .modal-body
+                                            select#seriesSelect
+                                                option(label="Select a Series",selected,disabled,value="")
+                                                each series, i in userSeries
+                                                    if series=="None"
+                                                        option(value="") None
+                                                    else
+                                                        option(value=series) #{series}
+                                            br
+                                            textarea#newSeries(type="text", placeholder="New Series",name="newSeries",style="resize:none")
+                                        .modal-footer
+                                            button.btn(data-dismiss='modal') Cancel
+                                            button.btn.btn-primary#publishButton Publish
+                                    
+                            - if (loadProject == null) {var comicID = "0";} else {var comicID = loadProject[0]._id;};
+                            form#deleteForm(name="formDeleteProject", method="post", action="/deleteProject/"+comicID+"?_method=DELETE")
+                              input(type="submit", value="Delete Comic", onclick = "return confirm('Do you really want to delete the project? Deletion cannot be recovered');")              
+            .col-sm-10                
+                ul.nav.nav-pills
+                    li.active
+                        a.btn.btn-default(data-toggle="pill" href="#image" span title="Upload Image")
+                            i.fa.fa-picture-o
+                    li
+                        a.btn.btn-default(data-toggle="pill" href="#speechBubble" span title="Dialogue Bubbles")
+                            i.fa.fa-comment
+                    li
+                        a.btn.btn-default(data-toggle="pill" href="#Text" span title="Text")
+                            i.fa.fa-font 
+                    li
+                        a#rmTextButton.btn.btn-default(href="#" span title="Remove")
+                            i.fa.fa-times
+                    li
+                        a#forwardButton.btn.btn-default(href="#" span title="Bring Forwards")
+                            i.fa.fa-eject
+                    li
+                        a.btn.btn-default(data-toggle="pill" href="#Panel" span title="Panel Options")
+                            i.fa.fa-columns
+
+                .tab-content
+                    #image.tab-pane.fade.in.active
+                        input#imgLoader(type="file" accept="image/*")
+                    #speechBubble.tab-pane.fade
+                        button#bubbleButton Normal Bubble
+                        button#squareButton Square Bubble
+                        button#thoughtButton Thought Bubble
+                        button#boxButton Text Box
+                    #Text.tab-pane.fade
+                        select#styleSelect
+                            option(value="Normal") Normal
+                            option(value="Bold") Bold
+                            option(value="Italic") Italic
+                            option(value="BoldItalic") BoldItalic
+                        select#fontSelect
+                            option(value="ComicSans") Comic Sans
+                            option(value="WildWordsRoman") Wild Words Roman
+                        textarea#dialogue(placeholder="Speech Bubble Text",style="width:100%;resize:none;height:200")
+                        button#textButton Add Text
+                        //textarea#colour(placeholder="type in colour and select text", style="width:100%;resize:none;height:200")
+                        p Red
+                            input#textRed(type="range" max="255" value="0")
+                        p Green
+                            input#textGreen(type="range" max="255" value="0")
+                        p Blue
+                            input#textBlue(type="range" max="255" value="0")
+                        canvas#textColourCanvas(name="textColourCanvas" width="50" height="50" style="border: 1px solid black")
+                        button#colourButton Set Text Colour
+                    #Panel.tab-pane.fade
+                        select#panelSelect
+                            option(value="Panel1") Panel 1
+                            option(value="Panel2") Panel 2
+                            option(value="Panel3") Panel 3
+                            option(value="Panel4") Panel 4
+                        p Red
+                            input#panelRed(type="range" max="255" value="255")
+                        p Green
+                            input#panelGreen(type="range" max="255" value="255")
+                        p Blue
+                            input#panelBlue(type="range" max="255" value="255")
+                        canvas#panelColourCanvas(name="panelColourCanvas" width="50" height="50" style="border: 1px solid black")
+                        button#panelColourButton Set Panel Colour
+
+
+                h2 Comic Panels
+                      canvas#panel1(name="panel1", width="1600",height="400",style="border: 3px solid black;")
+
+block scripts
+  script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
+  script(src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js")
+
+  script.
+    $(document).ready(function(){
+        $("[data-toggle=popover]").popover();
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+
+    var loadProject =!{JSON.stringify(loadProject)};
+    var userSeries = !{JSON.stringify(userSeries)};
+
+  script(type="text/javascript", src="/modules/Editor.js")
+
+
+    
+

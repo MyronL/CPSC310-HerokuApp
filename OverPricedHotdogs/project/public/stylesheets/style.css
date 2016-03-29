@@ -1,0 +1,39 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  font-family: "WildWordsRoman";
+}
+
+h2 {
+  font-family: "ComicSans";
+}
+
+a {
+  color: #00B7FF;
+}
+
+u1 {
+   overflow: auto; 
+}
+#commentList li{
+    font-size: 20px;
+}
+#toolbar {
+  padding: 4px;
+  border: 1px solid silver;
+  border-radius: 3px
+}
+
+#wrapper {
+    width: 500px;
+    margin: 0 auto;
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1600px;
+    padding-left: 1px;
+    padding-right:1px;
+  }
+}

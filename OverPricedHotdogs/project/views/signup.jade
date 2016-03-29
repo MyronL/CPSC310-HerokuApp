@@ -1,0 +1,17 @@
+
+extends loginlayout
+
+block content
+
+	include account
+	// the sign up page uses a variation of the account settings, which can be editted at account.jade
+	include modals/alert
+
+block scripts
+	script(src='/vendor/jquery.min.js')
+	script(src='/vendor/jquery.form.js')
+	script(src='/vendor/bootstrap-modal.js')
+	script(src='/vendor/bootstrap-transition.js')
+	script(src='/js/views/signup.js')
+	script(src='/js/controllers/signupController.js')
+	script(src='/js/form-validators/accountValidator.js')
