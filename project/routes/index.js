@@ -2,6 +2,7 @@
 ///<reference path='../types/DefinitelyTyped/express/express.d.ts'/> 
 var server = require('./server');
 var AM = require('./modules/account-manager');
+var CT = require('./modules/country-list');
 var EM = require('./modules/email-dispatcher');
 var ObjectId = require('mongodb').ObjectID;
 // REMEMBER TO RESTART NPM AND COMPILE TSC TO OBSERVE CHANGES
@@ -30,7 +31,34 @@ var Router = (function () {
         // this is the homepage where we show the published comics/projects
         router.get('/homepagenlLogin', function (req, res) {
             var db = req.db;
+            var accounts = db.get('accounts');
+            accounts.findOne({ user: req.session.user.user }, function (e, o) {
+                if (o.country == 'Viewer') {
+                    console.log('hi');
+                    res.redirect('/homepagenlLoginViewer');
+                }
+                else {
+                    var projectlistCollection = db.get('EditingComic');
+                    projectlistCollection.find({ "published": "true" }, {}, function (e, docs) {
+                        res.render('homepagenlLogin', {
+                            udata: req.session.user,
+                            "projectList": docs
+                        });
+                    });
+                }
+            });
+        });
+        router.get('/homepagenlLoginViewer', function (req, res) {
+            var db = req.db;
             var projectlistCollection = db.get('EditingComic');
+            projectlistCollection.find({ "published": "true" }, {}, function (e, docs) {
+                res.render('homepagenlLoginViewer', {
+                    udata: req.session.user,
+                    "projectList": docs
+                });
+            });
+            var projectlistCollection = db.get('EditingComic');
+            //projectlistCollection.find().sort({ date: -1 });
             // gets only the published projects to display
             projectlistCollection.find({
                 "published": "true" }, {}, function (e, docs) {
@@ -100,6 +128,8 @@ var Router = (function () {
                 var author = req.session.user.user;
                 projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                     res.render('home', {
+                        title: 'Control Panel',
+                        countries: CT,
                         udata: req.session.user,
                         "projectList": docs
                     });
@@ -111,7 +141,8 @@ var Router = (function () {
                 AM.updateAccount({
                     user: req.body['user'],
                     email: req.body['email'],
-                    pass: req.body['pass']
+                    pass: req.body['pass'],
+                    country: req.body['country']
                 }, function (e, o) {
                     if (e) {
                         res.status(400).send('error-updating-account');
@@ -135,14 +166,15 @@ var Router = (function () {
         });
         // creating new accounts //
         router.get('/signup', function (req, res) {
-            res.render('signup', { title: 'Sign Up' });
+            res.render('signup', { title: 'Sign Up', countries: CT });
         });
         router.post('/signup', function (req, res) {
             AM.addNewAccount({
                 name: req.body['name'],
                 email: req.body['email'],
                 user: req.body['user'],
-                pass: req.body['pass']
+                pass: req.body['pass'],
+                country: req.body['country']
             }, function (e) {
                 if (e) {
                     res.status(400).send(e);
