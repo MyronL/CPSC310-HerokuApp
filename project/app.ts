@@ -23,7 +23,7 @@ class Application {
     var session = require('express-session');
     var errorHandler = require('errorhandler');
     var MongoStore = require('connect-mongo')(session);
-    
+
     var methodOverride = require('method-override');
 
     var routes = require('./routes/index');
@@ -54,7 +54,7 @@ class Application {
     
     app.use(logger('dev'));
     app.use(bodyParser.json({limit: '50mb'}));
-    app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+    app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
 
