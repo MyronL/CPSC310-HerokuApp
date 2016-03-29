@@ -11,11 +11,13 @@ html(lang='en')
 
     .top-bar
       .top-bar-left
-        ul.menu
-          li
-            input(type="search" placeholder="Search")
-          li
-            button(type="button" class="button") Search
+        form#formSearch(name="formSearch",method="post",action="/searchComic")
+          ul.menu
+            li
+               input(type="search", placeholder="Search",name="search")
+               input(type="hidden",name="sort",value="new")
+            li
+               button(type="submit", class="button") Search
       .top-bar-right
         ul.menu
           li
@@ -34,14 +36,17 @@ html(lang='en')
     #main-menu.top-bar
       ul.menu.vertical.medium-horizontal.expanded.medium-text-center(data-responsive-menu='drilldown medium-dropdown')
         li
-          a(href='#') Most Favourited
-          a(href='#') Least Favourited
+          button.btn.btn-primary(style="width:100px",onclick="sendMFav()") Most Favourited
+          br
+          button.btn.btn-primary(style="width:100px",onclick="sendLFav()") Least Favourited
         li.has-submenu
-          a(href='#') Most Viewed
-          a(href='#') Least Viewed
+          button.btn.btn-primary(style="width:100px",onclick="sendMView()") Most Viewed
+          br
+          button.btn.btn-primary(style="width:100px",onclick="sendLview()") Least Viewed
         li
-          a(href='#') Newest
-          a(href='#') Oldest
+          button.btn.btn-primary(style="width:100px",onclick="sendNew()") Newest
+          br
+          button.btn.btn-primary(style="width:100px",onclick="sendOld()") Oldest
 
               
 block content
@@ -52,3 +57,48 @@ block content
             li
                 a(href="/viewer/"+project._id)= project.title
                     img(src=project.thumbnail, style = "border: 1px solid black;")
+                    
+block scripts
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
+  script(src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js")
+  script.
+      var searchWord = !{JSON.stringify(searchWord)};
+      console.log("search "+searchWord);
+  script.
+
+      function sendMFav(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "mFav";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();           
+      }
+      function sendLFav(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "lFav";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();           
+      }
+      function sendMView(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "mView";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();           
+      }
+      function sendLview(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "lView";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();          
+      }
+      function sendNew(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "new";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();          
+      }
+      function sendOld(){
+          var searchForm = document.getElementById("formSearch");
+          searchForm.elements['sort'].value = "old";
+          searchForm.elements['search'].value = searchWord;
+          searchForm.submit();
+      }
