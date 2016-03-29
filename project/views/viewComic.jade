@@ -36,6 +36,7 @@ block body
                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
         .row
             .col-sm-12
+              p#views 0 
               form#likeForm(name="likeForm", method="post", action="/favorites")
                 input(type="hidden", name="comicID")
                 if liked == 0
@@ -85,10 +86,13 @@ block scripts
             var tags = loadProject[0].tags;
             var author = loadProject[0].author;
             var img = loadProject[0].thumbnail;
+            var viewCount = loadProject[0].viewCount;
+            console.log(viewCount);
             console.log(title);
             $('#comicTitle').val(title);
             $('#comicDescription').val(description);
             $('#comicTags').val(tags);
+            document.getElementById("views").innerHTML = viewCount + " views"
             document.formNewComment.comicID.value = loadProject[0]._id;
             document.likeForm.comicID.value = loadProject[0]._id;
             var canvas1 = new fabric.Canvas(panel1);
