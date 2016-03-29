@@ -6,7 +6,6 @@ html.no-js(lang='en')
     title OverPricedHotdogs
     link(rel='stylesheet', href='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css')
     link(href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css', rel='stylesheet', type='text/css')
-    link(rel='stylesheet',href='/stylesheets/fonts.css')
 
     div.navbar.navbar-fixed-top
         <div class="top-bar">
@@ -29,9 +28,10 @@ html.no-js(lang='en')
         </div>
 
     .row
-      a(href=homeURL)
-        img.centered(src=banner width="50%" height="50%")
-      //.medium-8.columns
+      .medium-4.columns
+        a(href=homeURL)
+          img(src=logo)
+      .medium-8.columns
         img(src='http://images.cooltext.com/4586341.png')
     br
     .title-bar(data-responsive-toggle='main-menu', data-hide-for='medium')
@@ -42,13 +42,13 @@ html.no-js(lang='en')
         li
           a(href='./editor') Make Comic
         li.has-submenu
-          a(href='#') My Favourites
+          a(href='#') Favourites
         li.has-submenu
           a(href='#') Top Comics
         li.has-submenu
           a(href='#') My Comics
     br
-    //.row
+    .row
       .medium-8.columns
         p
           img(src='http://media.salon.com/2014/10/archie_comics.jpg', alt='main comic')
@@ -58,7 +58,7 @@ html.no-js(lang='en')
         p
           img(src='http://images1.fanpop.com/images/photos/2500000/Calvin-and-Hobbes-Comic-Strips-calvin-and-hobbes-2509543-600-191.gif', alt='alternate comic')
 
-    //hr
+    hr
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')
     script(src='http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js')
     script.

@@ -104,8 +104,7 @@ class Application {
     app.locals = {
       siteTitle: "OVERPRICED HOTDOGS",
       homeURL: "/homepage",
-      logo: "http://i.imgur.com/iwDCnm8.png",
-      banner: "http://i.imgur.com/q0ODD1i.png"
+      logo: "http://i.imgur.com/iwDCnm8.png"
     };
 
     module.exports = app;

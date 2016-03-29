@@ -17,7 +17,3 @@ src: url('WildWordsbolditalic.TTF');
 font-family: ComicSans;
 src: url('ComicSans.ttf');
 }
-img.centered{
-  display: block;
-  margin: 15px auto;
-}
