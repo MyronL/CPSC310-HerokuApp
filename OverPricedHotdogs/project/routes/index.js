@@ -136,7 +136,7 @@ var Router = (function () {
             var sortOption = req.body.sort;
             var projectlistCollection = db.get('EditingComic');
             if (sortOption == "new") {
-                projectlistCollection.find({ $and: [{ $or: [{ title: { $regex: ".*" + search + ".*" } }, { author: { $regex: ".*" + search + ".*" } }, { tags: { $regex: ".*" + search + ".*" } }] }, { published: "true" }] }, { sort: { date: -1 } }, function (e, docs) {
+                projectlistCollection.find({ $and: [{ $or: [{ title: search }, { author: search }, { tags: search }] }, { published: "true" }] }, { sort: { date: -1 } }, function (e, docs) {
                     console.log(search);
                     res.render('searchResult', {
                         "searchList": docs,
@@ -145,7 +145,7 @@ var Router = (function () {
                 });
             }
             else if (sortOption == "old") {
-                projectlistCollection.find({ $and: [{ $or: [{ title: { $regex: ".*" + search + ".*" } }, { author: { $regex: ".*" + search + ".*" } }, { tags: { $regex: ".*" + search + ".*" } }] }, { published: "true" }] }, { sort: { date: 1 } }, function (e, docs) {
+                projectlistCollection.find({ $and: [{ $or: [{ title: search }, { author: search }, { tags: search }] }, { published: "true" }] }, { sort: { date: 1 } }, function (e, docs) {
                     res.render('searchResult', {
                         "searchList": docs,
                         searchWord: search
@@ -153,7 +153,7 @@ var Router = (function () {
                 });
             }
             else if (sortOption == "mFav") {
-                projectlistCollection.find({ $and: [{ $or: [{ title: { $regex: ".*" + search + ".*" } }, { author: { $regex: ".*" + search + ".*" } }, { tags: { $regex: ".*" + search + ".*" } }] }, { published: "true" }] }, { sort: { favCount: -1 } }, function (e, docs) {
+                projectlistCollection.find({ $and: [{ $or: [{ title: search }, { author: search }, { tags: search }] }, { published: "true" }] }, { sort: { favCount: -1 } }, function (e, docs) {
                     res.render('searchResult', {
                         "searchList": docs,
                         searchWord: search
@@ -161,7 +161,7 @@ var Router = (function () {
                 });
             }
             else if (sortOption == "lFav") {
-                projectlistCollection.find({ $and: [{ $or: [{ title: { $regex: ".*" + search + ".*" } }, { author: { $regex: ".*" + search + ".*" } }, { tags: { $regex: ".*" + search + ".*" } }] }, { published: "true" }] }, { sort: { favCount: 1 } }, function (e, docs) {
+                projectlistCollection.find({ $and: [{ $or: [{ title: search }, { author: search }, { tags: search }] }, { published: "true" }] }, { sort: { favCount: 1 } }, function (e, docs) {
                     res.render('searchResult', {
                         "searchList": docs,
                         searchWord: search
@@ -169,7 +169,7 @@ var Router = (function () {
                 });
             }
             else if (sortOption == "mView") {
-                projectlistCollection.find({ $and: [{ $or: [{ title: { $regex: ".*" + search + ".*" } }, { author: { $regex: ".*" + search + ".*" } }, { tags: { $regex: ".*" + search + ".*" } }] }, { published: "true" }] }, { sort: { viewCount: -1 } }, function (e, docs) {
+                projectlistCollection.find({ $and: [{ $or: [{ title: search }, { author: search }, { tags: search }] }, { published: "true" }] }, { sort: { viewCount: -1 } }, function (e, docs) {
                     res.render('searchResult', {
                         "searchList": docs,
                         searchWord: search
@@ -177,7 +177,7 @@ var Router = (function () {
                 });
             }
             else if (sortOption == "lView") {
-                projectlistCollection.find({ $and: [{ $or: [{ title: { $regex: ".*" + search + ".*" } }, { author: { $regex: ".*" + search + ".*" } }, { tags: { $regex: ".*" + search + ".*" } }] }, { published: "true" }] }, { sort: { viewCount: 1 } }, function (e, docs) {
+                projectlistCollection.find({ $and: [{ $or: [{ title: search }, { author: search }, { tags: search }] }, { published: "true" }] }, { sort: { viewCount: 1 } }, function (e, docs) {
                     res.render('searchResult', {
                         "searchList": docs,
                         searchWord: search
@@ -185,7 +185,6 @@ var Router = (function () {
                 });
             }
         });
-
         // logged-in user homepage //
         router.get('/myComic', function (req, res) {
             var db = req.db;
@@ -198,7 +197,7 @@ var Router = (function () {
                 // display the comics that the author has created
                 var author = req.session.user.user;
                 projectlistCollection.find({ "author": author }, {}, function (e, docs) {
-                    res.render('myComic', {
+                    res.render('home', {
                         title: 'Control Panel',
                         countries: CT,
                         udata: req.session.user,
@@ -207,7 +206,6 @@ var Router = (function () {
                 });
             }
         });
-
         // logged-in user homepage //
         router.get('/home', function (req, res) {
             var db = req.db;
@@ -431,6 +429,59 @@ var Router = (function () {
                     else {
                         res.redirect('/viewer/' + comicID);
                     }
+                });
+            }
+        });
+        //like a comic
+        router.post('/favorites', function (req, res) {
+            var comicID = req.body.comicID;
+            var user = req.session.user.user;
+            var liked = req.body.like;
+            var db = req.db;
+            var favCollection = db.get('favorites');
+            if (liked == 1) {
+                favCollection.insert({ "user": user, "comicID": comicID }, function (err, doc) {
+                    if (err) {
+                        res.send("There was a problem adding the information to DB");
+                    }
+                    else {
+                        res.redirect('/viewer/' + comicID);
+                    }
+                });
+            }
+            else {
+                favCollection.remove({ "user": user, "comicID": comicID }, function (err, doc) {
+                    if (err) {
+                        res.send("There was a problem deleting a document in DB");
+                    }
+                    else {
+                        res.redirect('/viewer/' + comicID);
+                    }
+                });
+            }
+        });
+        router.get('/favorites', function (req, res) {
+            var db = req.db;
+            var favCollection = db.get('favorites');
+            var projectlistCollection = db.get('EditingComic');
+            var user = req.session.user.user;
+            var comics = [];
+            //var favList = [];
+            if (req.session.user == null) {
+                res.redirect('/');
+            }
+            else {
+                favCollection.find({ "user": user })
+                    .each(function (o) {
+                    comics.push(o.comicID);
+                })
+                    .success(function () {
+                    var obj_ids = comics.map(function (item) {
+                        return ObjectId(item);
+                    });
+                    projectlistCollection.find({ _id: { "$in": obj_ids } }, function (e, doc) {
+                        res.render('homepagenlLogin', { udata: req.session.user, "projectList": doc });
+                    });
                 });
             }
         });

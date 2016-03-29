@@ -450,6 +450,32 @@ class Router {
         }
     });
 
+    router.get('/favorites', function(req, res){
+      var db = req.db;
+      var favCollection = db.get('favorites');
+      var projectlistCollection = db.get('EditingComic');
+      var user = req.session.user.user;
+      var comics = [];
+      //var favList = [];
+
+      if (req.session.user == null){
+        res.redirect('/');
+      }else{
+        favCollection.find({"user":user})
+          .each(function(o) {
+            comics.push(o.comicID);
+          })
+          .success(function() {
+            var obj_ids = comics.map(function(item) {
+              return ObjectId(item)
+            });
+            projectlistCollection.find({_id: {"$in": obj_ids}}, function(e, doc) {
+                res.render('homepagenlLogin', {udata : req.session.user, "projectList": doc});
+              });         
+          });
+      }
+    });
+
     //post comment
     router.post('/newComment' , function(req,res){
         var comicID = req.body.comicID;
