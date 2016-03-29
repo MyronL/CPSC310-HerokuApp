@@ -9,7 +9,7 @@ var Editor = (function () {
         //colourText: HTMLTextAreaElement,
         textRed, textGreen, textBlue, textColourCanvas, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton, panelSelect, panelRed, panelGreen, panelBlue, panelColourCanvas, 
         //panelColour: HTMLTextAreaElement,
-        panelColourButton) {
+        panelColourButton, hotdog, tree, octopus, duck, seal, bear, penguin, frog, orca) {
         var _this = this;
         // images for speech bubble hosted on imgur
         this.bubble = 'http://i.imgur.com/qtDmgzK.png';
@@ -125,6 +125,16 @@ var Editor = (function () {
         this.panelCanvas.setBackgroundColor("rgb(255,255,255)", this.panelCanvas.renderAll.bind(this.panelCanvas));
         //this.panelColour = panelColour;
         this.panelColourButton = panelColourButton;
+        // clip art variables
+        this.hotdog = hotdog;
+        this.tree = tree;
+        this.octopus = octopus;
+        this.duck = duck;
+        this.seal = seal;
+        this.bear = bear;
+        this.penguin = penguin;
+        this.frog = frog;
+        this.orca = orca;
         imgLoader.onchange = function (e) { return _this.showImage(e); };
         bubbleButton.onclick = function () { return _this.clickBubbleButton(); };
         squareButton.onclick = function () { return _this.clickSquareButton(); };
@@ -146,6 +156,15 @@ var Editor = (function () {
         panelGreen.oninput = function () { return _this.updatePanelPreview(); };
         panelBlue.oninput = function () { return _this.updatePanelPreview(); };
         panelColourButton.onclick = function () { return _this.setPanelColor(); };
+        hotdog.onclick = function () { return _this.addhotdog(); };
+        tree.onclick = function () { return _this.addTree(); };
+        octopus.onclick = function () { return _this.addOctopus(); };
+        duck.onclick = function () { return _this.addDuck(); };
+        seal.onclick = function () { return _this.addSeal(); };
+        bear.onclick = function () { return _this.addBear(); };
+        penguin.onclick = function () { return _this.addPenguin(); };
+        frog.onclick = function () { return _this.addFrog(); };
+        orca.onclick = function () { return _this.addOrca(); };
         //   deleteButton.onclick = () => this.confirmDelete();
         //this.tools = null;
         //this.editingComic = null;
@@ -161,13 +180,25 @@ var Editor = (function () {
         reader.onload = function () {
             console.log('loadimage');
             var imgObj = new Image();
+            var options = { left: 0, top: 0, angle: 0, padding: 0 };
             imgObj.setAttribute('crossOrigin', 'anonymous');
             imgObj.src = reader.result;
             imgObj.onload = function () {
-                var image = new fabric.Image(imgObj, { left: 0, top: 0, angle: 0, padding: 0 });
-                image.scaleToWidth(300);
+                var image = new fabric.Image(imgObj, options);
+                image.scaleToHeight(canvas.getHeight());
                 canvas.add(image);
                 canvas.setActiveObject(image);
+                canvas.renderAll();
+                imgObj = null; // dereference
+                var originalPhotoObject = canvas.getActiveObject();
+                var newImg = new Image();
+                newImg.onload = function () {
+                    var imgInstance = new fabric.Image(newImg, options);
+                    canvas.remove(originalPhotoObject);
+                    canvas.add(imgInstance);
+                    canvas.renderAll();
+                    newImg = null;
+                };
             };
         };
         reader.readAsDataURL(e.target.files[0]);
@@ -276,6 +307,7 @@ var Editor = (function () {
     Editor.prototype.publishProject = function () {
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = true;
+        this.canvases[0].includeDefaultValues = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
         this.saveProjectForm.elements['editorID'].value = this.editorID;
@@ -290,13 +322,9 @@ var Editor = (function () {
         this.saveProjectForm.submit();
     };
     Editor.prototype.saveProject = function () {
-        /*    this.canvases[0].forEachObject(function(obj){
-                obj.sourcePath = '/uploadIMG/FILE.svg';
-                console.log(obj.sourcePath);
-            });
-            */
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = false;
+        this.canvases[0].includeDefaultValues = false;
         this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = null;
         this.saveProjectForm.elements['editorID'].value = this.editorID;
@@ -402,6 +430,51 @@ var Editor = (function () {
         var colourString = "rgb(" + r + "," + g + "," + b + ")";
         this.panelCanvas.setBackgroundColor(colourString, this.panelCanvas.renderAll.bind(this.panelCanvas));
     };
+    Editor.prototype.addClipArt = function (url) {
+        var canvas1 = this.canvases[0];
+        fabric.Image.fromURL(url, function (obj) {
+            obj.scaleToHeight(canvas1.getHeight());
+            canvas1.add(obj);
+            canvas1.setActiveObject(obj);
+            canvas1.renderAll();
+        }, { crossOrigin: 'anonymous' });
+    };
+    Editor.prototype.addhotdog = function () {
+        var url = document.getElementById("hotdog").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addTree = function () {
+        var url = document.getElementById("tree").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addOctopus = function () {
+        var url = document.getElementById("octopus").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addDuck = function () {
+        var url = document.getElementById("duck").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addSeal = function () {
+        var url = document.getElementById("seal").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addBear = function () {
+        var url = document.getElementById("bear").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addPenguin = function () {
+        var url = document.getElementById("penguin").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addFrog = function () {
+        var url = document.getElementById("frog").src;
+        this.addClipArt(url);
+    };
+    Editor.prototype.addOrca = function () {
+        var url = document.getElementById("orca").src;
+        this.addClipArt(url);
+    };
     return Editor;
 })();
 window.onload = function () {
@@ -439,11 +512,21 @@ window.onload = function () {
     var panelColourCanvas = document.getElementById("panelColourCanvas");
     //var panelColour = <HTMLTextAreaElement> document.getElementById("panelColour");
     var panelColourButton = document.getElementById("panelColourButton");
+    // clip art variables
+    var hotdog = document.getElementById("hotdog");
+    var tree = document.getElementById("tree");
+    var octopus = document.getElementById("octopus");
+    var duck = document.getElementById("duck");
+    var seal = document.getElementById("seal");
+    var bear = document.getElementById("bear");
+    var penguin = document.getElementById("penguin");
+    var frog = document.getElementById("frog");
+    var orca = document.getElementById("orca");
     var editor = new Editor(panels, imgLoader, bubbleButton, squareButton, thoughtButton, boxButton, dialogue, textButton, styleSelect, fontSelect, 
     //colourText,
     textRed, textGreen, textBlue, textColourCanvas, colourButton, rmTextButton, forwardButton, saveButton, saveProjectForm, publishButton, panelSelect, 
     //panelColour,
-    panelRed, panelGreen, panelBlue, panelColourCanvas, panelColourButton);
+    panelRed, panelGreen, panelBlue, panelColourCanvas, panelColourButton, hotdog, tree, octopus, duck, seal, bear, penguin, frog, orca);
     // load project is not defined
     /*
     if(userSeries == null){
