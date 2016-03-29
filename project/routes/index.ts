@@ -305,14 +305,6 @@ class Router {
 	       // if user is not logged-in redirect back to login page //
 			res.redirect('/');
 	    }else{
-            /*
-                projectlistCollection.find({ "author": author }, {}, function (e, docs) {
-                  res.render('home', {
-                        udata: req.session.user,
-                        "projectList": docs
-                    });
-                });            
-            */
             // increments view count per view           
             projectlistCollection.update({_id: ObjectId(comicID)}, {$inc: {"viewCount": 1}});
             // gets the favourite count from the favourite collection
@@ -322,22 +314,22 @@ class Router {
                    if (o) { 
                      favRecord = 1; 
                    }
-                   var sameSeries = docs.series;
+                   var sameSeries = docs[0].series;
                    var series = [];
-                   var promise = projectlistCollection.find({"series":sameSeries},function(e,docs){
-                      series = docs;
-                   });
                    // updates favCount field in the comicCollection
                    projectlistCollection.findAndModify({_id: ObjectId(comicID)}, {$set: {"favCount": count}});
-                   // renders the different variables to viewComic
-                   promise.success(res.render('viewComic',
-                    {title: 'Viewer', 
-                    "loadProject": docs, 
-                    udata : req.session.user,
-                    "series": series, 
-                    liked: favRecord, 
-                    favCount: count}
-                    ));
+                   projectlistCollection.find({"series":sameSeries},function(e,doc){
+                      series = doc;
+                      // renders the different variables to viewComic
+                      res.render('viewComic',
+                        {title: 'Viewer', 
+                        "loadProject": docs, 
+                        udata : req.session.user,
+                        "series": series, 
+                        liked: favRecord, 
+                        favCount: count}
+                        );                      
+                      });
                  });      
               });       
             });
@@ -403,8 +395,8 @@ class Router {
 	       }else{
             seriesCollection.findOne({"user":user},{},function(e,docs){
                 userSeries = docs;
-                //console.log(e);
-                //console.log(userSeries);
+                console.log(e);
+                console.log(userSeries);
                 res.render('editor', { title: 'Editor', "loadProject" : null, "editorID": null,"userSeries":userSeries, udata : req.session.user});
             });
            }
@@ -421,7 +413,7 @@ class Router {
 	       // if user is not logged-in redirect back to login page //
 			res.redirect('/');
 	       }else{
-            seriesCollection.find({"user":user},{},function(e,docs){
+            seriesCollection.findOne({"user":user},{},function(e,docs){
                 userSeries = docs;
                 projectlistCollection.find({_id: ObjectId(editID)},{},function(e,docs){
                     res.render('editor',{

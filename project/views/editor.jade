@@ -51,7 +51,7 @@ block body
                                         .modal-body
                                             select#seriesSelect2
                                                 option(label="Select a Series",selected,disabled,value="")
-                                                -if(userSeries == null){userSeries = ["None"]}else{userSeries = userSeries[0].series};
+                                                -if(userSeries == null){userSeries = ["None"]}else{userSeries = userSeries.series};
                                                 each series, i in userSeries
                                                     if series=="None"
                                                         option(value="") None
