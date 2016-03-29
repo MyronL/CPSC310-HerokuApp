@@ -81,6 +81,7 @@ exports.updateAccount = function(newData, callback)
 	accounts.findOne({user:newData.user}, function(e, o){
 		o.name 		= newData.name;
 		o.email 	= newData.email;
+		o.country   = newData.country;
 		if (newData.pass == ''){
 			accounts.update({user:newData.user},o,{safe: true}, function(err) {
 				if (err) callback(err);

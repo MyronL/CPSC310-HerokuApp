@@ -40,11 +40,13 @@ class Router {
 		  } 
         }); 
 	});
-    
+// this is the homepage where we show the published comics/projects
     router.get('/homepagenlLogin', function(req,res){
         var db = req.db;
         var projectlistCollection = db.get('EditingComic');
-        projectlistCollection.find({"published":"true"},{},function(e,docs){
+        // gets only the published projects to display
+        projectlistCollection.find({
+          "published":"true"},{},function(e,docs){
             res.render('homepagenlLogin',{
                udata : req.session.user,
                "projectList": docs 
