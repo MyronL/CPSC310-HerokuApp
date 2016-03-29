@@ -38,7 +38,7 @@ input(type='hidden', value= user._id)#userId
 				label.control-label(for='country-list') Account Type
 				.controls
 					select#country-list(name='country')
-						//each item in countries
+						each item in countries
 							option(selected=item.name == user.country)= item.name
 			div.clear-fix
 			hr
