@@ -5,7 +5,6 @@ import server = require('./server')
 import requestHandler = require('./requestHandler')
 
 var AM = require('./modules/account-manager');
-var CT = require('./modules/country-list');
 var EM = require('./modules/email-dispatcher');
 
 var ObjectId = require('mongodb').ObjectID;
@@ -98,7 +97,6 @@ class Router {
                         });
                     });
         var projectlistCollection = db.get('EditingComic');
-        //projectlistCollection.find().sort({ date: -1 });
         // gets only the published projects to display
         projectlistCollection.find({
           "published":"true"},{},function(e,docs){
@@ -211,8 +209,6 @@ class Router {
                 var author = req.session.user.user; 
                 projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                   res.render('home', {
-                        title : 'Control Panel',
-                        countries : CT,
                         udata: req.session.user,
                         "projectList": docs
                     });
@@ -226,10 +222,9 @@ class Router {
 				user 	: req.body['user'],
 				email 	: req.body['email'],
 				pass	: req.body['pass'],
-        country : req.body['country']
-      }, function(e, o) {
-        if (e) {
-          res.status(400).send('error-updating-account');
+			}, function(e, o){
+				if (e){
+					res.status(400).send('error-updating-account');
 				}	else{
 					req.session.user = o;
 			// update the user's login cookies if they exists //
@@ -250,7 +245,7 @@ class Router {
 // creating new accounts //
 	
 	router.get('/signup', function(req, res) {
-		res.render('signup', { title: 'Sign Up', countries : CT});
+		res.render('signup', {  title: 'Sign Up'});
 	});
 	
 	router.post('/signup', function(req, res){
@@ -259,9 +254,8 @@ class Router {
 			email 	: req.body['email'],
 			user 	: req.body['user'],
 			pass	: req.body['pass'],
-      country : req.body['country']
-    }, function(e) {
-      if (e) {
+		}, function(e){
+			if (e){
 				res.status(400).send(e);
 			}	else{
 				res.status(200).send('ok');
@@ -349,7 +343,6 @@ class Router {
 
 // viewer
     //testing
-    /*
     router.get('/viewer', function(req,res,next){
         if (req.session.user == null){
 	       // if user is not logged-in redirect back to login page //
@@ -358,7 +351,7 @@ class Router {
         res.render('viewComic', {title: 'Viewer', "loadProject": null, udata : req.session.user});
         }
     });
-    */
+
     router.get('/viewer/:id', function(req,res,next){
         var comicID = req.params.id;
         var db = req.db;
@@ -366,7 +359,6 @@ class Router {
         var favCollection = db.get('favorites');
         var user = req.session.user.user;
         var favRecord = 0;
-        var sameSeries = null;
 
         if (req.session.user == null){
 	       // if user is not logged-in redirect back to login page //
@@ -428,6 +420,32 @@ class Router {
         }
     });
 
+    router.get('/favorites', function(req, res){
+      var db = req.db;
+      var favCollection = db.get('favorites');
+      var projectlistCollection = db.get('EditingComic');
+      var user = req.session.user.user;
+      var comics = [];
+      //var favList = [];
+
+      if (req.session.user == null){
+        res.redirect('/');
+      }else{
+        favCollection.find({"user":user})
+          .each(function(o) {
+            comics.push(o.comicID);
+          })
+          .success(function() {
+            var obj_ids = comics.map(function(item) {
+              return ObjectId(item)
+            });
+            projectlistCollection.find({_id: {"$in": obj_ids}}, function(e, doc) {
+                res.render('homepagenlLogin', {udata : req.session.user, "projectList": doc});
+              });         
+          });
+      }
+    });
+
 
     //post comment
     router.post('/newComment' , function(req,res){
@@ -461,7 +479,7 @@ class Router {
 	       // if user is not logged-in redirect back to login page //
 			res.redirect('/');
 	       }else{
-            seriesCollection.findOne({"user":user},{},function(e,docs){
+            seriesCollection.find({"user":user},{},function(e,docs){
                 userSeries = docs;
                 console.log(e);
                 console.log(userSeries);
