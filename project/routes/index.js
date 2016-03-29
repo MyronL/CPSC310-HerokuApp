@@ -312,6 +312,7 @@ var Router = (function () {
                             promise.success(res.render('viewComic', { title: 'Viewer',
                                 "loadProject": docs,
                                 udata: req.session.user,
+                                "series": [],
                                 liked: favRecord,
                                 favCount: count }));
                         });
