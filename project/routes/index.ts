@@ -278,12 +278,23 @@ class Router {
                    if (o) { 
                      favRecord = 1; 
                    }
+
+                   var sameSeries = docs.series;
+                   var series = [];
+                   var promise = projectlistCollection.find({"series":sameSeries},function(e,docs){
+                      series = docs;
+                   });
                    // updates favCount field in the comicCollection
                    projectlistCollection.findAndModify({_id: ObjectId(comicID)}, {$set: {"favCount": count}});
                    // renders the different variables to viewComic
-                   res.render('viewComic',
-                    {title: 'Viewer', "loadProject": docs, udata : req.session.user, liked: favRecord, favCount: count}
-                    );
+                   promise.success(res.render('viewComic',
+                    {title: 'Viewer', 
+                    "loadProject": docs, 
+                    udata : req.session.user,
+                    "series": series, 
+                    liked: favRecord, 
+                    favCount: count}
+                    ));
                  });      
               });       
             });
