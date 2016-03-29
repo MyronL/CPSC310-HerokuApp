@@ -154,7 +154,7 @@ class Router {
           var sortOption = req.body.sort;
           var projectlistCollection = db.get('EditingComic');
           if (sortOption == "new"){
-            projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{sort:{date:-1}},function(e,docs){
+            projectlistCollection.find({$and:[{$or:[{title:{$regex : ".*"+search+".*"}},{author:{$regex : ".*"+search+".*"}},{tags:{$regex : ".*"+search+".*"}}]},{published:"true"}]},{sort:{date:-1}},function(e,docs){
                 console.log(search);
                 res.render('searchResult',{
                     "searchList": docs,
@@ -162,35 +162,35 @@ class Router {
                 });
             });            
           } else if (sortOption == "old"){
-            projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{sort:{date:1}},function(e,docs){
+            projectlistCollection.find({$and:[{$or:[{title:{$regex : ".*"+search+".*"}},{author:{$regex : ".*"+search+".*"}},{tags:{$regex : ".*"+search+".*"}}]},{published:"true"}]},{sort:{date:1}},function(e,docs){
                 res.render('searchResult',{
                     "searchList": docs,
                     searchWord: search                      
                 });
             });              
           } else if (sortOption == "mFav"){
-            projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{sort:{favCount:-1}},function(e,docs){
+            projectlistCollection.find({$and:[{$or:[{title:{$regex : ".*"+search+".*"}},{author:{$regex : ".*"+search+".*"}},{tags:{$regex : ".*"+search+".*"}}]},{published:"true"}]},{sort:{favCount:-1}},function(e,docs){
                 res.render('searchResult',{
                     "searchList": docs,
                     searchWord: search 
                 });
             });                    
           } else if (sortOption == "lFav"){
-            projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{sort:{favCount:1}},function(e,docs){
+            projectlistCollection.find({$and:[{$or:[{title:{$regex : ".*"+search+".*"}},{author:{$regex : ".*"+search+".*"}},{tags:{$regex : ".*"+search+".*"}}]},{published:"true"}]},{sort:{favCount:1}},function(e,docs){
                 res.render('searchResult',{
                     "searchList": docs,
                     searchWord: search 
                 });
             });                    
           } else if (sortOption == "mView"){
-            projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{sort:{viewCount:-1}},function(e,docs){
+            projectlistCollection.find({$and:[{$or:[{title:{$regex : ".*"+search+".*"}},{author:{$regex : ".*"+search+".*"}},{tags:{$regex : ".*"+search+".*"}}]},{published:"true"}]},{sort:{viewCount:-1}},function(e,docs){
                 res.render('searchResult',{
                     "searchList": docs,
                      searchWord: search 
                 });
             });                    
           } else if (sortOption == "lView"){
-            projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{sort:{viewCount:1}},function(e,docs){
+            projectlistCollection.find({$and:[{$or:[{title:{$regex : ".*"+search+".*"}},{author:{$regex : ".*"+search+".*"}},{tags:{$regex : ".*"+search+".*"}}]},{published:"true"}]},{sort:{viewCount:1}},function(e,docs){
                 res.render('searchResult',{
                     "searchList": docs,
                      searchWord: search 
