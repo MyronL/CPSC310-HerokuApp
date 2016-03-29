@@ -30,8 +30,6 @@ var Router = (function () {
         // this is the homepage where we show the published comics/projects
         router.get('/homepagenlLogin', function (req, res) {
             var db = req.db;
-<<<<<<< HEAD
-=======
             var accounts = db.get('accounts');
             accounts.findOne({ user: req.session.user.user }, function (e, o) {
                 if (o.country == 'Viewer') {
@@ -75,7 +73,13 @@ var Router = (function () {
         });
         router.get('/homepagenlLoginViewer', function (req, res) {
             var db = req.db;
->>>>>>> f87188397d88adc9b14a7759b736a7d8b9316a9f
+            var projectlistCollection = db.get('EditingComic');
+            projectlistCollection.find({ "published": "true" }, {}, function (e, docs) {
+                res.render('homepagenlLoginViewer', {
+                    udata: req.session.user,
+                    "projectList": docs
+                });
+            });
             var projectlistCollection = db.get('EditingComic');
             // gets only the published projects to display
             projectlistCollection.find({
@@ -419,7 +423,7 @@ var Router = (function () {
                         return ObjectId(item);
                     });
                     projectlistCollection.find({ _id: { "$in": obj_ids } }, function (e, doc) {
-                        res.render('favorites', { udata: req.session.user, "favList": doc, "number": comics.length });
+                        res.render('homepagenlLogin', { udata: req.session.user, "projectList": doc });
                     });
                 });
             }

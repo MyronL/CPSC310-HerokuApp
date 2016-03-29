@@ -420,7 +420,7 @@ class Router {
         }
     });
 
-    router.get('/favorites', function(req, res, next){
+    router.get('/favorites', function(req, res){
       var db = req.db;
       var favCollection = db.get('favorites');
       var projectlistCollection = db.get('EditingComic');
@@ -440,7 +440,7 @@ class Router {
               return ObjectId(item)
             });
             projectlistCollection.find({_id: {"$in": obj_ids}}, function(e, doc) {
-                res.render('favorites', {udata : req.session.user, "favList": doc, "number": comics.length});
+                res.render('homepagenlLogin', {udata : req.session.user, "projectList": doc});
               });         
           });
       }
