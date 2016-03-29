@@ -248,6 +248,7 @@ class Router {
 
 // viewer
     //testing
+    /*
     router.get('/viewer', function(req,res,next){
         if (req.session.user == null){
 	       // if user is not logged-in redirect back to login page //
@@ -256,7 +257,7 @@ class Router {
         res.render('viewComic', {title: 'Viewer', "loadProject": null, udata : req.session.user});
         }
     });
-
+    */
     router.get('/viewer/:id', function(req,res,next){
         var comicID = req.params.id;
         var db = req.db;
@@ -264,11 +265,20 @@ class Router {
         var favCollection = db.get('favorites');
         var user = req.session.user.user;
         var favRecord = 0;
+        var sameSeries = null;
 
         if (req.session.user == null){
 	       // if user is not logged-in redirect back to login page //
 			res.redirect('/');
 	    }else{
+            /*
+                projectlistCollection.find({ "author": author }, {}, function (e, docs) {
+                  res.render('home', {
+                        udata: req.session.user,
+                        "projectList": docs
+                    });
+                });            
+            */
             // increments view count per view           
             projectlistCollection.update({_id: ObjectId(comicID)}, {$inc: {"viewCount": 1}});
             // gets the favourite count from the favourite collection
@@ -278,12 +288,21 @@ class Router {
                    if (o) { 
                      favRecord = 1; 
                    }
+                   var sameSeries = docs.series;
+                   var series = null;
+                   var promise = projectlistCollection.find({"series":sameSeries},function(e,docs){
+                      series = docs; 
+                   });
                    // updates favCount field in the comicCollection
                    projectlistCollection.findAndModify({_id: ObjectId(comicID)}, {$set: {"favCount": count}});
                    // renders the different variables to viewComic
-                   res.render('viewComic',
-                    {title: 'Viewer', "loadProject": docs, udata : req.session.user, liked: favRecord, favCount: count}
-                    );
+                   promise.success(res.render('viewComic',
+                    {title: 'Viewer', 
+                    "loadProject": docs, 
+                    udata : req.session.user, 
+                    liked: favRecord, 
+                    favCount: count}
+                    ));
                  });      
               });       
             });
