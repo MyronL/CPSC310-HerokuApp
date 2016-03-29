@@ -428,6 +428,7 @@ class Router {
         }
     });
 
+
     //post comment
     router.post('/newComment' , function(req,res){
         var comicID = req.body.comicID;
@@ -565,7 +566,7 @@ class Router {
                             "description": editor_des,
                             "published": published,
                             "tags": editor_tags,
-                            //"panel1": panel1_JSON,
+                            "panel1": panel1_JSON,
                             "thumbnail": thumbnail,
                             "commentList": [],
                             "series":insertSeries,
@@ -596,7 +597,7 @@ class Router {
                      "description": editor_des,
                      "published": published,
                      "tags": editor_tags,
-                     //"panel1": panel1_JSON,
+                     "panel1": panel1_JSON,
                      "series":insertSeries,
                      "thumbnail": thumbnail,
                      "date": date

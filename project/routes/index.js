@@ -411,6 +411,38 @@ var Router = (function () {
                 });
             }
         });
+        router.get('/favorites', function (req, res) {
+            var db = req.db;
+            var favCollection = db.get('favorites');
+            var projectlistCollection = db.get('EditingComic');
+            var user = req.session.user.user;
+            var comics = [];
+            var favList = [];
+            if (req.session.user == null) {
+                res.redirect('/');
+            }
+            else {
+                favCollection.find({ "user": user }, {}, function (err, docs) {
+                    comics = docs;
+                    console.log("length " + comics.length);
+                    var j = 0;
+                    while (j < comics.length) {
+                        //console.log("start "+j);
+                        console.log(comics[j].comicID);
+                        var promise = projectlistCollection.findOne({ _id: comics[j].comicID }, function (e, element) {
+                            console.log("afterfind " + j);
+                            if (element) {
+                                favList.push(element);
+                                console.log("push " + j);
+                            }
+                        });
+                        promise.on('complete', function (err, doc) {
+                            j++;
+                        });
+                    }
+                });
+            }
+        });
         //post comment
         router.post('/newComment', function (req, res) {
             var comicID = req.body.comicID;
@@ -545,7 +577,7 @@ var Router = (function () {
                     "description": editor_des,
                     "published": published,
                     "tags": editor_tags,
-                    //"panel1": panel1_JSON,
+                    "panel1": panel1_JSON,
                     "thumbnail": thumbnail,
                     "commentList": [],
                     "series": insertSeries,
@@ -579,7 +611,7 @@ var Router = (function () {
                         "description": editor_des,
                         "published": published,
                         "tags": editor_tags,
-                        //"panel1": panel1_JSON,
+                        "panel1": panel1_JSON,
                         "series": insertSeries,
                         "thumbnail": thumbnail,
                         "date": date
