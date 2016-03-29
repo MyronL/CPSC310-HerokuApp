@@ -380,8 +380,10 @@ var Router = (function () {
                 res.redirect('/');
             }
             else {
-                seriesCollection.find({ "user": user }, {}, function (e, docs) {
+                seriesCollection.findOne({ "user": user }, {}, function (e, docs) {
                     userSeries = docs;
+                    //console.log(e);
+                    //console.log(userSeries);
                     res.render('editor', { title: 'Editor', "loadProject": null, "editorID": null, "userSeries": userSeries, udata: req.session.user });
                 });
             }
