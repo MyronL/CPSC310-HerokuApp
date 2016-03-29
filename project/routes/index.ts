@@ -122,17 +122,19 @@ class Router {
 		});
 	});
 
-		/*
-        router.get('/testProjectList', function(req,res,next){
+
+        router.post('/searchComic', function(req,res,next){
           var db = req.db;
+          var search = req.body.search;
+          console.log(search);
           var projectlistCollection = db.get('EditingComic');
-          projectlistCollection.find({"author":"test"},{},function(e,docs){
-              res.render('testProjectList',{
-                 "projectList": docs 
+          projectlistCollection.find({$and:[{$or:[{title:search},{author:search},{tags:search}]},{published:"true"}]},{},function(e,docs){
+              res.render('searchResult',{
+                 "searchList": docs 
               });
           });
         });
-        */
+
     // logged-in user homepage //
 	router.get('/home', function(req, res) {
         var db = req.db;

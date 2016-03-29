@@ -6,4 +6,5 @@ block content
     u1 
         each project, i in searchList
             li
-                a(href="/editor/"+project._id)= project.title
+                a(href="/viewer/"+project._id)= project.title
+                    img(src=project.thumbnail, style = "border: 1px solid black;width:70%;height:70%")
