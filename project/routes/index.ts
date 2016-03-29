@@ -141,6 +141,7 @@ class Router {
                     // if user is not logged-in redirect back to login page //
                     res.redirect('/');
             } else{
+              // display the comics that the author has created
                 var author = req.session.user.user; 
                 projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                   res.render('home', {
@@ -152,7 +153,7 @@ class Router {
                 });
             }
         });
-	
+	// update the account info
 	router.post('/home', function(req, res){
 		if (req.body['user'] != undefined) {
 			AM.updateAccount({

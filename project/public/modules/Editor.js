@@ -276,7 +276,7 @@ var Editor = (function () {
     Editor.prototype.publishProject = function () {
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = true;
-        this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+        this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = this.canvases[0].toDataURL();
         this.saveProjectForm.elements['editorID'].value = this.editorID;
         var seriesSelect = document.getElementById("seriesSelect");
@@ -297,7 +297,7 @@ var Editor = (function () {
             */
         this.canvases[0].deactivateAll();
         this.saveProjectForm.elements['published'].value = false;
-        this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0]);
+        this.saveProjectForm.elements['sPanel1'].value = JSON.stringify(this.canvases[0].toJSON(['selectable']));
         this.saveProjectForm.elements['thumbnail'].value = null;
         this.saveProjectForm.elements['editorID'].value = this.editorID;
         console.log(this.editorID);
