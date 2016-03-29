@@ -2,10 +2,11 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 append styles
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
     link(rel='stylesheet',href='/stylesheets/style.css')
+    link(rel='stylesheet',href='/font-awesome-4.5.0/css/font-awesome.min.css')  
 block body
   div.btm-links
-    a(href='/homepagenlLogin')#home
-      img(src="http://i.imgur.com/iwDCnm8.png",width = "100")
+    a(href=homeURL)#home
+      img(src=logo,width = "100")
     // this goes to /homepagenlLogin
     // is homepagel just a test page? the one with all the comic pictures?
   h1  
@@ -32,20 +33,38 @@ block body
         .row
             .col-sm-12
                 h2 
-                        .container
-                            style
-                            .row
-                                .col-lg-12
-                                    canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
+                   canvas#panel1(name="panel1", width="1609",height="400",style="border: 3px solid black;")
         .row
             .col-sm-12
-                h2 Comment
+              p#views 0 
+              form#likeForm(name="likeForm", method="post", action="/favorites")
+                input(type="hidden", name="comicID")
+                if liked == 0
+                  button.btn.btn-success(type='submit' name='like' value='1')
+                    i.fa.fa-thumbs-up.fa-lg Like
+                else 
+                  button.btn.btn-danger(type='submit' name='like' value='0')
+                    i.fa.fa-thumbs-down.fa-lg Dislike
+              if favCount <= 1
+                p #{favCount} person likes this comic
+              else if favCount > 1
+                p #{favCount} people like this comic
+                 
+        h2 Comment
+        .row
+            .col-sm-4
                 h4 
                     form#newComment(name="formNewComment", method="post", action="/newComment")
-                        textarea#comment(type="text",placeholder="New Comment",style="resize:none",name="comment")
-                        input(type="hidden", name="commentUserID")
+                        textarea#comment(type="text",placeholder="New Comment",style="resize:none;width:75%",name="comment")
+                        input(type="hidden", name="comicID")
                         br
                         input(type="submit", value="Comment")
+            .col-sm-8
+                  - if (loadProject == null) {var commentList = [];} else {var commentList = loadProject[0].commentList;};console.log(commentList);
+                  u1#commentList                   
+                    each comment, i in commentList
+                        li= comment 
+                                                 
 block scripts
   script(src="https://rawgit.com/kangax/fabric.js/master/dist/fabric.js")
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
@@ -54,6 +73,8 @@ block scripts
    // reference:http://jsfiddle.net/jaibuu/Vp6wa/
   script.
     var loadProject =!{JSON.stringify(loadProject)};
+    var liked = #{liked};
+    var favCount = #{favCount};
   script(type="text/javascript").
     window.onload = function(){
         console.log("Hi Loading");
@@ -65,10 +86,15 @@ block scripts
             var tags = loadProject[0].tags;
             var author = loadProject[0].author;
             var img = loadProject[0].thumbnail;
+            var viewCount = loadProject[0].viewCount;
+            console.log(viewCount);
             console.log(title);
             $('#comicTitle').val(title);
             $('#comicDescription').val(description);
             $('#comicTags').val(tags);
+            document.getElementById("views").innerHTML = viewCount + " views"
+            document.formNewComment.comicID.value = loadProject[0]._id;
+            document.likeForm.comicID.value = loadProject[0]._id;
             var canvas1 = new fabric.Canvas(panel1);
             fabric.Image.fromURL(img, function(obj){
                 canvas1.add(obj);

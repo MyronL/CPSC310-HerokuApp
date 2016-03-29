@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "jasmine-node spec"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
@@ -18,13 +19,19 @@
     "monk": "~1.0.1",
     "stylus": "~0.52.4",
     "express-session": "~1.11.3",
-    "moment" : "~2.10.3",
+    "moment": "~2.10.3",
     "emailjs": "~1.0.0",
     "connect-mongo": "~0.8.2",
     "errorhandler": "~1.4.2",
-    "jade-bootstrap": "1.0.1"
+    "jade-bootstrap": "1.0.1",
+    "method-override": "2.3.5",
+    "jasmine-node": "^1.14.5",
+    "request": "^2.69.0"
   },
   "engines": {
-	"node": "5.4.0"
+    "node": "5.4.0"
+  },
+  "devDependencies": {
+    "jasmine-core": "2.4.1"
   }
 }
