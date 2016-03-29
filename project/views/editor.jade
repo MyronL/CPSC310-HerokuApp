@@ -5,12 +5,14 @@ append styles
     link(rel='stylesheet',href='/font-awesome-4.5.0/css/font-awesome.min.css')  
     link(rel='stylesheet',href='/stylesheets/fonts.css')
 block body
-  div.btm-links
+  //div.btm-links
     a(href=homeURL)#home
       img(src=logo,width = "100", span title="Home")
     // this goes to /homepagenlLogin
     // is homepagel just a test page? the one with all the comic pictures?
   h1  Comic Editor
+    a(href=homeURL)#home
+        img(src=logo,width = "100", span title="Home" height="relative")
   body
     .container-fluid 
         .row
@@ -154,8 +156,17 @@ block body
                         canvas#panelColourCanvas(name="panelColourCanvas" width="50" height="50" style="border: 1px solid black")
                         button#panelColourButton Set Panel Colour
                     #ClipArt.tab-pane.fade
-                        p stub
-
+                        #images
+                            p Choose a clip art:
+                            input#hotdog(type="image" src="https://openclipart.org/image/2400px/svg_to_png/216348/hotdawg.png" height="100px" value="hotdog")
+                            input#tree(type="image" src="https://openclipart.org/image/2400px/svg_to_png/190682/Trace-Tree.png" height="100px" value="tree")
+                            input#octopus(type="image" src="https://openclipart.org/image/2400px/svg_to_png/204658/redoctopuscartoon.png" height="100px" value="octopus")
+                            input#duck(type="image" src="https://openclipart.org/image/2400px/svg_to_png/83473/14thWarrior-Cartoon-Mallard.png" height="100px" value="duck")
+                            input#seal(type="image" src="https://openclipart.org/image/2400px/svg_to_png/236727/Harbor-Seal-2.png" height="100px" value="seal")
+                            input#bear(type="image" src="https://openclipart.org/image/2400px/svg_to_png/93403/oursenpeluche.png" height="100px" value="bear")
+                            input#penguin(type="image" src="https://openclipart.org/image/2400px/svg_to_png/12751/Anonymous-emperor-penguin.png" height="100px" value="penguin")
+                            input#frog(type="image" src="https://openclipart.org/image/2400px/svg_to_png/214691/Frosch.png" height="100px" value="frog")
+                            input#orca(type="image" src="https://openclipart.org/image/2400px/svg_to_png/90325/orca-matthew-gates-r.png" height="100px" value="orca")
 
                 h2 Comic Panels
                       canvas#panel1(name="panel1", width="1600",height="400",style="border: 3px solid black;")
