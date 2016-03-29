@@ -5,41 +5,42 @@ import server = require('./server')
 import requestHandler = require('./requestHandler')
 
 var AM = require('./modules/account-manager');
+var CT = require('./modules/country-list');
 var EM = require('./modules/email-dispatcher');
 
 var ObjectId = require('mongodb').ObjectID;
 
 // REMEMBER TO RESTART NPM AND COMPILE TSC TO OBSERVE CHANGES
 class Router {
-	
-	constructor(){}
+  
+  constructor(){}
     
 
-	start() {
+  start() {
 
-		var express = require('express');
-		var router = express.Router();
+    var express = require('express');
+    var router = express.Router();
         
         server.start();
 // main login page //
-	router.get('/homepage', function(req, res) {
+  router.get('/homepage', function(req, res) {
         var db = req.db;
         var projectlistCollection = db.get('EditingComic');        
         projectlistCollection.find({"published":"true"},{},function(e,docs){
            if (req.session.user == null){
-	// if user is not logged-in redirect back to login page //
+  // if user is not logged-in redirect back to login page //
             //res.render('homepage', {  title: 'Home Page'});
-			res.redirect('/');
-		  }else{
+      res.redirect('/');
+      }else{
             res.redirect('/homepagenlLogin');
-			/*
+      /*
             res.render('homepagenl', {
-				udata : req.session.user,
-			});
+        udata : req.session.user,
+      });
             */
-		  } 
+      } 
         }); 
-	});
+  });
 // this is the homepage where we show the published comics/projects
     router.get('/homepagenlLogin', function(req,res){
         var db = req.db;
@@ -97,6 +98,7 @@ class Router {
                         });
                     });
         var projectlistCollection = db.get('EditingComic');
+        //projectlistCollection.find().sort({ date: -1 });
         // gets only the published projects to display
         projectlistCollection.find({
           "published":"true"},{},function(e,docs){
@@ -107,43 +109,43 @@ class Router {
         });                   
     });
     
-	router.get('/homepagenl', function(req, res) {
-		res.redirect('/');
-	});
+  router.get('/homepagenl', function(req, res) {
+    res.redirect('/');
+  });
 
 
-		/* GET login page. */
-		router.get('/', function(req, res, next) {
-	       // check if the user's credentials are saved in a cookie //
-		  if (req.cookies.user == undefined || req.cookies.pass == undefined){
-			 res.render('login', { title: 'Sign In' });
-		  }else{
-	       // attempt automatic login //
-			AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){
-				if (o != null){
-				    req.session.user = o;
-					res.redirect('/homepage');
-				}else{
-				    res.render('login', { title: 'Sign In' });
-				}
-			});
-		}
-	});
+    /* GET login page. */
+    router.get('/', function(req, res, next) {
+         // check if the user's credentials are saved in a cookie //
+      if (req.cookies.user == undefined || req.cookies.pass == undefined){
+       res.render('login', { title: 'Sign In' });
+      }else{
+         // attempt automatic login //
+      AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){
+        if (o != null){
+            req.session.user = o;
+          res.redirect('/homepage');
+        }else{
+            res.render('login', { title: 'Sign In' });
+        }
+      });
+    }
+  });
     
-	router.post('/', function(req, res){
-		AM.manualLogin(req.body['user'], req.body['pass'], function(e, o){
-			if (!o){
-				res.status(400).send(e);
-			}	else{
-				req.session.user = o;
-				if (req.body['remember-me'] == 'true'){
-					res.cookie('user', o.user, { maxAge: 900000 });
-					res.cookie('pass', o.pass, { maxAge: 900000 });
-				}
-				res.status(200).send(o);
-			}
-		});
-	});
+  router.post('/', function(req, res){
+    AM.manualLogin(req.body['user'], req.body['pass'], function(e, o){
+      if (!o){
+        res.status(400).send(e);
+      }  else{
+        req.session.user = o;
+        if (req.body['remember-me'] == 'true'){
+          res.cookie('user', o.user, { maxAge: 900000 });
+          res.cookie('pass', o.pass, { maxAge: 900000 });
+        }
+        res.status(200).send(o);
+      }
+    });
+  });
 
       // search the database for comics
         router.post('/searchComic', function(req,res,next){
@@ -198,7 +200,7 @@ class Router {
         });
 
     // logged-in user homepage //
-	router.get('/home', function(req, res) {
+  router.get('/home', function(req, res) {
         var db = req.db;
         var projectlistCollection = db.get('EditingComic');
         if (req.session.user == null) {
@@ -209,149 +211,154 @@ class Router {
                 var author = req.session.user.user; 
                 projectlistCollection.find({ "author": author }, {}, function (e, docs) {
                   res.render('home', {
+                        title : 'Control Panel',
+                        countries : CT,
                         udata: req.session.user,
                         "projectList": docs
                     });
                 });
             }
         });
-	// update the account info
-	router.post('/home', function(req, res){
-		if (req.body['user'] != undefined) {
-			AM.updateAccount({
-				user 	: req.body['user'],
-				email 	: req.body['email'],
-				pass	: req.body['pass'],
-			}, function(e, o){
-				if (e){
-					res.status(400).send('error-updating-account');
-				}	else{
-					req.session.user = o;
-			// update the user's login cookies if they exists //
-					if (req.cookies.user != undefined && req.cookies.pass != undefined){
-						res.cookie('user', o.user, { maxAge: 900000 });
-						res.cookie('pass', o.pass, { maxAge: 900000 });	
-					}
-					res.status(200).send('ok');
-				}
-			});
-		}	else if (req.body['logout'] == 'true'){
-			res.clearCookie('user');
-			res.clearCookie('pass');
-			req.session.destroy(function(e){ res.status(200).send('ok'); });
-		}
-	});
+  // update the account info
+  router.post('/home', function(req, res){
+    if (req.body['user'] != undefined) {
+      AM.updateAccount({
+        user   : req.body['user'],
+        email   : req.body['email'],
+        pass  : req.body['pass'],
+        country : req.body['country']
+      }, function(e, o) {
+        if (e) {
+          res.status(400).send('error-updating-account');
+        }  else{
+          req.session.user = o;
+      // update the user's login cookies if they exists //
+          if (req.cookies.user != undefined && req.cookies.pass != undefined){
+            res.cookie('user', o.user, { maxAge: 900000 });
+            res.cookie('pass', o.pass, { maxAge: 900000 });  
+          }
+          res.status(200).send('ok');
+        }
+      });
+    }  else if (req.body['logout'] == 'true'){
+      res.clearCookie('user');
+      res.clearCookie('pass');
+      req.session.destroy(function(e){ res.status(200).send('ok'); });
+    }
+  });
 
 // creating new accounts //
-	
-	router.get('/signup', function(req, res) {
-		res.render('signup', {  title: 'Sign Up'});
-	});
-	
-	router.post('/signup', function(req, res){
-		AM.addNewAccount({
-			name 	: req.body['name'],
-			email 	: req.body['email'],
-			user 	: req.body['user'],
-			pass	: req.body['pass'],
-		}, function(e){
-			if (e){
-				res.status(400).send(e);
-			}	else{
-				res.status(200).send('ok');
-			}
-		});
-	});
+  
+  router.get('/signup', function(req, res) {
+    res.render('signup', { title: 'Sign Up', countries : CT});
+  });
+  
+  router.post('/signup', function(req, res){
+    AM.addNewAccount({
+      name   : req.body['name'],
+      email   : req.body['email'],
+      user   : req.body['user'],
+      pass  : req.body['pass'],
+      country : req.body['country']
+    }, function(e) {
+      if (e) {
+        res.status(400).send(e);
+      }  else{
+        res.status(200).send('ok');
+      }
+    });
+  });
 
 // password reset //
 
-	router.post('/lost-password', function(req, res){
-	// look up the user's account via their email //
-		AM.getAccountByEmail(req.body['email'], function(o){
-			if (o){
-				EM.dispatchResetPasswordLink(o, function(e, m){
-				// this callback takes a moment to return //
-				// TODO add an ajax loader to give user feedback //
-					if (!e){
-						res.status(200).send('ok');
-					}	else{
-						for (k in e) console.log('ERROR : ', k, e[k]);
-						res.status(400).send('unable to dispatch password reset');
-					}
-				});
-			}	else{
-				res.status(400).send('email-not-found');
-			}
-		});
-	});
+  router.post('/lost-password', function(req, res){
+  // look up the user's account via their email //
+    AM.getAccountByEmail(req.body['email'], function(o){
+      if (o){
+        EM.dispatchResetPasswordLink(o, function(e, m){
+        // this callback takes a moment to return //
+        // TODO add an ajax loader to give user feedback //
+          if (!e){
+            res.status(200).send('ok');
+          }  else{
+            for (k in e) console.log('ERROR : ', k, e[k]);
+            res.status(400).send('unable to dispatch password reset');
+          }
+        });
+      }  else{
+        res.status(400).send('email-not-found');
+      }
+    });
+  });
 
-	router.get('/reset-password', function(req, res) {
-		var email = req.query["e"];
-		var passH = req.query["p"];
-		AM.validateResetLink(email, passH, function(e){
-			if (e != 'ok'){
-				res.redirect('/');
-			} else{
-	// save the user's email in a session instead of sending to the client //
-				req.session.reset = { email:email, passHash:passH };
-				res.render('reset', { title : 'Reset Password' });
-			}
-		})
-	});
-	
-	router.post('/reset-password', function(req, res) {
-		var nPass = req.body['pass'];
-	// retrieve the user's email from the session to lookup their account and reset password //
-		var email = req.session.reset.email;
-	// destory the session immediately after retrieving the stored email //
-		req.session.destroy();
-		AM.updatePassword(email, nPass, function(e, o){
-			if (o){
-				res.status(200).send('ok');
-			}	else{
-				res.status(400).send('unable to update password');
-			}
-		})
-	});
-	
+  router.get('/reset-password', function(req, res) {
+    var email = req.query["e"];
+    var passH = req.query["p"];
+    AM.validateResetLink(email, passH, function(e){
+      if (e != 'ok'){
+        res.redirect('/');
+      } else{
+  // save the user's email in a session instead of sending to the client //
+        req.session.reset = { email:email, passHash:passH };
+        res.render('reset', { title : 'Reset Password' });
+      }
+    })
+  });
+  
+  router.post('/reset-password', function(req, res) {
+    var nPass = req.body['pass'];
+  // retrieve the user's email from the session to lookup their account and reset password //
+    var email = req.session.reset.email;
+  // destory the session immediately after retrieving the stored email //
+    req.session.destroy();
+    AM.updatePassword(email, nPass, function(e, o){
+      if (o){
+        res.status(200).send('ok');
+      }  else{
+        res.status(400).send('unable to update password');
+      }
+    })
+  });
+  
 // view & delete accounts //
-	
-	router.get('/print', function(req, res) {
-		AM.getAllRecords( function(e, accounts){
-			res.render('print', { title : 'Account List', accts : accounts });
-		})
-	});
-	
-	router.post('/delete', function(req, res){
-		AM.deleteAccount(req.body.id, function(e, obj){
-			if (!e){
-				res.clearCookie('user');
-				res.clearCookie('pass');
-				req.session.destroy(function(e){ res.status(200).send('ok'); });
-			}	else{
-				res.status(400).send('record not found');
-			}
-	    });
-	});
-	
-	router.get('/reset', function(req, res) {
-		AM.delAllRecords(function(){
-			res.redirect('/print');	
-		});
-	});
-	
+  
+  router.get('/print', function(req, res) {
+    AM.getAllRecords( function(e, accounts){
+      res.render('print', { title : 'Account List', accts : accounts });
+    })
+  });
+  
+  router.post('/delete', function(req, res){
+    AM.deleteAccount(req.body.id, function(e, obj){
+      if (!e){
+        res.clearCookie('user');
+        res.clearCookie('pass');
+        req.session.destroy(function(e){ res.status(200).send('ok'); });
+      }  else{
+        res.status(400).send('record not found');
+      }
+      });
+  });
+  
+  router.get('/reset', function(req, res) {
+    AM.delAllRecords(function(){
+      res.redirect('/print');  
+    });
+  });
+  
 
 // viewer
     //testing
+    /*
     router.get('/viewer', function(req,res,next){
         if (req.session.user == null){
-	       // if user is not logged-in redirect back to login page //
-			res.redirect('/');
-	    }else{  
+         // if user is not logged-in redirect back to login page //
+      res.redirect('/');
+      }else{  
         res.render('viewComic', {title: 'Viewer', "loadProject": null, udata : req.session.user});
         }
     });
-
+    */
     router.get('/viewer/:id', function(req,res,next){
         var comicID = req.params.id;
         var db = req.db;
@@ -359,11 +366,12 @@ class Router {
         var favCollection = db.get('favorites');
         var user = req.session.user.user;
         var favRecord = 0;
+        var sameSeries = null;
 
         if (req.session.user == null){
-	       // if user is not logged-in redirect back to login page //
-			res.redirect('/');
-	    }else{
+         // if user is not logged-in redirect back to login page //
+      res.redirect('/');
+      }else{
             // increments view count per view           
             projectlistCollection.update({_id: ObjectId(comicID)}, {$inc: {"viewCount": 1}});
             // gets the favourite count from the favourite collection
@@ -468,17 +476,17 @@ class Router {
     });
 
 
-// editor stuff	
+// editor stuff  
         router.get('/editor', function(req, res, next) {
             var db = req.db;
             var user = req.session.user.user;
             var seriesCollection = db.get('Series');
             var userSeries = null;
             if (req.session.user == null){
-	       // if user is not logged-in redirect back to login page //
-			res.redirect('/');
-	       }else{
-            seriesCollection.find({"user":user},{},function(e,docs){
+         // if user is not logged-in redirect back to login page //
+      res.redirect('/');
+         }else{
+            seriesCollection.findOne({"user":user},{},function(e,docs){
                 userSeries = docs;
                 console.log(e);
                 console.log(userSeries);
@@ -495,9 +503,9 @@ class Router {
            var seriesCollection = db.get('Series');
            var userSeries = null;
            if (req.session.user == null){
-	       // if user is not logged-in redirect back to login page //
-			res.redirect('/');
-	       }else{
+         // if user is not logged-in redirect back to login page //
+      res.redirect('/');
+         }else{
             seriesCollection.findOne({"user":user},{},function(e,docs){
                 userSeries = docs;
                 projectlistCollection.find({_id: ObjectId(editID)},{},function(e,docs){
@@ -635,8 +643,8 @@ class Router {
             };
         });
     router.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
-		module.exports = router;
-	}
+    module.exports = router;
+  }
 }
 
 var router = new Router()
